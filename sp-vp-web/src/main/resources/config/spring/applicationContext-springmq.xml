@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd">
+
+    <rabbit:connection-factory id="rabbitConnectionFactory" host="${rabbitmq.host}" port="${rabbitmq.port}" virtual-host="${rabbitmq.vhost}" username="${rabbitmq.username}" password="${rabbitmq.password}" />
+
+    <rabbit:admin connection-factory="rabbitConnectionFactory" />
+
+    <rabbit:queue id="TemplateQueue.AvnActivate" name="TemplateQueue.AvnActivate" durable="true" auto-delete="false"/>
+
+    <!-- exchange queue binging key 绑定 -->
+    <rabbit:direct-exchange id="avnActivateExchange" name="avnActivateExchange" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="TemplateQueue.AvnActivate" key="TemplateQueue.AvnActivate"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <bean id="avnActivateConvertor"  class="org.springframework.amqp.support.converter.JsonMessageConverter">
+        <property name="classMapper">
+            <bean class="org.springframework.amqp.support.converter.DefaultClassMapper">
+                 <property name="defaultType" value="com.zxq.iov.cloud.sp.vp.api.msg.AvnActivateMessage"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- spring template声明-->
+    <rabbit:template id="avnActivateTemplate" exchange="avnActivateExchange" routing-key="TemplateQueue.AvnActivate"
+          connection-factory="rabbitConnectionFactory"  message-converter="avnActivateConvertor"/>
+
+</beans>

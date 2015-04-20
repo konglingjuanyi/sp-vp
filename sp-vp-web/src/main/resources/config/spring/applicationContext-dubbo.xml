@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
+    <bean id="cacheAspect" class="com.zxq.iov.cloud.core.aop.RedisCacheAspect"/>
+    <bean id="exceptionAspect" class="com.zxq.iov.cloud.core.aop.RpcExceptionAspect"/>
+
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" server="${dubbo.protocol.server}" />
+
+    <!-- 应用配置 -->
+    <dubbo:application name="${dubbo.app.name}" organization="${dubbo.app.org}" owner="${dubbo.app.owner}"/>
+
+    <dubbo:monitor protocol="${dubbo.monitor.protocol}"/>
+
+    <dubbo:registry id="zookeeper_registry" protocol="${dubbo.registry.protocol}"
+                    address="${dubbo.registry.address}"
+                    client="${dubbo.registry.client}" group="${dubbo.group}" />
+
+	<!-- Manager API -->
+    <bean id="vehicleManager" class="com.zxq.iov.cloud.sp.vp.mgmt.api.impl.VehicleManagerImpl" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.mgmt.api.IVehicleManager" ref="vehicleManager" version="1.1" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+
+    <!-- Biz Service -->
+    <bean id="vehicleService" class="com.zxq.iov.cloud.sp.vp.api.impl.VehicleServiceImpl" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IVehicleService" ref="vehicleService" version="1.1" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+
+</beans>
