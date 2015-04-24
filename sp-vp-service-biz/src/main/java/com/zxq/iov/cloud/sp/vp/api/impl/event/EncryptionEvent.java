@@ -18,6 +18,10 @@ public class EncryptionEvent extends AbstractEvent {
         return event.getId();
     }
 
+    @Override
+    public void finishEvent(Long eventId) {
+
+    }
 
     @Override
     public Long startTask(Long eventId) {
@@ -25,6 +29,26 @@ public class EncryptionEvent extends AbstractEvent {
         // 处理个性化属性
         // 推送第三方轮询来出发超时机制
         return task.getId();
+    }
+
+    @Override
+    public Long finishTask(Long taskId) {
+        return null;
+    }
+
+    @Override
+    public Long startStep(Long taskId) {
+        return null;
+    }
+
+    @Override
+    public Long startAndFinishStep(Long taskId) {
+        return null;
+    }
+
+    @Override
+    public Long finishStep(Long stepId) {
+        return null;
     }
 
 }
