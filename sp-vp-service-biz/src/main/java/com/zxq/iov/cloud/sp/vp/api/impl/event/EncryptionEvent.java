@@ -8,7 +8,7 @@ import com.zxq.iov.cloud.sp.vp.entity.event.Task;
  * Date: 2015/4/23
  * Time: 11:08
  */
-public class EncryptionEventService extends AbstractEventService {
+public class EncryptionEvent extends AbstractEvent {
 
     @Override
     public Long startEvent() {
