@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tokxp
@@ -29,6 +31,7 @@ public class EventDaoServiceImplTest extends BaseServiceTestCase {
         Event event = new Event();
         event.setVin("001");
         event.setCode("1");
+        event.setStartTime(new Date());
         event = eventDaoService.createEvent(event);
         Assert.assertNotNull(event);
     }

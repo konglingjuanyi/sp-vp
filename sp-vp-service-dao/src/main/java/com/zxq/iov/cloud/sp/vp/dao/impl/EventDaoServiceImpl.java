@@ -48,7 +48,6 @@ public class EventDaoServiceImpl extends BaseServiceImpl<IEventRepository, Event
 			LOGGER.error("Event cannot be null");
 		}
 		event.setId(null);
-		event.setStartTime(new Date());
 		super.save(event);
 		return event;
 	}
