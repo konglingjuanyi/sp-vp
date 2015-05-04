@@ -44,7 +44,7 @@ public class TaskStepDaoServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testUpdateTask(){
+    public void testUpdateTaskStep(){
         Long taskStepId = 4L;
         TaskStep taskStep = taskStepDaoService.findTaskStepById(taskStepId);
         System.out.println("=====" + taskStep.getTask().getCode());

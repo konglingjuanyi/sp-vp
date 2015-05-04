@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskParameterRepository">
+
+	<resultMap id="eventResultMap" type="TaskParameter">
+		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="NAME" jdbcType="VARCHAR" property="name"/>
+		<result column="VALUE" jdbcType="VARCHAR" property="value"/>
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<association column="TASK_ID" property="task" javaType="Task"
+					 select="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskRepository.getOne"></association>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_TASK_PARAMETER t
+		and IFNULL(t.is_valid, 1) = 1
+	</sql>	
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+	
+	<select id="selectPage" parameterType="hashmap" resultMap="eventResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="TaskStep" resultMap="eventResultMap">
+        SELECT * FROM TB_TASK_PARAMETER t
+        WHERE t.is_valid = 1
+    </select>
+
+</mapper>
