@@ -11,9 +11,9 @@ public class BaseDto {
 
     private String vin;
     private Integer platform;
-    private Long eventId;
-    private Long taskId;
-    private Long stepId;
+    private String aid;
+    private Integer mid;
+    private Integer requestId;
 
     public String getVin() {
         return vin;
@@ -31,27 +31,27 @@ public class BaseDto {
         this.platform = platform;
     }
 
-    public Long getEventId() {
-        return eventId;
+    public String getAid() {
+        return aid;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setAid(String aid) {
+        this.aid = aid;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Integer getMid() {
+        return mid;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
-    public Long getStepId() {
-        return stepId;
+    public Integer getRequestId() {
+        return requestId;
     }
 
-    public void setStepId(Long stepId) {
-        this.stepId = stepId;
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId;
     }
 }

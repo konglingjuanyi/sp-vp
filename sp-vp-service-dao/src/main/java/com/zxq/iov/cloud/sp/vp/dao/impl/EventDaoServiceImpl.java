@@ -15,16 +15,12 @@ package com.zxq.iov.cloud.sp.vp.dao.impl;
 import com.zxq.iov.cloud.core.log.LoggerFactory;
 import com.zxq.iov.cloud.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
-import com.zxq.iov.cloud.sp.vp.dao.IVehicleDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.repo.IEventRepository;
-import com.zxq.iov.cloud.sp.vp.dao.repo.IVehicleRepository;
-import com.zxq.iov.cloud.sp.vp.entity.Vehicle;
 import com.zxq.iov.cloud.sp.vp.entity.event.Event;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 
 /**
  * 安防 事件持久化服务接口实现类

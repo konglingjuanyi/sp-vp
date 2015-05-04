@@ -7,7 +7,7 @@ package com.zxq.iov.cloud.sp.vp.api.dto;
  * create date 2015-4-23 10:30:07
  * @version 0.1, 2015-4-23
  */
-public class TboxDto extends BaseDto {
+public class TboxDto extends EventDto {
 
     private Long tboxId;
     private String tboxSn;

@@ -13,7 +13,6 @@
 package com.zxq.iov.cloud.sp.vp.dao;
 
 import com.zxq.iov.cloud.core.service.BaseService;
-import com.zxq.iov.cloud.sp.vp.entity.Vehicle;
 import com.zxq.iov.cloud.sp.vp.entity.event.Event;
 
 /**

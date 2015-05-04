@@ -1,12 +1,10 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
 import com.zxq.iov.cloud.sp.vp.api.IEncryptionService;
-import com.zxq.iov.cloud.sp.vp.api.dto.BaseDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.TboxDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.EncryptionServiceImpl;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.EncryptionEvent;
-import com.zxq.iov.cloud.sp.vp.api.IEventService;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 
 /**
@@ -28,9 +26,9 @@ public class EncryptionServiceProxy implements IEncryptionService {
 
     @Override
     public KeyDto generateAsymmetricKey(TboxDto tboxDto) {
-        BaseDto baseDto = this.event.startEvent(tboxDto);
+        this.event.startEvent(tboxDto);
         KeyDto keyDto = this.encryptionService.generateAsymmetricKey(tboxDto);
-        keyDto.setTaskId(baseDto.getTaskId());
+        keyDto.setTaskId(tboxDto.getTaskId());
         return keyDto;
     }
 

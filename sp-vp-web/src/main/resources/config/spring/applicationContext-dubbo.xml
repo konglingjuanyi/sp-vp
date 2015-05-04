@@ -31,4 +31,7 @@
     <bean id="vehicleService" class="com.zxq.iov.cloud.sp.vp.api.impl.VehicleServiceImpl" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IVehicleService" ref="vehicleService" version="1.1" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
+    <bean id="encryptionServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.EncryptionServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IEncryptionService" ref="encryptionServiceProxy" version="1.1" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+
 </beans>

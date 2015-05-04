@@ -1,5 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.dto;
 
+import java.awt.*;
+
 /**
  * 安防 密钥DTO
  *
@@ -7,7 +9,7 @@ package com.zxq.iov.cloud.sp.vp.api.dto;
  * create date 2015-4-23 10:30:07
  * @version 0.1, 2015-4-23
  */
-public class KeyDto extends BaseDto {
+public class KeyDto extends EventDto {
 
     private String publicKey;
     private String privateKey;

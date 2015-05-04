@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.BaseDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskStepDaoService;
@@ -24,38 +25,32 @@ public class EncryptionEvent extends AbstractEvent {
     private ITaskStepDaoService taskStepDaoService;
 
     @Override
-    public BaseDto startEvent(BaseDto baseDto) {
+    public void startEvent(EventDto eventDto) {
         // 开始交换密钥事件
-        Event event = super.createEvent(baseDto);
+        Event event = super.createEvent(eventDto);
         event.setCode(""); // 还未确定交换密码的具体命令代码
         // event.setExpirationTime(); // 未确定具体超时时间
         eventDaoService.createEvent(event);
-        // 开始交换密钥任务
-        Long taskId = this.startTask(event.getId());
-        // 开始任务第一步
-        this.startStep(taskId);
+        eventDto.setEventId(event.getId());
+        this.startTask(eventDto); // 开始交换密钥任务
         // 推送第三方轮询来触发超时机制
-        baseDto.setTaskId(taskId);
-        return baseDto;
     }
 
     @Override
-    public void finishEvent(BaseDto baseDto) {
-        // 先完成之前任务步骤
-        super.startAndFinishStep(baseDto.getTaskId());
-        // 完成任务
-        super.finishTask(baseDto.getTaskId());
-        // 完成事件
-        super.finishEvent(baseDto);
+    public void finishEvent(EventDto eventDto) {
+        super.startAndFinishStep(eventDto);  // 先完成之前任务步骤
+        super.finishTask(eventDto); // 完成任务
+        super.finishEvent(eventDto); // 完成事件
     }
 
     @Override
-    public Long startTask(Long eventId) {
-        Task task = super.createTask(eventId);
+    public void startTask(EventDto eventDto) {
+        Task task = super.createTask(eventDto);
         task.setSort(1L); // 未确定是0开始还是1开始
         taskDaoService.createTask(task);
+        eventDto.setTaskId(task.getId());
+        this.startStep(eventDto);  // 开始任务第一步
         // 推送第三方轮询来出发超时机制
-        return task.getId();
     }
 
 }
