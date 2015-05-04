@@ -1,8 +1,17 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import com.zxq.iov.cloud.sp.vp.api.IEventService;
+import com.zxq.iov.cloud.sp.vp.api.dto.BaseDto;
+import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.ITaskStepDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.Event;
 import com.zxq.iov.cloud.sp.vp.entity.event.Task;
+import com.zxq.iov.cloud.sp.vp.entity.event.TaskStep;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * User: 荣杰
@@ -11,30 +20,74 @@ import com.zxq.iov.cloud.sp.vp.entity.event.Task;
  */
 public abstract class AbstractEvent implements IEvent {
 
-    public abstract Long startEvent();
+    @Autowired
+    private IEventDaoService eventDaoService;
+    @Autowired
+    private ITaskDaoService taskDaoService;
+    @Autowired
+    private ITaskStepDaoService taskStepDaoService;
 
-    public abstract void finishEvent(Long eventId);
+    public abstract BaseDto startEvent(BaseDto baseDto);
+
+    @Override
+    public void finishEvent(BaseDto baseDto) {
+        Event event = eventDaoService.findEventById(baseDto.getEventId());
+        event.setEndTime(new Date());
+        eventDaoService.updateEvent(event);
+    }
 
     public abstract Long startTask(Long eventId);
 
-    public abstract Long finishTask(Long taskId);
+    @Override
+    public Long finishTask(Long taskId) {
+        Task task = taskDaoService.findTaskById(taskId);
+        task.setEndTime(new Date());
+        taskDaoService.updateTask(task);
+        return task.getEvent().getId();
+    }
 
-    public abstract Long startStep(Long taskId);
+    @Override
+    public Long startStep(Long taskId) {
+        TaskStep taskStep = this.createTaskStep(taskId);
+        taskStepDaoService.createTaskStep(taskStep);
+        return taskStep.getId();
+    }
 
-    public abstract Long startAndFinishStep(Long taskId);
+    @Override
+    public Long startAndFinishStep(Long taskId) {
+        TaskStep taskStep = this.createTaskStep(taskId);
+        taskStep.setEndTime(new Date());
+        taskStepDaoService.createTaskStep(taskStep);
+        return taskStep.getTask().getId();
+    }
 
-    public abstract Long finishStep(Long stepId);
+    @Override
+    public Long finishStep(Long stepId) {
+        TaskStep taskStep = taskStepDaoService.findTaskStepById(stepId);
+        taskStep.setEndTime(new Date());
+        taskStepDaoService.updateTaskStep(taskStep);
+        return taskStep.getTask().getId();
+    }
 
-    protected Event createEvent() {
+    protected Event createEvent(BaseDto baseDto) {
         Event event = new Event();
-        // 初始化默认属性
+        event.setVin(baseDto.getVin());
+        event.setPlatform(baseDto.getPlatform());
+        event.setStartTime(new Date());
         return event;
     }
 
     protected Task createTask(Long eventId) {
         Task task = new Task();
-        task.setEventId(eventId);
-        // 处理默认属性
+        task.setEvent(eventDaoService.findEventById(eventId));
+        task.setStartTime(new Date());
         return task;
+    }
+
+    protected TaskStep createTaskStep(Long taskId) {
+        TaskStep taskStep = new TaskStep();
+        taskStep.setTask(taskDaoService.findTaskById(taskId));
+        taskStep.setStartTime(new Date());
+        return taskStep;
     }
 }
