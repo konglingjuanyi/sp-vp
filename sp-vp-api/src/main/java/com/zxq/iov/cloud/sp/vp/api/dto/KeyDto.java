@@ -1,14 +1,14 @@
 package com.zxq.iov.cloud.sp.vp.api.dto;
 
 /**
- * User: 荣杰
- * Date: 2015/4/23
- * Time: 10:30
+ * 安防 密钥DTO
+ *
+ * @author 叶荣杰
+ * create date 2015-4-23 10:30:07
+ * @version 0.1, 2015-4-23
  */
-public class KeyDto {
+public class KeyDto extends BaseDto {
 
-    private Long taskId;
-    private Long stepId;
     private String publicKey;
     private String privateKey;
     private String secretKey;
@@ -38,19 +38,4 @@ public class KeyDto {
         this.secretKey = secretKey;
     }
 
-    public Long getStepId() {
-        return stepId;
-    }
-
-    public void setStepId(Long stepId) {
-        this.stepId = stepId;
-    }
-
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
-    }
 }

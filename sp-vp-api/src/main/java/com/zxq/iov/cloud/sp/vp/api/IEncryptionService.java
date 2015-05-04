@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.KeyDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.TboxDto;
 
 /**
  * User: 荣杰
@@ -11,17 +12,17 @@ public interface IEncryptionService {
 
     /**
      * 生成非对称密钥，用以对TBOX密钥加解密
-     * @param tbox      TBOX ID或者SN
+     * @param tboxDto   TBOX传输对象
      * @return          密钥传输对象
      */
-    KeyDto generateAsymmetricKey(String tbox);
+    KeyDto generateAsymmetricKey(TboxDto tboxDto);
 
     /**
      * 将TBOX密钥与TBOX ID绑定
-     * @param tbox      TBOX ID或SN
+     * @param tboxDto   TBOX传输对象
      * @param keyDto    密钥传输对象（包含公钥加密过的TBOX密钥）
-     * @return          TBOX ID
+     * @return          TBOX传输对象
      */
-    String bindTboxWithSecretKey(String tbox, KeyDto keyDto);
+    TboxDto bindTboxWithSecretKey(TboxDto tboxDto, KeyDto keyDto);
 
 }
