@@ -5,6 +5,8 @@ import com.zxq.iov.cloud.sp.vp.api.dto.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.TboxDto;
 import com.zxq.iov.cloud.sp.vp.dao.ITboxDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  * 安防 加密服务实现类
@@ -13,20 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * create date 2015-4-23 10:56:07
  * @version 0.1, 2015-4-23
  */
+@Service
+@Qualifier("encryptionService")
 public class EncryptionServiceImpl implements IEncryptionService {
 
     @Autowired
     private ITboxDaoService tboxDaoService;
-
-    private EncryptionServiceImpl(){}
-
-    public static EncryptionServiceImpl getInstance(){
-        return EncryptionServiceInstance.instance;
-    }
-
-    private static class EncryptionServiceInstance{
-        static EncryptionServiceImpl instance = new EncryptionServiceImpl();
-    }
 
     @Override
     public KeyDto generateAsymmetricKey(TboxDto tboxDto) {

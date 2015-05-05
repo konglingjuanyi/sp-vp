@@ -9,6 +9,8 @@ import com.zxq.iov.cloud.sp.vp.entity.event.Event;
 import com.zxq.iov.cloud.sp.vp.entity.event.Task;
 import com.zxq.iov.cloud.sp.vp.entity.event.TaskStep;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -17,6 +19,8 @@ import java.util.*;
  * Date: 2015/4/23
  * Time: 11:08
  */
+@Service
+@Qualifier("encryptionEvent")
 public class EncryptionEvent extends AbstractEvent {
 
     @Autowired
@@ -29,7 +33,7 @@ public class EncryptionEvent extends AbstractEvent {
     private static final String AID = "100";
     private static final String CODE = ""; // 还未确定交换密码的具体命令代码，还有事件和任务的命令代码是否完全一致？
     private static final Integer RETRY = 0;
-    private static final Map<Integer, Integer> MID = new HashMap();
+    private static final Map<Integer, Integer> MID = new HashMap<>();
     static {
         MID.put(11, 12);
         MID.put(12, 13);
@@ -50,6 +54,7 @@ public class EncryptionEvent extends AbstractEvent {
         }
         else {
             // 抛出AID不匹配异常
+            throw new RuntimeException("AID不匹配");
         }
     }
 
@@ -83,7 +88,9 @@ public class EncryptionEvent extends AbstractEvent {
         taskStep.setRespAid(AID);
         taskStep.setRespMid(MID.get(taskStep.getMid()));
         taskStep.setRetry(RETRY);
-        taskStep.setEndTime(new Date());
+        Date now = new Date();
+        taskStep.setStartTime(now);
+        taskStep.setEndTime(now);
         taskStepDaoService.createTaskStep(taskStep);
 
         Integer nextMid = MID.get(MID.get(taskStep.getMid()));
@@ -93,9 +100,9 @@ public class EncryptionEvent extends AbstractEvent {
             nextTaskStep.setRespAid(AID);
             nextTaskStep.setRespMid(MID.get(nextTaskStep.getMid()));
             nextTaskStep.setRetry(RETRY);
-            taskStepDaoService.createTaskStep(taskStep);
+            taskStepDaoService.createTaskStep(nextTaskStep);
 
-            Task task = nextTaskStep.getTask(); // 激活当前步骤
+            Task task = taskDaoService.findTaskById(eventDto.getTaskId()); // 激活当前步骤
             task.setActiveTaskStep(nextTaskStep);
             taskDaoService.updateTask(task);
         }

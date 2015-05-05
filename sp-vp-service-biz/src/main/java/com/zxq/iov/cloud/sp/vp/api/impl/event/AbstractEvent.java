@@ -41,6 +41,10 @@ public abstract class AbstractEvent implements IEvent {
         Task task = taskDaoService.findTaskById(eventDto.getTaskId());
         task.setEndTime(new Date());
         taskDaoService.updateTask(task);
+
+        Event event = task.getEvent(); // 去除事件中该任务的激活状态
+        event.setActiveTask(null);
+        eventDaoService.updateEvent(event);
     }
 
     public abstract void startStep(EventDto eventDto);
@@ -56,9 +60,14 @@ public abstract class AbstractEvent implements IEvent {
             taskStep.setStartTime(now);
             taskStep.setEndTime(now);
             taskStepDaoService.updateTaskStep(taskStep);
+
+            Task task = taskStep.getTask(); // 去除任务中该步骤的激活状态
+            task.setActiveTaskStep(null);
+            taskDaoService.updateTask(task);
         }
         else {
             // 抛出异常
+            throw new RuntimeException("消息异常");
         }
     }
 

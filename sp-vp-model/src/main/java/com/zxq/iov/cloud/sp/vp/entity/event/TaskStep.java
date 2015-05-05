@@ -47,7 +47,7 @@ public class TaskStep extends MyBaseEntity<Long> implements Serializable {
     private Integer respMid;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "START_TIME", nullable = false, length = 7)
+    @Column(name = "START_TIME", length = 7)
     private Date startTime;
 
     @Temporal(TemporalType.TIMESTAMP)
