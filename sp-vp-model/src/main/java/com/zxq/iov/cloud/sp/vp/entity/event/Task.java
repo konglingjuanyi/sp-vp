@@ -59,7 +59,7 @@ public class Task extends MyBaseEntity<Long> implements Serializable {
     private Integer errorType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACTICE_TASK_STEP")
+    @JoinColumn(name = "ACTIVE_TASK_STEP")
     private TaskStep activeTaskStep;
 
     public Long getId() {
