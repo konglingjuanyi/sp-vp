@@ -54,6 +54,10 @@ public class Event extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "ERROR_TYPE", precision = 1, scale = 0)
     private Integer errorType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTIVE_TASK")
+    private Task activeTask;
+
     public Long getId() {
         return id;
     }
@@ -126,4 +130,11 @@ public class Event extends MyBaseEntity<Long> implements Serializable {
         this.errorType = errorType;
     }
 
+    public Task getActiveTask() {
+        return activeTask;
+    }
+
+    public void setActiveTask(Task activeTask) {
+        this.activeTask = activeTask;
+    }
 }

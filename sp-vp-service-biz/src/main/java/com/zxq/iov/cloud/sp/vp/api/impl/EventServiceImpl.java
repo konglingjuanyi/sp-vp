@@ -3,20 +3,13 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 import com.zxq.iov.cloud.sp.vp.api.IEventService;
 
 /**
- * User: 荣杰
- * Date: 2015/4/24
- * Time: 17:18
+ * 安防 事件服务实现类
+ *
+ * @author 叶荣杰
+ * create date 2015-4-24 17:18:07
+ * @version 0.1, 2015-4-24
  */
 public class EventServiceImpl implements IEventService {
-    @Override
-    public void bindStepWithRequestId(Long stepId, Integer requestId) {
-        // 绑定stepId和requestId
-    }
-
-    @Override
-    public void validateStepWithRequestId(Long taskId, Integer requestId) {
-        // 验证一致后完成该步骤，并更新其任务
-    }
 
     @Override
     public void checkEvent(Long eventId) {

@@ -5,7 +5,6 @@
 
 	<resultMap id="eventResultMap" type="TaskStep">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="REQUEST_ID" jdbcType="DECIMAL" property="requestId"/>
 		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
 		<result column="AID" jdbcType="VARCHAR" property="aid"/>
 		<result column="MID" jdbcType="DECIMAL" property="mid"/>

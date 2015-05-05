@@ -21,6 +21,8 @@
 		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
 		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
 		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<association column="ACTIVE_TASK" property="activeTask" javaType="Task"
+					 select="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskRepository.getOne"></association>
 	</resultMap>
 	
 	<!-- 分页查询 -->

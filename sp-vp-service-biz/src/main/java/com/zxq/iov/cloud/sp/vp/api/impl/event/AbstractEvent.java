@@ -1,6 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.BaseDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
@@ -30,7 +29,7 @@ public abstract class AbstractEvent implements IEvent {
 
     @Override
     public void finishEvent(EventDto eventDto) {
-        Event event = eventDaoService.findEventById(eventDto.getEventId());
+        Event event = taskDaoService.findTaskById(eventDto.getTaskId()).getEvent();
         event.setEndTime(new Date());
         eventDaoService.updateEvent(event);
     }
@@ -44,28 +43,23 @@ public abstract class AbstractEvent implements IEvent {
         taskDaoService.updateTask(task);
     }
 
-    @Override
-    public void startStep(EventDto eventDto) {
-        TaskStep taskStep = this.createTaskStep(eventDto);
-        taskStepDaoService.createTaskStep(taskStep);
-        eventDto.setStepId(taskStep.getId());
-    }
+    public abstract void startStep(EventDto eventDto);
+
+    public abstract void startAndFinishStep(EventDto eventDto);
 
     @Override
-    public EventDto startAndFinishStep(EventDto eventDto) {
-        TaskStep taskStep = this.createTaskStep(eventDto);
-        taskStep.setEndTime(new Date());
-        taskStepDaoService.createTaskStep(taskStep);
-        eventDto.setStepId(taskStep.getId());
-        return eventDto;
-    }
-
-    @Override
-    public Long finishStep(Long stepId) {
-        TaskStep taskStep = taskStepDaoService.findTaskStepById(stepId);
-        taskStep.setEndTime(new Date());
-        taskStepDaoService.updateTaskStep(taskStep);
-        return taskStep.getTask().getId();
+    public void finishStep(EventDto eventDto) {
+        TaskStep taskStep = taskDaoService.findTaskById(eventDto.getTaskId()).getActiveTaskStep();
+        if(taskStep.getAid().equals(eventDto.getAid()) &&
+                taskStep.getMid().intValue() == eventDto.getMid().intValue()) {
+            Date now = new Date();
+            taskStep.setStartTime(now);
+            taskStep.setEndTime(now);
+            taskStepDaoService.updateTaskStep(taskStep);
+        }
+        else {
+            // 抛出异常
+        }
     }
 
     protected Event createEvent(EventDto eventDto) {
@@ -88,10 +82,8 @@ public abstract class AbstractEvent implements IEvent {
     protected TaskStep createTaskStep(EventDto eventDto) {
         TaskStep taskStep = new TaskStep();
         taskStep.setTask(taskDaoService.findTaskById(eventDto.getTaskId()));
-        taskStep.setStartTime(new Date());
         taskStep.setAid(eventDto.getAid());
         taskStep.setMid(eventDto.getMid());
-        taskStep.setRequestId(eventDto.getRequestId());
         return taskStep;
     }
 }

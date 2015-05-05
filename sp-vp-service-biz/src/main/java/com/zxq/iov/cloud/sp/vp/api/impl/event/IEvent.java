@@ -42,15 +42,13 @@ public interface IEvent {
     /**
      * 开始并直接结束步骤（适用于TBOX主动发起的步骤）
      * @param eventDto  事件传输对象
-     * @return          事件传输对象
      */
-    EventDto startAndFinishStep(EventDto eventDto);
+    void startAndFinishStep(EventDto eventDto);
 
     /**
      * 结束步骤
-     * @param stepId    步骤ID
-     * @return          任务ID
+     * @param eventDto  事件传输对象
      */
-    Long finishStep(Long stepId);
+    void finishStep(EventDto eventDto);
 
 }

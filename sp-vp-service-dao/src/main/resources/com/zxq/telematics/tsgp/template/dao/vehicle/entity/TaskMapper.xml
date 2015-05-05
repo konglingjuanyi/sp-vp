@@ -23,6 +23,8 @@
 		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
 		<association column="EVENT_ID" property="event" javaType="Event"
 					 select="com.zxq.iov.cloud.sp.vp.dao.repo.IEventRepository.getOne"></association>
+		<association column="ACTIVE_TASK_STEP" property="activeTaskStep" javaType="TaskStep"
+					 select="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskStepRepository.getOne"></association>
 	</resultMap>
 	
 	<!-- 分页查询 -->

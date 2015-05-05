@@ -31,9 +31,6 @@ public class TaskStep extends MyBaseEntity<Long> implements Serializable {
     @JoinColumn(name = "TASK_ID", nullable = false)
     private Task task;
 
-    @Column(name = "REQUEST_ID", precision = 6, scale = 0)
-    private Integer requestId;
-
     @Column(name = "TYPE", precision = 6, scale = 0)
     private Integer type;
 
@@ -77,14 +74,6 @@ public class TaskStep extends MyBaseEntity<Long> implements Serializable {
 
     public void setTask(Task task) {
         this.task = task;
-    }
-
-    public Integer getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
     }
 
     public Integer getType() {
