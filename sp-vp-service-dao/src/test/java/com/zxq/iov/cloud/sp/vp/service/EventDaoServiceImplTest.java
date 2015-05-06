@@ -30,6 +30,7 @@ public class EventDaoServiceImplTest extends BaseServiceTestCase {
     public void testCreateEvent(){
         Event event = new Event();
         event.setVin("001");
+        event.setTbox("001");
         event.setCode("1");
         event.setStartTime(new Date());
         event = eventDaoService.createEvent(event);
@@ -39,7 +40,7 @@ public class EventDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testUpdateEvent(){
-        Long eventId = 11L;
+        Long eventId = 15L;
         Event event = eventDaoService.findEventById(eventId);
         event.setVin("002");
         event = eventDaoService.updateEvent(event);

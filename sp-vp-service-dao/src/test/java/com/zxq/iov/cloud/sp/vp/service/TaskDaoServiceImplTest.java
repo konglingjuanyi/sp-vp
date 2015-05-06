@@ -30,10 +30,11 @@ public class TaskDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testCreateTask(){
-        Long eventId = 11L;
+        Long eventId = 15L;
         Task task = new Task();
         task.setEvent(eventDaoService.findEventById(eventId));
         task.setVin("002");
+        task.setTbox("001");
         task.setCode("1");
         task.setSort(1L);
         task.setStartTime(new Date());
@@ -44,7 +45,7 @@ public class TaskDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testUpdateTask(){
-        Long taskId = 5L;
+        Long taskId = 8L;
         Task task = taskDaoService.findTaskById(taskId);
         task.setCode("2");
         task = taskDaoService.updateTask(task);

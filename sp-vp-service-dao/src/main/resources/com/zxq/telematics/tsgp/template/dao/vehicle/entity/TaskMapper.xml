@@ -6,6 +6,7 @@
 	<resultMap id="eventResultMap" type="Task">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
+		<result column="TBOX" jdbcType="VARCHAR" property="tbox"/>
 		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="PLATFORM" jdbcType="DECIMAL" property="platform"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>

@@ -31,6 +31,12 @@ public class TaskStep extends MyBaseEntity<Long> implements Serializable {
     @JoinColumn(name = "TASK_ID", nullable = false)
     private Task task;
 
+    @Column(name = "VIN", length=17)
+    private String vin;
+
+    @Column(name = "TBOX", nullable = false, length=20)
+    private String tbox;
+
     @Column(name = "TYPE", precision = 6, scale = 0)
     private Integer type;
 
@@ -74,6 +80,22 @@ public class TaskStep extends MyBaseEntity<Long> implements Serializable {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getTbox() {
+        return tbox;
+    }
+
+    public void setTbox(String tbox) {
+        this.tbox = tbox;
     }
 
     public Integer getType() {

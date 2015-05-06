@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 /**
- * User: 荣杰
- * Date: 2015/4/23
- * Time: 11:54
+ * 安防 事件抽象类
+ *
+ * @author 叶荣杰
+ * create date 2015-4-23 11:54
+ * modify date 2015-5-5 17:26
+ * @version 0.2, 2015-5-5
  */
 public abstract class AbstractEvent implements IEvent {
 
@@ -74,6 +77,7 @@ public abstract class AbstractEvent implements IEvent {
     protected Event createEvent(EventDto eventDto) {
         Event event = new Event();
         event.setVin(eventDto.getVin());
+        event.setTbox(eventDto.getTbox());
         event.setPlatform(eventDto.getPlatform());
         event.setStartTime(new Date());
         return event;
@@ -83,6 +87,7 @@ public abstract class AbstractEvent implements IEvent {
         Task task = new Task();
         task.setEvent(eventDaoService.findEventById(eventDto.getEventId()));
         task.setVin(eventDto.getVin());
+        task.setTbox(eventDto.getTbox());
         task.setPlatform(eventDto.getPlatform());
         task.setStartTime(new Date());
         return task;
@@ -91,6 +96,8 @@ public abstract class AbstractEvent implements IEvent {
     protected TaskStep createTaskStep(EventDto eventDto) {
         TaskStep taskStep = new TaskStep();
         taskStep.setTask(taskDaoService.findTaskById(eventDto.getTaskId()));
+        taskStep.setVin(eventDto.getVin());
+        taskStep.setTbox(eventDto.getTbox());
         taskStep.setAid(eventDto.getAid());
         taskStep.setMid(eventDto.getMid());
         return taskStep;

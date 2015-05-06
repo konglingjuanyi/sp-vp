@@ -27,8 +27,11 @@ public class Event extends MyBaseEntity<Long> implements Serializable {
             pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
     private Long id;
 
-    @Column(name = "VIN", nullable = false, length=17)
+    @Column(name = "VIN", length=17)
     private String vin;
+
+    @Column(name = "TBOX", nullable = false, length=20)
+    private String tbox;
 
     @Column(name = "CODE", nullable = false, length=32)
     private String code;
@@ -72,6 +75,14 @@ public class Event extends MyBaseEntity<Long> implements Serializable {
 
     public void setVin(String vin) {
         this.vin = vin;
+    }
+
+    public String getTbox() {
+        return tbox;
+    }
+
+    public void setTbox(String tbox) {
+        this.tbox = tbox;
     }
 
     public String getCode() {

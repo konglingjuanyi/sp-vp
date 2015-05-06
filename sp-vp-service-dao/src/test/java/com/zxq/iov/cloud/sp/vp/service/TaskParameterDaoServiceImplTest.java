@@ -30,8 +30,8 @@ public class TaskParameterDaoServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testCreateTaskStep(){
-        Long taskId = 5L;
+    public void testCreateTaskParameter(){
+        Long taskId = 8L;
         TaskParameter taskParameter = new TaskParameter();
         taskParameter.setTask(taskDaoService.findTaskById(taskId));
         taskParameter.setName("a");

@@ -32,9 +32,10 @@ public class TaskStepDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testCreateTaskStep(){
-        Long taskId = 5L;
+        Long taskId = 8L;
         TaskStep taskStep = new TaskStep();
         taskStep.setTask(taskDaoService.findTaskById(taskId));
+        taskStep.setTbox("001");
         taskStep.setAid("001");
         taskStep.setMid(1);
         taskStep.setStartTime(new Date());
@@ -45,7 +46,7 @@ public class TaskStepDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testUpdateTaskStep(){
-        Long taskStepId = 4L;
+        Long taskStepId = 9L;
         TaskStep taskStep = taskStepDaoService.findTaskStepById(taskStepId);
         System.out.println("=====" + taskStep.getTask().getCode());
         taskStep.setMid(2);

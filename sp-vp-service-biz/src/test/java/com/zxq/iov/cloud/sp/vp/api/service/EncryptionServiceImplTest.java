@@ -31,6 +31,7 @@ public class EncryptionServiceImplTest extends BaseServiceTestCase {
         tboxDto.setAid("100");
         tboxDto.setMid(11);
         tboxDto.setVin("111");
+        tboxDto.setTbox("001");
         encryptionService.generateAsymmetricKey(tboxDto);
     }
 
@@ -41,7 +42,7 @@ public class EncryptionServiceImplTest extends BaseServiceTestCase {
         tboxDto.setAid("100");
         tboxDto.setMid(13);
         tboxDto.setVin("111");
-        tboxDto.setTaskId(8L);
+        tboxDto.setTaskId(12L);
         KeyDto keyDto = new KeyDto();
         encryptionService.bindTboxWithSecretKey(tboxDto, keyDto);
     }
