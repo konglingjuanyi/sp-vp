@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.BaseDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
+import com.zxq.iov.cloud.sp.vp.common.OtaConstants;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskStepDaoService;
@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * User: 荣杰
- * Date: 2015/4/23
- * Time: 11:08
+ * 安防 交换密码事件类
+ *
+ * @author 叶荣杰
+ * create date 2015-4-23 11:08
+ * @version 0.2, 2015-4-23
  */
 @Service
 @Qualifier("encryptionEvent")
@@ -30,7 +32,7 @@ public class EncryptionEvent extends AbstractEvent {
     @Autowired
     private ITaskStepDaoService taskStepDaoService;
 
-    private static final String AID = "100";
+    private static final String AID = OtaConstants.OTA_CONFIGURATION;
     private static final String CODE = ""; // 还未确定交换密码的具体命令代码，还有事件和任务的命令代码是否完全一致？
     private static final Integer RETRY = 0;
     private static final Map<Integer, Integer> MID = new HashMap<>();
@@ -42,20 +44,15 @@ public class EncryptionEvent extends AbstractEvent {
 
     @Override
     public void startEvent(EventDto eventDto) {
-        if(AID.equals(eventDto.getAid())) {
-            Event event = super.createEvent(eventDto);
-            event.setCode(CODE);
-            // event.setExpirationTime(); // 未确定具体超时时间
-            eventDaoService.createEvent(event);
-            eventDto.setEventId(event.getId());
-            // 推送第三方轮询来触发超时机制
+        super.checkAid(eventDto, AID);
+        Event event = super.createEvent(eventDto);
+        event.setCode(CODE);
+        // event.setExpirationTime(); // 未确定具体超时时间
+        eventDaoService.createEvent(event);
+        eventDto.setEventId(event.getId());
+        // 推送第三方轮询来触发超时机制
 
-            this.startTask(eventDto); // 开始交换密钥任务
-        }
-        else {
-            // 抛出AID不匹配异常
-            throw new RuntimeException("AID不匹配");
-        }
+        this.startTask(eventDto); // 开始交换密钥任务
     }
 
     @Override

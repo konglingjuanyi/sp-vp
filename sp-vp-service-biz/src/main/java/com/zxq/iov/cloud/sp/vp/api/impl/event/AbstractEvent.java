@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
+import com.zxq.iov.cloud.sp.vp.api.exception.AidNotMatchException;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskStepDaoService;
@@ -101,5 +102,16 @@ public abstract class AbstractEvent implements IEvent {
         taskStep.setAid(eventDto.getAid());
         taskStep.setMid(eventDto.getMid());
         return taskStep;
+    }
+
+    /**
+     * 检查AID是否一致
+     * @param eventDto
+     * @param aid
+     */
+    protected void checkAid(EventDto eventDto, String aid) {
+        if(!aid.equals(eventDto.getAid())) {
+            throw new AidNotMatchException();
+        }
     }
 }
