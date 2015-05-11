@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskRepository">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.EventMapper">
 
-	<resultMap id="eventResultMap" type="Task">
+	<resultMap id="eventResultMap" type="Event">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="TBOX" jdbcType="VARCHAR" property="tbox"/>
 		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="PLATFORM" jdbcType="DECIMAL" property="platform"/>
+		<result column="DELAY_TIME" jdbcType="DECIMAL" property="delayTime"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
 		<result column="EXPIRATION_TIME" jdbcType="TIMESTAMP" property="expirationTime"/>
-		<result column="SORT" jdbcType="DECIMAL" property="sort"/>
 		<result column="ERROR_TYPE" jdbcType="DECIMAL" property="errorType"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
 		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
@@ -22,17 +22,15 @@
 		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
 		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
 		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
-		<association column="EVENT_ID" property="event" javaType="Event"
-					 select="com.zxq.iov.cloud.sp.vp.dao.repo.IEventRepository.getOne"></association>
-		<association column="ACTIVE_TASK_STEP" property="activeTaskStep" javaType="TaskStep"
-					 select="com.zxq.iov.cloud.sp.vp.dao.repo.ITaskStepRepository.getOne"></association>
+		<association column="ACTIVE_TASK" property="activeTask" javaType="Task"
+					 select="com.zxq.iov.cloud.sp.vp.entity.event.TaskMapper.selectOne" />
 	</resultMap>
 	
 	<!-- 分页查询 -->
 	<sql id="selectPageTemplate">
 		SELECT t.*
-		FROM TB_TASK t
-		and IFNULL(t.is_valid, 1) = 1
+		FROM TB_EVENT t
+		WHERE IFNULL(t.is_valid, 1) = 1
 	</sql>	
 	<select id="selectPageCount" parameterType="hashmap" resultType="long">
 		SELECT COUNT(*) FROM (
@@ -47,9 +45,27 @@
 	<!-- 分页查询 -->
 
 	<!-- 业务查询 -->
-    <select id="selectSample" parameterType="Task" resultMap="eventResultMap">
-        SELECT * FROM TB_TASK t
+    <select id="selectSample" parameterType="Event" resultMap="eventResultMap">
+        SELECT * FROM TB_EVENT t
         WHERE t.is_valid = 1
     </select>
+
+	<select id="selectList" parameterType="hashmap" resultMap="eventResultMap">
+		<include refid="selectPageTemplate"/>
+		<if test="tbox != null and tbox != ''">
+			AND TBOX = #{tbox,jdbcType=VARCHAR}
+		</if>
+		<if test="code != null and code != ''">
+			AND CODE = #{code,jdbcType=VARCHAR}
+		</if>
+		<if test="activeEvent != null and activeEvent">
+			AND END_TIME IS NULL
+		</if>
+	</select>
+
+	<select id="selectOne" resultMap="eventResultMap" parameterType="java.lang.String">
+		<include refid="selectPageTemplate"/>
+		AND ID = #{id,jdbcType=VARCHAR}
+	</select>
 
 </mapper>

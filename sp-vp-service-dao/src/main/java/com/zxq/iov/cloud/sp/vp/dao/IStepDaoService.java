@@ -13,37 +13,37 @@
 package com.zxq.iov.cloud.sp.vp.dao;
 
 import com.zxq.iov.cloud.core.service.BaseService;
-import com.zxq.iov.cloud.sp.vp.entity.event.Task;
-import com.zxq.iov.cloud.sp.vp.entity.event.TaskStep;
+import com.zxq.iov.cloud.sp.vp.entity.event.Step;
 
 /**
- * 安防 任务步骤持久化服务接口
+ * 安防 步骤持久化服务接口
  *
  * @author 叶荣杰
  * create date 2015-4-30 15:48:07
- * @version 0.1, 2015-4-30
+ * modify date 2015-5-8 15:31
+ * @version 0.2, 2015-5-8
  */
-public interface ITaskStepDaoService extends BaseService<TaskStep, Long> {
+public interface IStepDaoService extends BaseService<Step, Long> {
 
 	/**
 	 * 创建任务步骤
-	 * @param taskStep	任务步骤对象
+	 * @param step		任务步骤对象
 	 * @return			任务步骤对象
 	 */
-	TaskStep createTaskStep (TaskStep taskStep);
+	Step createStep (Step step);
 
 	/**
 	 * 更新任务步骤
-	 * @param taskStep	任务步骤对象
+	 * @param step		任务步骤对象
 	 * @return			任务步骤对象
 	 */
-	TaskStep updateTaskStep(TaskStep taskStep);
+	Step updateStep(Step step);
 
 	/**
 	 * 根据Task ID得到任务步骤对象
-	 * @param taskStepId 	任务步骤ID
-	 * @return				任务步骤对象
+	 * @param stepId 	任务步骤ID
+	 * @return			任务步骤对象
 	 */
-	TaskStep findTaskStepById(Long taskStepId);
+	Step findStepById(Long stepId);
 	
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.VehicleMapper">
+
+	<resultMap id="vehicleResultMap" type="Vehicle">		 	    
+		<id column="id" javaType="Long"  property="id"></id>
+		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_VEHICLE t
+		and IFNULL(t.is_valid, 1) = 1
+		<if test="userId != null">
+			AND t.USER_ID = #{userId}
+		</if>	
+	</sql>	
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+	
+	<select id="selectPage" parameterType="hashmap" resultMap="vehicleResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="Vehicle" resultMap="vehicleResultMap">
+        SELECT * FROM TB_VEHICLE t
+        WHERE t.is_valid = 1
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
+    </select>
+
+</mapper>

@@ -21,6 +21,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * 安防 事件持久化服务接口实现类
@@ -63,5 +67,14 @@ public class EventDaoServiceImpl extends BaseServiceImpl<IEventRepository, Event
 			LOGGER.error("Event ID cannot be null");
 		}
 		return super.findOne(eventId);
+	}
+
+	@Override
+	public List<Event> findActiveEventByTboxAndCode(String tbox, String code) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("tbox", tbox);
+		paramMap.put("code", code);
+		paramMap.put("activeEvent", true);
+		return super.findListViaBatis(paramMap);
 	}
 }

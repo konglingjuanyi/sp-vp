@@ -2,6 +2,8 @@ package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
 
+import java.io.IOException;
+
 /**
  * User: 荣杰
  * Date: 2015/4/24
@@ -11,44 +13,41 @@ public interface IEvent {
 
     /**
      * 开始事件
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
      */
     void startEvent(EventDto eventDto);
 
     /**
      * 结束事件
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
      */
     void finishEvent(EventDto eventDto);
 
     /**
      * 开始任务
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
      */
     void startTask(EventDto eventDto);
 
     /**
      * 结束任务
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
      */
     void finishTask(EventDto eventDto);
 
     /**
      * 开始步骤
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
+     * @param clazz         结果对象类
+     * @return              结果对象
      */
-    void startStep(EventDto eventDto);
-
-    /**
-     * 开始并直接结束步骤（适用于TBOX主动发起的步骤）
-     * @param eventDto  事件传输对象
-     */
-    void startAndFinishStep(EventDto eventDto);
+    Object startStep(EventDto eventDto, Class clazz);
 
     /**
      * 结束步骤
-     * @param eventDto  事件传输对象
+     * @param eventDto      事件传输对象
+     * @param result        结果对象
      */
-    void finishStep(EventDto eventDto);
+    void finishStep(EventDto eventDto, Object result);
 
 }

@@ -7,18 +7,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 安防服务 任务步骤类
+ * 安防服务 步骤类
  * @author 叶荣杰
  * create time 2015-4-23 13:59:07
- * modify by
- * modify time
- * @version 0.1, 2015-4-23
+ * modify time 2015-5-8 15:25
+ * @version 0.2, 2015-5-8
  */
 @Entity()
-@Table(name = "TB_TASK_STEP")
-public class TaskStep extends MyBaseEntity<Long> implements Serializable {
+@Table(name = "TB_STEP")
+public class Step extends MyBaseEntity<Long> implements Serializable {
 
-    private static final String SEQ_NAME = "seq_tb_task_step";
+    private static final String SEQ_NAME = "seq_tb_step";
 
     @Id
     @Column(name = "ID", nullable = false, updatable = false, length=20)

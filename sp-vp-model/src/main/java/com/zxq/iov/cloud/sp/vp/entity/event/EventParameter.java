@@ -7,18 +7,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 安防服务 任务参数类
+ * 安防服务 事件参数类
  * @author 叶荣杰
- * create time 2015-5-4 9:25:07
- * modify by
- * modify time
- * @version 0.1, 2015-5-4
+ * create time 2015-5-4 9:25
+ * modify time 2015-5-8 18:02
+ * @version 0.2, 2015-5-8
  */
 @Entity()
-@Table(name = "TB_TASK_PARAMETER")
-public class TaskParameter extends MyBaseEntity<Long> implements Serializable {
+@Table(name = "TB_EVENT_PARAMETER")
+public class EventParameter extends MyBaseEntity<Long> implements Serializable {
 
-    private static final String SEQ_NAME = "seq_tb_task_parameter";
+    private static final String SEQ_NAME = "seq_tb_event_parameter";
 
     @Id
     @Column(name = "ID", nullable = false, updatable = false, length=20)
@@ -28,8 +27,16 @@ public class TaskParameter extends MyBaseEntity<Long> implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TASK_ID", nullable = false)
+    @JoinColumn(name = "EVENT_ID")
+    private Event event;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TASK_ID")
     private Task task;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STEP_ID")
+    private Step step;
 
     @Column(name = "NAME", length=32)
     private String name;
@@ -45,12 +52,28 @@ public class TaskParameter extends MyBaseEntity<Long> implements Serializable {
         this.id = id;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     public Task getTask() {
         return task;
     }
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
     }
 
     public String getName() {

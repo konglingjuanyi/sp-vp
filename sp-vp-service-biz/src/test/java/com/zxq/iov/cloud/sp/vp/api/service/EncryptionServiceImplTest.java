@@ -4,6 +4,7 @@ import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IEncryptionService;
 import com.zxq.iov.cloud.sp.vp.api.dto.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.TboxDto;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,7 +33,8 @@ public class EncryptionServiceImplTest extends BaseServiceTestCase {
         tboxDto.setMid(11);
         tboxDto.setVin("111");
         tboxDto.setTbox("001");
-        encryptionService.generateAsymmetricKey(tboxDto);
+        KeyDto keyDto = encryptionService.generateAsymmetricKey(tboxDto);
+        Assert.assertNotNull(keyDto);
     }
 
     @Test
@@ -42,7 +44,8 @@ public class EncryptionServiceImplTest extends BaseServiceTestCase {
         tboxDto.setAid("100");
         tboxDto.setMid(13);
         tboxDto.setVin("111");
-        tboxDto.setTaskId(12L);
+        tboxDto.setTbox("001");
+        tboxDto.setTaskId(21L);
         KeyDto keyDto = new KeyDto();
         encryptionService.bindTboxWithSecretKey(tboxDto, keyDto);
     }

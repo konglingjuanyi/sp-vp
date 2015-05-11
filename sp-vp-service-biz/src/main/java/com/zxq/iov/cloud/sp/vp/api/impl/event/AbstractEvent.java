@@ -1,16 +1,21 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
+import com.alibaba.dubbo.common.json.JSON;
 import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
 import com.zxq.iov.cloud.sp.vp.api.exception.AidNotMatchException;
 import com.zxq.iov.cloud.sp.vp.dao.IEventDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.ITaskDaoService;
-import com.zxq.iov.cloud.sp.vp.dao.ITaskStepDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.IEventParameterDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.IStepDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.Event;
+import com.zxq.iov.cloud.sp.vp.entity.event.EventParameter;
+import com.zxq.iov.cloud.sp.vp.entity.event.Step;
 import com.zxq.iov.cloud.sp.vp.entity.event.Task;
-import com.zxq.iov.cloud.sp.vp.entity.event.TaskStep;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防 事件抽象类
@@ -27,15 +32,25 @@ public abstract class AbstractEvent implements IEvent {
     @Autowired
     private ITaskDaoService taskDaoService;
     @Autowired
-    private ITaskStepDaoService taskStepDaoService;
+    private IStepDaoService stepDaoService;
+    @Autowired
+    private IEventParameterDaoService taskParameterDaoService;
+
+    protected String aid; // 应用ID
+    protected String eventCode; // 事件命令代码
+    protected String taskCode; // 任务命令代码
+    protected boolean isExclusive; // 是否互斥
+    protected boolean isContinue; // 是否继续
 
     public abstract void startEvent(EventDto eventDto);
 
     @Override
     public void finishEvent(EventDto eventDto) {
         Event event = taskDaoService.findTaskById(eventDto.getTaskId()).getEvent();
-        event.setEndTime(new Date());
-        eventDaoService.updateEvent(event);
+        if(null == event.getEndTime()) {
+            event.setEndTime(new Date());
+            eventDaoService.updateEvent(event);
+        }
     }
 
     public abstract void startTask(EventDto eventDto);
@@ -43,31 +58,36 @@ public abstract class AbstractEvent implements IEvent {
     @Override
     public void finishTask(EventDto eventDto) {
         Task task = taskDaoService.findTaskById(eventDto.getTaskId());
-        task.setEndTime(new Date());
-        taskDaoService.updateTask(task);
-
-        Event event = task.getEvent(); // 去除事件中该任务的激活状态
-        event.setActiveTask(null);
-        eventDaoService.updateEvent(event);
+        if(null == task.getEndTime()) {
+            task.setEndTime(new Date());
+            taskDaoService.updateTask(task);
+        }
     }
 
-    public abstract void startStep(EventDto eventDto);
-
-    public abstract void startAndFinishStep(EventDto eventDto);
+    public abstract Object startStep(EventDto eventDto, Class clazz);
 
     @Override
-    public void finishStep(EventDto eventDto) {
-        TaskStep taskStep = taskDaoService.findTaskById(eventDto.getTaskId()).getActiveTaskStep();
-        if(taskStep.getAid().equals(eventDto.getAid()) &&
-                taskStep.getMid().intValue() == eventDto.getMid().intValue()) {
+    public void finishStep(EventDto eventDto, Object result) {
+        Step step = taskDaoService.findTaskById(eventDto.getTaskId()).getActiveStep();
+        if(step.getAid().equals(eventDto.getAid()) &&
+                step.getMid().intValue() == eventDto.getMid().intValue()) {
             Date now = new Date();
-            taskStep.setStartTime(now);
-            taskStep.setEndTime(now);
-            taskStepDaoService.updateTaskStep(taskStep);
+            step.setStartTime(now);
+            step.setEndTime(now);
+            stepDaoService.updateStep(step);
 
-            Task task = taskStep.getTask(); // 去除任务中该步骤的激活状态
-            task.setActiveTaskStep(null);
-            taskDaoService.updateTask(task);
+            // 保存结果参数
+            EventParameter eventParameter = new EventParameter();
+            eventParameter.setEvent(step.getTask().getEvent());
+            eventParameter.setTask(step.getTask());
+            eventParameter.setStep(step);
+            eventParameter.setName("result");
+            try {
+                eventParameter.setValue(JSON.json(result));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            taskParameterDaoService.createEventParameter(eventParameter);
         }
         else {
             // 抛出异常
@@ -94,24 +114,76 @@ public abstract class AbstractEvent implements IEvent {
         return task;
     }
 
-    protected TaskStep createTaskStep(EventDto eventDto) {
-        TaskStep taskStep = new TaskStep();
-        taskStep.setTask(taskDaoService.findTaskById(eventDto.getTaskId()));
-        taskStep.setVin(eventDto.getVin());
-        taskStep.setTbox(eventDto.getTbox());
-        taskStep.setAid(eventDto.getAid());
-        taskStep.setMid(eventDto.getMid());
-        return taskStep;
+    protected Step createStep(EventDto eventDto) {
+        Step step = new Step();
+        step.setTask(taskDaoService.findTaskById(eventDto.getTaskId()));
+        step.setVin(eventDto.getVin());
+        step.setTbox(eventDto.getTbox());
+        step.setAid(eventDto.getAid());
+        step.setMid(eventDto.getMid());
+        step.setRetry(0);
+        return step;
     }
 
     /**
-     * 检查AID是否一致
+     * 检查事件
      * @param eventDto
-     * @param aid
      */
-    protected void checkAid(EventDto eventDto, String aid) {
-        if(!aid.equals(eventDto.getAid())) {
+    protected boolean checkEvent(EventDto eventDto) {
+        boolean flag = true;
+        if(!this.aid.equals(eventDto.getAid())) {
             throw new AidNotMatchException();
         }
+        if(isExclusive) {
+            // 如果是互斥事件，检查当前TBOX的当前CODE的事件是否有已激活的
+            List<Event> list = eventDaoService.findActiveEventByTboxAndCode(eventDto.getTbox(), eventCode);
+            if(list.size() > 0) {
+                eventDto.setEventId(list.get(0).getId());
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 检查任务
+     * @param eventDto
+     * @return
+     */
+    protected boolean checkTask(EventDto eventDto) {
+        boolean flag = true;
+        if(null == eventDto.getEventId()) {
+            eventDto.setEventId(taskDaoService.findTaskById(eventDto.getTaskId()).getId());
+        }
+        if(isContinue) {
+            // 如果是可继续任务，检查当前任务是否已被执行
+            Event event = eventDaoService.findEventById(eventDto.getEventId());
+            if(null != event.getActiveTask() && null == eventDto.getTaskId()) {
+                eventDto.setTaskId(event.getActiveTask().getId());
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 检查任务步骤
+     * @param eventDto
+     * @return
+     */
+    protected boolean checkStep(EventDto eventDto) {
+        boolean flag = true;
+        if(isContinue) {
+            // 如果是可继续任务，检查当前任务步骤是否已被执行
+            Task task = taskDaoService.findTaskById(eventDto.getTaskId());
+            Step step = task.getActiveStep();
+            if(null != step && step.getAid().equals(eventDto.getAid()) &&
+                    step.getMid().intValue() == eventDto.getMid().intValue()) {
+                step.setRetry(step.getRetry() + 1);
+                stepDaoService.update(step);
+                flag = false;
+            }
+        }
+        return flag;
     }
 }

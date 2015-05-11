@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+
 /**
  * 安防 事件代理加密服务实现类
  *
@@ -31,15 +33,26 @@ public class EncryptionServiceProxy implements IEncryptionService {
     @Override
     public KeyDto generateAsymmetricKey(TboxDto tboxDto) {
         this.event.startEvent(tboxDto);
-        KeyDto keyDto = this.encryptionService.generateAsymmetricKey(tboxDto);
+        this.event.startTask(tboxDto);
+        Object result = this.event.startStep(tboxDto, KeyDto.class);
+        if(null == result) {
+            result = this.encryptionService.generateAsymmetricKey(tboxDto);
+            this.event.finishStep(tboxDto, result);
+        }
+        KeyDto keyDto = (KeyDto)result;
         keyDto.setTaskId(tboxDto.getTaskId());
         return keyDto;
     }
 
     @Override
     public TboxDto bindTboxWithSecretKey(TboxDto tboxDto, KeyDto keyDto) {
-        tboxDto = this.encryptionService.bindTboxWithSecretKey(tboxDto, keyDto);
+        Object result = this.event.startStep(tboxDto, TboxDto.class);
+        if(null == result) {
+            result = this.encryptionService.bindTboxWithSecretKey(tboxDto, keyDto);
+            this.event.finishStep(tboxDto, result);
+        }
+        this.event.finishTask(tboxDto);
         this.event.finishEvent(tboxDto);
-        return tboxDto;
+        return (TboxDto)result;
     }
 }

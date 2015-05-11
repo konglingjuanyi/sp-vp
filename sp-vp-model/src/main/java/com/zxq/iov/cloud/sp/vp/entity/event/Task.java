@@ -9,10 +9,9 @@ import java.util.Date;
 /**
  * 安防服务 任务类
  * @author 叶荣杰
- * create time 2015-4-23 11:51:07
- * modify by
- * modify time
- * @version 0.1, 2015-4-23
+ * create time 2015-4-23 11:51
+ * modify time 2015-5-8 15:28
+ * @version 0.2, 2015-5-8
  */
 @Entity()
 @Table(name = "TB_TASK")
@@ -62,8 +61,8 @@ public class Task extends MyBaseEntity<Long> implements Serializable {
     private Integer errorType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACTIVE_TASK_STEP")
-    private TaskStep activeTaskStep;
+    @JoinColumn(name = "ACTIVE_STEP")
+    private Step activeStep;
 
     public Long getId() {
         return id;
@@ -153,11 +152,11 @@ public class Task extends MyBaseEntity<Long> implements Serializable {
         this.errorType = errorType;
     }
 
-    public TaskStep getActiveTaskStep() {
-        return activeTaskStep;
+    public Step getActiveStep() {
+        return activeStep;
     }
 
-    public void setActiveTaskStep(TaskStep activeTaskStep) {
-        this.activeTaskStep = activeTaskStep;
+    public void setActiveStep(Step activeStep) {
+        this.activeStep = activeStep;
     }
 }

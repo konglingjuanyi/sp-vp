@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * Created with IntelliJ IDEA.
- * User: tokxp
- * Date: 14-11-27
- * Time: 上午8:56
+ * 安防 任务持久化服务测试类
+ *
+ * @author 叶荣杰
+ * create date 2015-4-29 8:56
+ * @version 0.1, 2015-4-29
  */
 @Transactional
 public class TaskDaoServiceImplTest extends BaseServiceTestCase {
@@ -30,7 +31,7 @@ public class TaskDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testCreateTask(){
-        Long eventId = 15L;
+        Long eventId = 22L;
         Task task = new Task();
         task.setEvent(eventDaoService.findEventById(eventId));
         task.setVin("002");
@@ -45,7 +46,7 @@ public class TaskDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(true)
     public void testUpdateTask(){
-        Long taskId = 8L;
+        Long taskId = 14L;
         Task task = taskDaoService.findTaskById(taskId);
         task.setCode("2");
         task = taskDaoService.updateTask(task);
