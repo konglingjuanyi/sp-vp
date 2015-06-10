@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.journey.JourneyMapper">
+
+	<resultMap id="journeyResultMap" type="Journey">
+		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="TBOX_JOURNEY_ID" jdbcType="DECIMAL" property="tboxJourneyId"/>
+		<result column="OWNER_ID" jdbcType="DECIMAL" property="ownerId"/>
+		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
+		<result column="KEY_ID" jdbcType="DECIMAL" property="keyId"/>
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
+		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
+		<result column="START_VEHICLE_INFO_ID" jdbcType="DECIMAL" property="startVehicleInfoId"/>
+		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
+		<result column="END_VEHICLE_INFO_ID" jdbcType="DECIMAL" property="endVehicleInfoId"/>
+		<result column="DISTANCE" jdbcType="DECIMAL" property="distance"/>
+		<result column="AVG_SPEED" jdbcType="DECIMAL" property="avgSpeed"/>
+		<result column="FUEL_CONSUMPTION" jdbcType="DECIMAL" property="fuelConsumption"/>
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_JOURNEY t
+		WHERE IFNULL(t.is_valid, 1) = 1
+	</sql>	
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+	
+	<select id="selectPage" parameterType="hashmap" resultMap="journeyResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="Journey" resultMap="journeyResultMap">
+        SELECT * FROM TB_JOURNEY t
+        WHERE t.is_valid = 1
+    </select>
+
+	<select id="selectList" parameterType="hashmap" resultMap="journeyResultMap">
+		<include refid="selectPageTemplate"/>
+		<if test="tboxJourneyId != null">
+			AND TBOX_JOURNEY_ID = #{tboxJourneyId,jdbcType=DECIMAL}
+		</if>
+	</select>
+
+	<select id="selectOne" resultMap="journeyResultMap" parameterType="java.lang.Long">
+		<include refid="selectPageTemplate"/>
+		AND ID = #{id, jdbcType=DECIMAL}
+	</select>
+
+</mapper>

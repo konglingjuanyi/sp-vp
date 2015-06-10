@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.status;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * create date 2015-5-13 13:58
  * @version 0.1, 2015-5-13
  */
-public class VehicleInfoDto extends EventDto {
+public class VehicleInfoDto extends OtaDto {
 
     private Long id;
     private Integer sourceType;

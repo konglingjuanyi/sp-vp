@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.entity.status;
 
 import com.zxq.iov.cloud.core.dal.entity.MyBaseEntity;
-import com.zxq.iov.cloud.sp.vp.entity.event.Event;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.TaskInstanceMapper">
+
+	<resultMap id="taskInstanceResultMap" type="TaskInstance">
+		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="TASK_DEFINITION_ID" jdbcType="DECIMAL" property="taskDefinitionId"/>
+		<result column="EVENT_INSTANCE_ID" jdbcType="DECIMAL" property="eventInstanceId"/>
+		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
+		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
+		<result column="ERROR_CODE" jdbcType="DECIMAL" property="errorCode"/>
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<association column="TASK_DEFINITION_ID" property="taskDefinition" javaType="TaskDefinition"
+					 select="com.zxq.iov.cloud.sp.vp.entity.event.TaskDefinitionMapper.selectOne"/>
+		<association column="EVENT_INSTANCE_ID" property="eventInstance" javaType="EventInstance"
+					 select="com.zxq.iov.cloud.sp.vp.entity.event.EventInstanceMapper.selectOne" />
+	</resultMap>
+
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_TASK_INSTANCE t
+		WHERE IFNULL(t.is_valid, 1) = 1
+	</sql>
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+
+	<select id="selectPage" parameterType="hashmap" resultMap="taskInstanceResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="TaskInstance" resultMap="taskInstanceResultMap">
+        SELECT * FROM TB_TASK_INSTANCE t
+        WHERE t.is_valid = 1
+    </select>
+
+	<select id="selectList" parameterType="hashmap" resultMap="taskInstanceResultMap">
+		<include refid="selectPageTemplate"/>
+		<if test="eventInstanceId != null">
+			AND EVENT_INSTANCE_ID = #{eventInstanceId,jdbcType=DECIMAL}
+		</if>
+		<if test="taskDefinitionId != null">
+			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			AND STATUS = #{status,jdbcType=DECIMAL}
+		</if>
+	</select>
+
+	<select id="selectOne" resultMap="taskInstanceResultMap" parameterType="java.lang.Long">
+		<include refid="selectPageTemplate"/>
+		AND ID = #{id,jdbcType=DECIMAL}
+	</select>
+
+</mapper>

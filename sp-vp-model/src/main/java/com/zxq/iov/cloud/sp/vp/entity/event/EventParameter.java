@@ -4,14 +4,13 @@ import com.zxq.iov.cloud.core.dal.entity.MyBaseEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 安防服务 事件参数类
  * @author 叶荣杰
  * create time 2015-5-4 9:25
- * modify time 2015-5-8 18:02
- * @version 0.2, 2015-5-8
+ * modify time 2015-6-8 15:38
+ * @version 0.3, 2015-6-8
  */
 @Entity()
 @Table(name = "TB_EVENT_PARAMETER")
@@ -26,19 +25,17 @@ public class EventParameter extends MyBaseEntity<Long> implements Serializable {
             pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EVENT_ID")
-    private Event event;
+    @Column(name = "TYPE", nullable = false, precision = 4, scale = 0)
+    private Integer type;
+
+    @Column(name = "STEP_INSTANCE_ID", precision = 20, scale = 0)
+    private Long stepInstanceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TASK_ID")
-    private Task task;
+    @JoinColumn(name = "STEP_INSTANCE_ID", insertable = false, updatable = false)
+    private StepInstance stepInstance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STEP_ID")
-    private Step step;
-
-    @Column(name = "NAME", length=32)
+    @Column(name = "NAME", length=50)
     private String name;
 
     @Column(name = "VALUE", length=255)
@@ -52,28 +49,28 @@ public class EventParameter extends MyBaseEntity<Long> implements Serializable {
         this.id = id;
     }
 
-    public Event getEvent() {
-        return event;
+    public Integer getType() {
+        return type;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
-    public Task getTask() {
-        return task;
+    public Long getStepInstanceId() {
+        return stepInstanceId;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setStepInstanceId(Long stepInstanceId) {
+        this.stepInstanceId = stepInstanceId;
     }
 
-    public Step getStep() {
-        return step;
+    public StepInstance getStepInstance() {
+        return stepInstance;
     }
 
-    public void setStep(Step step) {
-        this.step = step;
+    public void setStepInstance(StepInstance stepInstance) {
+        this.stepInstance = stepInstance;
     }
 
     public String getName() {

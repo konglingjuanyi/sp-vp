@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 车辆信息类
  * @author 叶荣杰
  * create time 2015-5-13 9:54
- * modify time 2015-5-15 13:45
- * @version 0.2, 2015-5-15
+ * modify time 2015-6-9 15:38
+ * @version 0.3, 2015-6-9
  */
 @Entity()
 @Table(name = "TB_VEHICLE_INFO")
@@ -31,6 +31,9 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     @Column(name = "SOURCE_TYPE", nullable = false, precision = 2, scale = 0)
     private Integer sourceType;
+
+    @Column(name = "SOURCE_ID", precision = 20, scale = 0)
+    private Long sourceId;
 
     @Column(name = "EVENT_ID", precision = 20, scale = 0)
     private Long eventId;
@@ -85,6 +88,14 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     public void setSourceType(Integer sourceType) {
         this.sourceType = sourceType;
+    }
+
+    public Long getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(Long sourceId) {
+        this.sourceId = sourceId;
     }
 
     public Long getEventId() {

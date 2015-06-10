@@ -1,53 +1,46 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.EventDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 
-import java.io.IOException;
+import java.util.Map;
 
 /**
- * User: 荣杰
- * Date: 2015/4/24
- * Time: 16:59
+ * 安防 事件消息及回调接口
+ *
+ * @author 叶荣杰
+ * create date 2015-4-23 11:17
+ * modify date 2015-6-10 9:39
+ * @version 0.3, 2015-6-10
  */
 public interface IEvent {
 
     /**
      * 开始事件
-     * @param eventDto      事件传输对象
+     * @param otaDto        OTA传输对象
      */
-    void startEvent(EventDto eventDto);
+    void start(OtaDto otaDto);
 
     /**
-     * 结束事件
-     * @param eventDto      事件传输对象
-     */
-    void finishEvent(EventDto eventDto);
-
-    /**
-     * 开始任务
-     * @param eventDto      事件传输对象
-     */
-    void startTask(EventDto eventDto);
-
-    /**
-     * 结束任务
-     * @param eventDto      事件传输对象
-     */
-    void finishTask(EventDto eventDto);
-
-    /**
-     * 开始步骤
-     * @param eventDto      事件传输对象
+     * 开始事件
+     * @param otaDto        OTA传输对象
+     * @param paramMap      参数MAP
      * @param clazz         结果对象类
      * @return              结果对象
      */
-    Object startStep(EventDto eventDto, Class clazz);
+    Object start(OtaDto otaDto, Map<String, Object> paramMap, Class clazz);
 
     /**
-     * 结束步骤
-     * @param eventDto      事件传输对象
+     * 结束事件
+     * @param otaDto        OTA传输对象
+     */
+    void end(OtaDto otaDto);
+
+    /**
+     * 结束事件
+     * @param otaDto        OTA传输对象
+     * @param paramMap      参数MAP
      * @param result        结果对象
      */
-    void finishStep(EventDto eventDto, Object result);
+    void end(OtaDto otaDto, Map<String, Object> paramMap, Object result);
 
 }
