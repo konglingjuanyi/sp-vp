@@ -3,4 +3,5 @@ package com.zxq.iov.cloud.sp.vp.common;
 public class Constants {
 
 	public static final Integer VEHICLE_INFO_SOURCE_JOURNEY = 1;
+	public static final Integer VEHICLE_INFO_SOURCE_BCALL = 2;
 }

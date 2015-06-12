@@ -6,16 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 安防 车辆传输对象
+ * 安防 车辆状态传输对象
  *
  * @author 叶荣杰
  * create date 2015-5-13 13:58
- * @version 0.1, 2015-5-13
+ * modify date 2015-6-11 11:26
+ * @version 0.2, 2015-6-11
  */
 public class VehicleInfoDto extends OtaDto {
 
     private Long id;
     private Integer sourceType;
+    private Long sourceId;
     private Date statusTime;
     private Long ownerId;
     private Long userId;
@@ -25,9 +27,10 @@ public class VehicleInfoDto extends OtaDto {
 
     public VehicleInfoDto() {}
 
-    public VehicleInfoDto(Long id, Integer sourceType, Date statusTime, Long ownerId, Long userId) {
+    public VehicleInfoDto(Long id, Integer sourceType, Long sourceId, Date statusTime, Long ownerId, Long userId) {
         this.id = id;
         this.sourceType = sourceType;
+        this.sourceId = sourceId;
         this.statusTime = statusTime;
         this.ownerId = ownerId;
         this.userId = userId;
@@ -47,6 +50,14 @@ public class VehicleInfoDto extends OtaDto {
 
     public void setSourceType(Integer sourceType) {
         this.sourceType = sourceType;
+    }
+
+    public Long getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(Long sourceId) {
+        this.sourceId = sourceId;
     }
 
     public Date getStatusTime() {

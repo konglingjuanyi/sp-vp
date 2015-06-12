@@ -25,8 +25,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-5-15 14:02
- * @version 0.2, 2015-5-15
+ * modify date 2015-6-11 13:30
+ * @version 0.3, 2015-6-11
  */
 @Service
 @Qualifier("statusService")
@@ -45,26 +45,32 @@ public class StatusServiceImpl implements IStatusService {
     }
 
     @Override
-    public void updateVehicleStatus(VehicleInfoDto vehicleInfoDto) {
-        VehicleInfo vehicleInfo = new VehicleInfoDtoAssembler().fromDto(vehicleInfoDto);
+    public VehicleInfoDto updateVehicleStatus(VehicleInfoDto vehicleInfoDto) {
+        VehicleInfoDtoAssembler vehicleInfoDtoAssembler = new VehicleInfoDtoAssembler();
+        VehicleInfo vehicleInfo = vehicleInfoDtoAssembler.fromDto(vehicleInfoDto);
         vehicleInfo.setVin("001"); // 此处应根据TBOXID查询主数据获得车辆的VIN
         vehicleInfo.setOwnerId(1L); // 此处应根据TBOXID查询主数据获得车主的USERID
         vehicleInfoDaoService.createVehicleInfo(vehicleInfo);
         VehiclePos vehiclePos = new VehiclePosDtoAssembler().fromDto(vehicleInfoDto.getVehiclePosDto());
         vehiclePos.setVehicleInfo(vehicleInfo);
         vehiclePosDaoService.createVehiclePos(vehiclePos);
-        VehicleStatusDtoAssembler vehicleStatusDtoAssembler = new VehicleStatusDtoAssembler();
-        for(VehicleStatusDto vehicleStatusDto : vehicleInfoDto.getVehicleStatusDtos()) {
-            VehicleStatus vehicleStatus = vehicleStatusDtoAssembler.fromDto(vehicleStatusDto);
-            vehicleStatus.setVehicleInfo(vehicleInfo);
-            vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
+        if(null != vehicleInfoDto.getVehicleStatusDtos()) {
+            VehicleStatusDtoAssembler vehicleStatusDtoAssembler = new VehicleStatusDtoAssembler();
+            for(VehicleStatusDto vehicleStatusDto : vehicleInfoDto.getVehicleStatusDtos()) {
+                VehicleStatus vehicleStatus = vehicleStatusDtoAssembler.fromDto(vehicleStatusDto);
+                vehicleStatus.setVehicleInfo(vehicleInfo);
+                vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
+            }
         }
-        VehicleAlertDtoAssembler vehicleAlertDtoAssembler = new VehicleAlertDtoAssembler();
-        for(VehicleAlertDto vehicleAlertDto : vehicleInfoDto.getVehicleAlertDtos()) {
-            VehicleStatus vehicleStatus = vehicleAlertDtoAssembler.fromDto(vehicleAlertDto);
-            vehicleStatus.setVehicleInfo(vehicleInfo);
-            vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
+        if(null != vehicleInfoDto.getVehicleAlertDtos()) {
+            VehicleAlertDtoAssembler vehicleAlertDtoAssembler = new VehicleAlertDtoAssembler();
+            for(VehicleAlertDto vehicleAlertDto : vehicleInfoDto.getVehicleAlertDtos()) {
+                VehicleStatus vehicleStatus = vehicleAlertDtoAssembler.fromDto(vehicleAlertDto);
+                vehicleStatus.setVehicleInfo(vehicleInfo);
+                vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
+            }
         }
+        return vehicleInfoDtoAssembler.toDto(vehicleInfo);
     }
 
     @Override

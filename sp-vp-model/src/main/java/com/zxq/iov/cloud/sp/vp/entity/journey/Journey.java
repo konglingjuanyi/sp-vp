@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 行程类
  * @author 叶荣杰
  * create date 2015-6-9 13:16
- * modify date
- * @version 0.1, 2015-6-9
+ * modify date 2015-6-11 17:22
+ * @version 0.2, 2015-6-11
  */
 @Entity()
 @Table(name = "TB_JOURNEY")
@@ -28,6 +28,9 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
 
     @Column(name = "TBOX_JOURNEY_ID", nullable = false, precision = 10, scale = 0)
     private Integer tboxJourneyId;
+
+    @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
+    private Long tboxId;
 
     @Column(name = "OWNER_ID", nullable = false, precision = 20, scale = 0)
     private Long ownerId;
@@ -66,8 +69,9 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
 
     public Journey(){}
 
-    public Journey(Integer tboxJourneyId, Long ownerId, Long userId, Long keyId, String vin, Date startTime, Long startVehicleInfoId, Date endTime, Long endVehicleInfoId, Integer distance, Integer avgSpeed, Integer fuelConsumption) {
+    public Journey(Integer tboxJourneyId, Long tboxId, Long ownerId, Long userId, Long keyId, String vin, Date startTime, Long startVehicleInfoId, Date endTime, Long endVehicleInfoId, Integer distance, Integer avgSpeed, Integer fuelConsumption) {
         this.tboxJourneyId = tboxJourneyId;
+        this.tboxId = tboxId;
         this.ownerId = ownerId;
         this.userId = userId;
         this.keyId = keyId;
@@ -95,6 +99,14 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
 
     public void setTboxJourneyId(Integer tboxJourneyId) {
         this.tboxJourneyId = tboxJourneyId;
+    }
+
+    public Long getTboxId() {
+        return tboxId;
+    }
+
+    public void setTboxId(Long tboxId) {
+        this.tboxId = tboxId;
     }
 
     public Long getOwnerId() {

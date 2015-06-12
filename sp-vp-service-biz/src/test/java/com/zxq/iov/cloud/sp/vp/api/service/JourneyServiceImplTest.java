@@ -21,8 +21,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-9 16:10
- * modify date 2015-6-10 10:39
- * @version 0.2, 2015-6-10
+ * modify date 2015-6-12 10:00
+ * @version 0.3, 2015-6-12
  */
 @Transactional
 public class JourneyServiceImplTest extends BaseServiceTestCase {
@@ -39,12 +39,12 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
         Long keyId = 1L;
         String aid = "112";
         Integer mid = 1;
-        String vin = "001";
+        Long tboxId = 1L;
         JourneyDto journeyDto = new JourneyDto();
         journeyDto.setEventCreateTime(new Date());
         journeyDto.setAid(aid);
         journeyDto.setMid(mid);
-        journeyDto.setVin(vin);
+        journeyDto.setTboxId(tboxId);
         journeyDto.setTboxJourneyId(tboxJourneyId);
         journeyDto.setOwnerId(ownerId);
         journeyDto.setStartTime(new Date());
@@ -60,7 +60,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
         Long keyId = 1L;
         String aid = "112";
         Integer mid = 2;
-        String vin = "001";
+        Long tboxId = 1L;
         JourneyDto journeyDto = new JourneyDto();
         journeyDto.setEventCreateTime(new Date());
         journeyDto.setTboxJourneyId(tboxJourneyId);
@@ -68,7 +68,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
         journeyDto.setKeyId(keyId);
         journeyDto.setAid(aid);
         journeyDto.setMid(mid);
-        journeyDto.setVin(vin);
+        journeyDto.setTboxId(tboxId);
         VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
         vehicleInfoDto.setStatusTime(new Date());
         VehiclePosDto vehiclePosDto = new VehiclePosDto();
@@ -100,7 +100,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
         Long keyId = 1L;
         String aid = "112";
         Integer mid = 3;
-        String vin = "001";
+        Long tboxId = 1L;
         JourneyDto journeyDto = new JourneyDto();
         journeyDto.setEventCreateTime(new Date());
         journeyDto.setTboxJourneyId(tboxJourneyId);
@@ -108,7 +108,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
         journeyDto.setKeyId(keyId);
         journeyDto.setAid(aid);
         journeyDto.setMid(mid);
-        journeyDto.setVin(vin);
+        journeyDto.setTboxId(tboxId);
         journeyDto.setEndTime(new Date());
         VehicleInfoDto startVehicleInfoDto = new VehicleInfoDto();
         VehiclePosDto startVehiclePosDto = new VehiclePosDto();

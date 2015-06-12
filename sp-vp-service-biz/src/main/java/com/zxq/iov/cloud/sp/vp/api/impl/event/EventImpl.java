@@ -11,8 +11,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 15:45
- * modify date 2015-6-10 9:28
- * @version 0.3, 2015-6-10
+ * modify date 2015-6-12 10:04
+ * @version 0.5, 2015-6-12
  */
 @Service
 public class EventImpl implements IEvent {
@@ -22,20 +22,32 @@ public class EventImpl implements IEvent {
 
     @Override
     public void start(OtaDto otaDto) {
-        String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        eventDispatch.start(otaDto.getVin(), otaDto.getEventId(), otaDto.getEventCreateTime(), code, null, null);
+        start(otaDto, null, null);
+    }
+
+    @Override
+    public Object start(OtaDto otaDto, Class clazz) {
+        return start(otaDto, null, clazz);
     }
 
     @Override
     public Object start(OtaDto otaDto, Map<String, Object> paramMap, Class clazz) {
         String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        return eventDispatch.start(otaDto.getVin(), otaDto.getEventId(), otaDto.getEventCreateTime(), code, paramMap, clazz);
+        String owner = otaDto.getTboxId().toString();
+        if(null == owner) {
+            owner = otaDto.getTboxSn();
+        }
+        return eventDispatch.start(owner, otaDto.getEventId(), otaDto.getEventCreateTime(), code, paramMap, clazz);
     }
 
     @Override
     public void end(OtaDto otaDto) {
-        String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        eventDispatch.end(otaDto.getEventId(), otaDto.getEventCreateTime(), code, null, null);
+        end(otaDto, null, null);
+    }
+
+    @Override
+    public void end(OtaDto otaDto, Object result) {
+        end(otaDto, null, result);
     }
 
     @Override

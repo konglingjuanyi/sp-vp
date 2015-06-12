@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author 叶荣杰
  * create date 2015-6-9 13:53
- * modify date
- * @version 0.1, 2015-6-9
+ * modify date 2015-6-11 17:45
+ * @version 0.2, 2015-6-11
  */
 @Transactional
 public class JourneyDaoServiceImplTest extends BaseServiceTestCase {
@@ -28,17 +28,19 @@ public class JourneyDaoServiceImplTest extends BaseServiceTestCase {
     public void testCreateJourney(){
         Long ownerId = 1L;
         Integer tboxJourneyId = 1;
+        Long tboxId = 1L;
         Journey journey = new Journey();
         journey.setOwnerId(ownerId);
         journey.setTboxJourneyId(tboxJourneyId);
+        journey.setTboxId(tboxId);
         journey = journeyDaoService.createJourney(journey);
         Assert.assertNotNull(journey);
     }
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void testUpdateJourney(){
-        Long journeyId = 5L;
+        Long journeyId = 25L;
         Journey journey = journeyDaoService.findJourneyById(journeyId);
         journey.setVin("001");
         journey = journeyDaoService.updateJourney(journey);
@@ -46,9 +48,9 @@ public class JourneyDaoServiceImplTest extends BaseServiceTestCase {
     }
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void testRemoveJourney(){
-        Long journeyId = 5L;
+        Long journeyId = 25L;
         journeyDaoService.removeJourney(journeyId);
     }
 
@@ -56,7 +58,8 @@ public class JourneyDaoServiceImplTest extends BaseServiceTestCase {
     @Rollback(true)
     public void testFindJourneyByTboxJourneyId(){
         Integer tboxJourneyId = 1;
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyId(tboxJourneyId);
+        Long tboxId = 1L;
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, tboxId);
         Assert.assertNotNull(journey);
     }
 }

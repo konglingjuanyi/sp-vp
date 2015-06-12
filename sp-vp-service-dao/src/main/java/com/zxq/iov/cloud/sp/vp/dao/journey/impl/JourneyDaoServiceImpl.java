@@ -18,8 +18,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-9 13:44
- * modify date
- * @version 0.1, 2015-6-9
+ * modify date 2015-6-11 17:27
+ * @version 0.2, 2015-6-11
  */
 @Service
 public class JourneyDaoServiceImpl extends BaseServiceImpl<IJourneyRepository, Journey, Long> implements IJourneyDaoService {
@@ -67,12 +67,13 @@ public class JourneyDaoServiceImpl extends BaseServiceImpl<IJourneyRepository, J
 	}
 
 	@Override
-	public Journey findJourneyByTboxJourneyId(Integer tboxJourneyId) {
-		if (tboxJourneyId == null){
-			LOGGER.error("tboxJourneyId cannot be null");
+	public Journey findJourneyByTboxJourneyIdAndTboxId(Integer tboxJourneyId, Long tboxId) {
+		if (tboxJourneyId == null || tboxId == null){
+			LOGGER.error("tboxJourneyId or tboxId cannot be null");
 		}
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tboxJourneyId", tboxJourneyId);
+		paramMap.put("tboxId", tboxId);
 		List<Journey> list = super.findListViaBatis(paramMap);
 		return (list.size()>0)?list.get(0):null;
 	}

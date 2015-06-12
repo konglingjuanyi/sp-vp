@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-4 13:55
- * modify date 2015-6-10 10:01
- * @version 0.2, 2015-6-10
+ * modify date 2015-6-11 15:39
+ * @version 0.3, 2015-6-11
  */
 @Transactional
 public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
@@ -31,8 +31,8 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("行程事件");
-        eventDefinitionDto.setLifecycle(604800);
+        eventDefinitionDto.setName("bCall事件");
+        eventDefinitionDto.setLifecycle(86400);
         eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(true);
         eventDefinitionDto.setIsRollback(false);
@@ -42,30 +42,32 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 15L;
+        Long eventDefinitionId = 16L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("结束行程");
+        taskDefinitionDto.setName("超时结束bCall");
+        taskDefinitionDto.setPreTaskDefinitionId(29L);
         taskDefinitionDto.setLifecycle(600);
         taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
         taskDefinitionDto.setIsLast(true);
-        taskDefinitionDto.setSort(3);
+        taskDefinitionDto.setSort(6);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 28L;
+        Long taskDefinitionId = 34L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("结束行程");
-        stepDefinitionDto.setStartCode("1123");
+        stepDefinitionDto.setName("超时结束bCall");
+        stepDefinitionDto.setStartCode("9039");
         stepDefinitionDto.setLifecycle(120);
         stepDefinitionDto.setRetryLimit(5);
+        //stepDefinitionDto.setPreStepDefinitionId(27L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
         stepDefinitionDto.setSort(1);

@@ -7,19 +7,37 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-6-10 14:00
- * @version 0.3, 2015-6-10
+ * modify date 2015-6-12 9:57
+ * @version 0.5, 2015-6-12
  */
 public class OtaDto {
 
     private String vin;
-    private String tbox;
+    private String tboxSn;
+    private Long tboxId;
     private Integer platform;
     private String aid;
     private Integer mid;
     private Date eventCreateTime;
     private Long eventId;
     private Integer requestId;
+
+    public OtaDto() {
+    }
+
+    public OtaDto(String tboxSn, String aid, Integer mid) {
+        this.tboxSn = tboxSn;
+        this.aid = aid;
+        this.mid = mid;
+        this.eventCreateTime = new Date();
+    }
+
+    public OtaDto(Long tboxId, String aid, Integer mid) {
+        this.tboxId = tboxId;
+        this.aid = aid;
+        this.mid = mid;
+        this.eventCreateTime = new Date();
+    }
 
     public String getVin() {
         return vin;
@@ -29,12 +47,20 @@ public class OtaDto {
         this.vin = vin;
     }
 
-    public String getTbox() {
-        return tbox;
+    public String getTboxSn() {
+        return tboxSn;
     }
 
-    public void setTbox(String tbox) {
-        this.tbox = tbox;
+    public void setTboxSn(String tboxSn) {
+        this.tboxSn = tboxSn;
+    }
+
+    public Long getTboxId() {
+        return tboxId;
+    }
+
+    public void setTboxId(Long tboxId) {
+        this.tboxId = tboxId;
     }
 
     public Integer getPlatform() {

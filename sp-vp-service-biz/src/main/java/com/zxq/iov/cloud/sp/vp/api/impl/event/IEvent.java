@@ -9,8 +9,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-4-23 11:17
- * modify date 2015-6-10 9:39
- * @version 0.3, 2015-6-10
+ * modify date 2015-6-11 15:17
+ * @version 0.4, 2015-6-11
  */
 public interface IEvent {
 
@@ -19,6 +19,14 @@ public interface IEvent {
      * @param otaDto        OTA传输对象
      */
     void start(OtaDto otaDto);
+
+    /**
+     * 开始事件
+     * @param otaDto        OTA传输对象
+     * @param clazz         结果对象类
+     * @return              结果对象
+     */
+    Object start(OtaDto otaDto, Class clazz);
 
     /**
      * 开始事件
@@ -34,6 +42,13 @@ public interface IEvent {
      * @param otaDto        OTA传输对象
      */
     void end(OtaDto otaDto);
+
+    /**
+     * 结束事件
+     * @param otaDto        OTA传输对象
+     * @param result        结果对象
+     */
+    void end(OtaDto otaDto, Object result);
 
     /**
      * 结束事件

@@ -8,8 +8,8 @@ import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
  *
  * @author 叶荣杰
  * create date 2015-6-9 13:31
- * modify date
- * @version 0.1, 2015-6-9
+ * modify date 2015-6-11 17:26
+ * @version 0.2, 2015-6-11
  */
 public interface IJourneyDaoService extends BaseService<Journey, Long> {
 
@@ -43,8 +43,9 @@ public interface IJourneyDaoService extends BaseService<Journey, Long> {
 	/**
 	 * 根据TBOX行程ID得到行程对象
 	 * @param tboxJourneyId TBOX行程ID
+	 * @param tboxId 		TBOX ID
 	 * @return         		行程对象
 	 */
-	Journey findJourneyByTboxJourneyId(Integer tboxJourneyId);
+	Journey findJourneyByTboxJourneyIdAndTboxId(Integer tboxJourneyId, Long tboxId);
 	
 }

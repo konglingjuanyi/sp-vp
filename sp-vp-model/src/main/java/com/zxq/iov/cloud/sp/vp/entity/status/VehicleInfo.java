@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 车辆信息类
  * @author 叶荣杰
  * create time 2015-5-13 9:54
- * modify time 2015-6-9 15:38
- * @version 0.3, 2015-6-9
+ * modify time 2015-6-11 13:41
+ * @version 0.4, 2015-6-11
  */
 @Entity()
 @Table(name = "TB_VEHICLE_INFO")
@@ -50,8 +50,9 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     public VehicleInfo(){}
 
-    public VehicleInfo(Integer sourceType, Long eventId, Date statusTime) {
+    public VehicleInfo(Integer sourceType, Long sourceId, Long eventId, Date statusTime) {
         this.sourceType = sourceType;
+        this.sourceId = sourceId;
         this.eventId = eventId;
         this.statusTime = statusTime;
     }

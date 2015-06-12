@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-10 9:10
- * @version 0.1, 2015-6-10
+ * modify date 2015-6-11 17:28
+ * @version 0.2, 2015-6-11
  */
 @Service
 @Qualifier("journeyServiceProxy")
@@ -34,7 +35,7 @@ public class JourneyServiceProxy implements IJourneyService {
     @Override
     public void startJourney(JourneyDto journeyDto) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyId(journeyDto.getTboxJourneyId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
             journeyService.startJourney(journeyDto);
         }
@@ -48,7 +49,7 @@ public class JourneyServiceProxy implements IJourneyService {
     @Override
     public void updateJourney(JourneyDto journeyDto, VehicleInfoDto vehicleInfoDto) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyId(journeyDto.getTboxJourneyId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
             journeyService.updateJourney(journeyDto, vehicleInfoDto);
         }
@@ -62,7 +63,7 @@ public class JourneyServiceProxy implements IJourneyService {
     @Override
     public void endJourney(JourneyDto journeyDto, VehicleInfoDto startVehicleInfoDto, VehicleInfoDto endVehicleInfoDto) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyId(journeyDto.getTboxJourneyId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
             journeyService.endJourney(journeyDto, startVehicleInfoDto, endVehicleInfoDto);
         }

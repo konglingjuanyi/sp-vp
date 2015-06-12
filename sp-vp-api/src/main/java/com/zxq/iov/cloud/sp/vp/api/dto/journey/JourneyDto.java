@@ -9,12 +9,14 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-9 13:14
- * @version 0.1, 2015-6-9
+ * modify date 2015-6-11 17:24
+ * @version 0.2, 2015-6-11
  */
 public class JourneyDto extends OtaDto {
 
     private Long id;
     private Integer tboxJourneyId;
+    private Long tboxId;
     private Long ownerId;
     private Long userId;
     private Long keyId;
@@ -29,9 +31,10 @@ public class JourneyDto extends OtaDto {
 
     public JourneyDto() {}
 
-    public JourneyDto(Long id, Integer tboxJourneyId, Long ownerId, Long userId, Long keyId, String vin, Date startTime, Long startVehicleInfoId, Date endTime, Long endVehicleInfoId, Integer distance, Integer avgSpeed, Integer fuelConsumption) {
+    public JourneyDto(Long id, Integer tboxJourneyId, Long tboxId, Long ownerId, Long userId, Long keyId, String vin, Date startTime, Long startVehicleInfoId, Date endTime, Long endVehicleInfoId, Integer distance, Integer avgSpeed, Integer fuelConsumption) {
         this.id = id;
         this.tboxJourneyId = tboxJourneyId;
+        this.tboxId = tboxId;
         this.ownerId = ownerId;
         this.userId = userId;
         this.keyId = keyId;
@@ -59,6 +62,14 @@ public class JourneyDto extends OtaDto {
 
     public void setTboxJourneyId(Integer tboxJourneyId) {
         this.tboxJourneyId = tboxJourneyId;
+    }
+
+    public Long getTboxId() {
+        return tboxId;
+    }
+
+    public void setTboxId(Long tboxId) {
+        this.tboxId = tboxId;
     }
 
     public Long getOwnerId() {
