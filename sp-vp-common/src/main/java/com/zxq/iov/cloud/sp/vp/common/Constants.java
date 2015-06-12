@@ -13,4 +13,5 @@ public class Constants {
 	public static final Integer VEHICLE_INFO_SOURCE_JOURNEY = 1;
 	public static final Integer VEHICLE_INFO_SOURCE_BCALL = 2;
 	public static final Integer VEHICLE_INFO_SOURCE_ECALL = 3;
+	public static final Integer VEHICLE_INFO_SOURCE_ICALL = 4;
 }

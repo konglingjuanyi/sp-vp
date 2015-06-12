@@ -31,7 +31,7 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("eCall事件");
+        eventDefinitionDto.setName("iCall事件");
         eventDefinitionDto.setLifecycle(86400);
         eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(true);
@@ -42,11 +42,11 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 17L;
+        Long eventDefinitionId = 18L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("超时结束eCall");
-        taskDefinitionDto.setPreTaskDefinitionId(35L);
+        taskDefinitionDto.setName("超时结束iCall");
+        taskDefinitionDto.setPreTaskDefinitionId(41L);
         taskDefinitionDto.setLifecycle(600);
         taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
@@ -60,14 +60,14 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 40L;
+        Long taskDefinitionId = 46L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("超时结束eCall");
-        stepDefinitionDto.setStartCode("9029");
+        stepDefinitionDto.setName("超时结束iCall");
+        stepDefinitionDto.setStartCode("9049");
         stepDefinitionDto.setLifecycle(120);
         stepDefinitionDto.setRetryLimit(5);
-        //stepDefinitionDto.setPreStepDefinitionId(36L);
+        //stepDefinitionDto.setPreStepDefinitionId(45L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
         stepDefinitionDto.setSort(1);
