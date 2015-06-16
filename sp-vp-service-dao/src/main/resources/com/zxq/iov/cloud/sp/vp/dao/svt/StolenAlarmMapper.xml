@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarmMapper">
+
+	<resultMap id="stolenAlarmResultMap" type="StolenAlarm">
+		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
+		<result column="ALARM_TYPE" jdbcType="DECIMAL" property="alarmType"/>
+		<result column="ALARM_DATA" jdbcType="VARCHAR" property="alarmData"/>
+		<result column="ALARM_TIME" jdbcType="TIMESTAMP" property="alarmTime"/>
+		<result column="VEHICLE_INFO_ID" jdbcType="DECIMAL" property="vehicleInfoId"/>
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_STOLEN_ALARM t
+		WHERE IFNULL(t.is_valid, 1) = 1
+	</sql>	
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+	
+	<select id="selectPage" parameterType="hashmap" resultMap="stolenAlarmResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="StolenAlarm" resultMap="stolenAlarmResultMap">
+        SELECT * FROM TB_STOLEN_ALARM t
+        WHERE t.is_valid = 1
+    </select>
+
+	<select id="selectList" parameterType="hashmap" resultMap="stolenAlarmResultMap">
+		<include refid="selectPageTemplate"/>
+	</select>
+
+	<select id="selectOne" resultMap="stolenAlarmResultMap" parameterType="java.lang.Long">
+		<include refid="selectPageTemplate"/>
+		AND ID = #{id, jdbcType=DECIMAL}
+	</select>
+
+</mapper>

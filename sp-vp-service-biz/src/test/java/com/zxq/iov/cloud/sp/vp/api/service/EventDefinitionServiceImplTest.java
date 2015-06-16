@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-4 13:55
- * modify date 2015-6-12 11:37
- * @version 0.4, 2015-6-12
+ * modify date 2015-6-16 10:03
+ * @version 0.5, 2015-6-16
  */
 @Transactional
 public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
@@ -31,8 +31,8 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("iCall事件");
-        eventDefinitionDto.setLifecycle(86400);
+        eventDefinitionDto.setName("车辆被盗追踪事件");
+        eventDefinitionDto.setLifecycle(5184000);
         eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(true);
         eventDefinitionDto.setIsRollback(false);
@@ -42,35 +42,35 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 18L;
+        Long eventDefinitionId = 19L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("超时结束iCall");
-        taskDefinitionDto.setPreTaskDefinitionId(41L);
+        taskDefinitionDto.setName("阻止车辆启动");
+        taskDefinitionDto.setPreTaskDefinitionId(47L);
         taskDefinitionDto.setLifecycle(600);
-        taskDefinitionDto.setCycleLimit(1);
+        taskDefinitionDto.setCycleLimit(0);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
-        taskDefinitionDto.setIsLast(true);
-        taskDefinitionDto.setSort(6);
+        taskDefinitionDto.setIsLast(false);
+        taskDefinitionDto.setSort(7);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 46L;
+        Long taskDefinitionId = 53L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("超时结束iCall");
-        stepDefinitionDto.setStartCode("9049");
-        stepDefinitionDto.setLifecycle(120);
+        stepDefinitionDto.setName("响应阻止车辆启动请求");
+        stepDefinitionDto.setStartCode("11410");
+        stepDefinitionDto.setLifecycle(60);
         stepDefinitionDto.setRetryLimit(5);
-        //stepDefinitionDto.setPreStepDefinitionId(45L);
+        stepDefinitionDto.setPreStepDefinitionId(57L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
-        stepDefinitionDto.setSort(1);
+        stepDefinitionDto.setSort(2);
         eventDefinitionService.createStepDefinition(stepDefinitionDto);
     }
 

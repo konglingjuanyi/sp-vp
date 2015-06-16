@@ -7,6 +7,7 @@
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="STEP_DEFINITION_ID" jdbcType="DECIMAL" property="stepDefinitionId"/>
 		<result column="TASK_INSTANCE_ID" jdbcType="DECIMAL" property="taskInstanceId"/>
+		<result column="OWNER" jdbcType="VARCHAR" property="owner"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
 		<result column="ERROR_CODE" jdbcType="DECIMAL" property="errorCode"/>
@@ -59,6 +60,9 @@
 		</if>
 		<if test="eventInstanceId != null">
 			AND TASK_INSTANCE_ID in (SELECT ID FROM TB_TASK_INSTANCE WHERE EVENT_INSTANCE_ID = #{eventInstanceId,jdbcType=DECIMAL})
+		</if>
+		<if test="owner != null and owner != ''">
+			AND OWNER = #{owner,jdbcType=VARCHAR}
 		</if>
 		<if test="status != null">
 			AND STATUS = #{status,jdbcType=DECIMAL}

@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 
 import java.util.Map;
 
@@ -9,8 +10,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-4-23 11:17
- * modify date 2015-6-11 15:17
- * @version 0.4, 2015-6-11
+ * modify date 2015-6-15 14:00
+ * @version 0.5, 2015-6-15
  */
 public interface IEvent {
 
@@ -57,5 +58,20 @@ public interface IEvent {
      * @param result        结果对象
      */
     void end(OtaDto otaDto, Map<String, Object> paramMap, Object result);
+
+    /**
+     * 异常事件
+     * @param otaDto        OTA传输对象
+     * @param errorCode     错误代码
+     */
+    void error(OtaDto otaDto, Integer errorCode);
+
+    /**
+     * 得到拥有者当前实例
+     * @param owner         拥有者
+     * @param code          代码
+     * @return              步骤实例
+     */
+    StepInstance findInstance(String owner, String code);
 
 }

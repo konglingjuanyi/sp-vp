@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 步骤类
  * @author 叶荣杰
  * create time 2015-4-23 13:59
- * modify time 2015-6-5 14:11
- * @version 0.4, 2015-6-5
+ * modify time 2015-6-15 14:23
+ * @version 0.5, 2015-6-15
  */
 @Entity()
 @Table(name = "TB_STEP_INSTANCE")
@@ -39,6 +39,9 @@ public class StepInstance extends MyBaseEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TASK_INSTANCE_ID", nullable = false, insertable = false, updatable = false)
     private TaskInstance taskInstance;
+
+    @Column(name = "OWNER", length = 50)
+    private String owner;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "START_TIME", length = 7)
@@ -92,6 +95,14 @@ public class StepInstance extends MyBaseEntity<Long> implements Serializable {
 
     public void setTaskInstance(TaskInstance taskInstance) {
         this.taskInstance = taskInstance;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Date getStartTime() {

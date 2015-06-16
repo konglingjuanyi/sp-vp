@@ -7,6 +7,7 @@
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="TASK_DEFINITION_ID" jdbcType="DECIMAL" property="taskDefinitionId"/>
 		<result column="EVENT_INSTANCE_ID" jdbcType="DECIMAL" property="eventInstanceId"/>
+		<result column="OWNER" jdbcType="VARCHAR" property="owner"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
 		<result column="ERROR_CODE" jdbcType="DECIMAL" property="errorCode"/>

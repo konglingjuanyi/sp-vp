@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 安防 车辆信息持久化服务接口实现类
+ * 安防 行程持久化服务接口实现类
  *
  * @author 叶荣杰
  * create date 2015-6-9 13:44

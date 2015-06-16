@@ -15,8 +15,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-8 10:12
- * modify date 2015-6-9 9:23
- * @version 0.2, 2015-6-9
+ * modify date 2015-6-16 14:45
+ * @version 0.4, 2015-6-16
  */
 @Service
 public class EventConverter {
@@ -33,7 +33,8 @@ public class EventConverter {
     private IEventParameterDaoService eventParameterDaoService;
 
     private static final Integer RUNNING_STATUS = 1;
-    private static final Integer FINISH_STATUS = 2;
+    private static final Integer END_STATUS = 2;
+    private static final Integer ERROR_STATUS = 3;
 
     /**
      * 得到事件实例
@@ -67,19 +68,38 @@ public class EventConverter {
     }
 
     /**
+     * 得到拥有者指定的未结束步骤实例
+     * @param owner                 拥有者
+     * @param stepDefinitionId      步骤定义ID
+     * @return                      步骤实例
+     */
+    public StepInstance findOwnerRunningStepInstance(String owner, Long stepDefinitionId) {
+        List<StepInstance> list = stepInstanceDaoService.listStepInstanceByOwner(owner, stepDefinitionId, RUNNING_STATUS);
+        return (list.size()>0)?list.get(0):null;
+    }
+
+    /**
      * 完成运行的步骤实例
      * @param eventInstanceId       事件实例ID
      * @param stepDefinitionId      步骤定义ID
      * @param eventCreateTime       事件发生时间
+     * @param errorCode             错误代码
      * @return                      步骤实例对象
      */
-    public StepInstance finishRunningStepInstance(Long eventInstanceId, Long stepDefinitionId, Date eventCreateTime) {
+    public StepInstance finishRunningStepInstance(Long eventInstanceId, Long stepDefinitionId, Date eventCreateTime,
+                                                  Integer errorCode) {
         List<StepInstance> list = stepInstanceDaoService.listStepInstanceByEventInstanceId(eventInstanceId,
                 stepDefinitionId, RUNNING_STATUS);
         if(list.size() > 0) {
             StepInstance stepInstance = list.get(0);
             stepInstance.setEndTime(eventCreateTime);
-            stepInstance.setStatus(FINISH_STATUS);
+            if(null != errorCode) {
+                stepInstance.setStatus(ERROR_STATUS);
+                stepInstance.setErrorCode(errorCode);
+            }
+            else {
+                stepInstance.setStatus(END_STATUS);
+            }
             return stepInstanceDaoService.updateStepInstance(stepInstance);
         }
         return null;
@@ -90,15 +110,24 @@ public class EventConverter {
      * @param eventInstanceId       事件实例ID
      * @param taskDefinitionId      任务定义ID
      * @param eventCreateTime       事件发生时间
+     * @param errorCode             错误代码
      * @return                      任务实例对象
      */
-    public TaskInstance finishRunningTaskInstance(Long eventInstanceId, Long taskDefinitionId, Date eventCreateTime) {
+    public TaskInstance finishRunningTaskInstance(Long eventInstanceId, Long taskDefinitionId, Date eventCreateTime,
+                                                  Integer errorCode) {
         List<TaskInstance> list = taskInstanceDaoService.listTaskInstanceByEventInstanceId(eventInstanceId,
                 taskDefinitionId, RUNNING_STATUS);
         if(list.size() > 0) {
             TaskInstance taskInstance = list.get(0);
             taskInstance.setEndTime(eventCreateTime);
-            taskInstance.setStatus(FINISH_STATUS);
+            if(null != errorCode) {
+                taskInstance.setStatus(ERROR_STATUS);
+                taskInstance.setErrorCode(errorCode);
+            }
+            else {
+                taskInstance.setStatus(END_STATUS);
+            }
+            taskInstance.setStatus(END_STATUS);
             return taskInstanceDaoService.updateTaskInstance(taskInstance);
         }
         return null;
@@ -126,7 +155,7 @@ public class EventConverter {
             }
         }
         eventInstance.setEndTime(eventCreateTime);
-        eventInstance.setStatus(FINISH_STATUS);
+        eventInstance.setStatus(END_STATUS);
         return eventInstanceDaoService.updateEventInstance(eventInstance);
     }
 

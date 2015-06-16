@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-5 14:04
- * modify date
- * @version 0.1, 2015-6-5
+ * modify date 2015-6-15 14:36
+ * @version 0.2, 2015-6-15
  */
 @Transactional
 public class StepInstanceDaoServiceImplTest extends BaseServiceTestCase {
@@ -75,6 +75,17 @@ public class StepInstanceDaoServiceImplTest extends BaseServiceTestCase {
         Long stepDefinitionId = 9L;
         Integer status = 1;
         List<StepInstance> list = stepInstanceDaoService.listStepInstanceByEventInstanceId(eventInstanceId,
+                stepDefinitionId, status);
+        Assert.assertTrue(list.size() > 0);
+    }
+
+    @Test
+    @Rollback(true)
+    public void testListStepInstanceByOwner() {
+        String owner = "1";
+        Long stepDefinitionId = 47L;
+        Integer status = 2;
+        List<StepInstance> list = stepInstanceDaoService.listStepInstanceByOwner(owner,
                 stepDefinitionId, status);
         Assert.assertTrue(list.size() > 0);
     }

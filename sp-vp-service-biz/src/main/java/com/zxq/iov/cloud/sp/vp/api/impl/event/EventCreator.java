@@ -14,8 +14,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-8 11:09
- * modify date 2015-6-10 11:49
- * @version 0.2, 2015-6-10
+ * modify date 2015-6-15 14:25
+ * @version 0.3, 2015-6-15
  */
 @Service
 public class EventCreator {
@@ -37,14 +37,16 @@ public class EventCreator {
      * 创建步骤实例
      * @param taskInstanceId        任务实例ID
      * @param stepDefinitionId      步骤定义ID
+     * @param owner                 拥有者
      * @param eventCreateTime       事件时间
      * @return                      步骤实例对象
      */
-    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, Date eventCreateTime) {
+    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, String owner, Date eventCreateTime) {
         validateStep(taskInstanceId, stepDefinitionId);
         StepInstance stepInstance = new StepInstance();
         stepInstance.setTaskInstanceId(taskInstanceId);
         stepInstance.setStepDefinitionId(stepDefinitionId);
+        stepInstance.setOwner(owner);
         stepInstance.setStartTime(eventCreateTime);
         stepInstance.setRetryCount(0);
         stepInstance.setStatus(RUNNING_STATUS);
@@ -66,14 +68,16 @@ public class EventCreator {
      * 创建任务实例
      * @param eventInstanceId       事件实例ID
      * @param taskDefinitionId      任务定义ID
+     * @param owner                 拥有者
      * @param eventCreateTime       事件时间
      * @return                      任务实例对象
      */
-    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, Date eventCreateTime) {
+    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, String owner, Date eventCreateTime) {
         validateTask(eventInstanceId, taskDefinitionId);
         TaskInstance taskInstance = new TaskInstance();
         taskInstance.setEventInstanceId(eventInstanceId);
         taskInstance.setTaskDefinitionId(taskDefinitionId);
+        taskInstance.setOwner(owner);
         taskInstance.setStartTime(eventCreateTime);
         taskInstance.setStatus(RUNNING_STATUS);
         taskInstance = taskInstanceDaoService.createTaskInstance(taskInstance);

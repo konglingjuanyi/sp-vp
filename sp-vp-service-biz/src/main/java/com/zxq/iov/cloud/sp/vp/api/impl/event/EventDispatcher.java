@@ -13,8 +13,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-8 9:35
- * modify date 2015-6-10 11:02
- * @version 0.3, 2015-6-10
+ * modify date 2015-6-16 14:44
+ * @version 0.5, 2015-6-16
  */
 @Service
 public class EventDispatcher {
@@ -99,10 +99,10 @@ public class EventDispatcher {
         }
         if(isCreateTask) {
             isCreateStep = true;
-            taskInstanceId = eventCreator.createTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId(), eventCreateTime).getId();
+            taskInstanceId = eventCreator.createTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId(), owner, eventCreateTime).getId();
         }
         if(isCreateStep) {
-            eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), eventCreateTime);
+            eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), owner, eventCreateTime);
         }
         return result;
     }
@@ -117,17 +117,42 @@ public class EventDispatcher {
      */
     public void end(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Object result) {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap);
-        StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime);
+        StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, null);
         if(null != result) {
             eventConvert.saveResult(stepInstance.getId(), result);
         }
         if(stepDefinition.isLast()) {
-            eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime);
+            eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime, null);
             if(stepDefinition.getTaskDefinition().isLast()) {
                 eventConvert.finishRunningEventInstance(eventId,
                         stepDefinition.getTaskDefinition().getEventDefinitionId(), eventCreateTime);
             }
         }
+    }
+
+    /**
+     * 异常事件
+     * @param eventId           事件实例ID
+     * @param eventCreateTime   事件发生时间
+     * @param code              代码
+     * @param paramMap          参数MAP
+     * @param errorCode         错误代码
+     */
+    public void error(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Integer errorCode) {
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap);
+        eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, errorCode);
+        eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime, errorCode);
+    }
+
+    /**
+     * 得到拥有者当前实例
+     * @param owner             拥有者
+     * @param code              代码
+     * @return                  步骤实例
+     */
+    public StepInstance findInstance(String owner, String code) {
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, null);
+        return eventConvert.findOwnerRunningStepInstance(owner, stepDefinition.getId());
     }
 
 }

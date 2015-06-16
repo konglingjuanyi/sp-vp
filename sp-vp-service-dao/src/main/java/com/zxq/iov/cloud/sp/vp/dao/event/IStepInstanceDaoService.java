@@ -11,8 +11,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-5 17:14
- * modify date 2015-6-9 9:48
- * @version 0.2, 2015-6-9
+ * modify date 2015-6-15 14:29
+ * @version 0.3, 2015-6-15
  */
 public interface IStepInstanceDaoService extends BaseService<StepInstance, Long> {
 
@@ -58,6 +58,16 @@ public interface IStepInstanceDaoService extends BaseService<StepInstance, Long>
 	 * @return               	步骤实例列表
 	 */
 	List<StepInstance> listStepInstanceByEventInstanceId(Long eventInstanceId, Long stepDefinitionId,
+														 Integer status);
+
+	/**
+	 * 得到指定拥有者的步骤实例列表
+	 * @param owner          	拥有者
+	 * @param stepDefinitionId 	步骤定义ID
+	 * @param status          	状态
+	 * @return              	步骤实例列表
+	 */
+	List<StepInstance> listStepInstanceByOwner(String owner, Long stepDefinitionId,
 														 Integer status);
 	
 }

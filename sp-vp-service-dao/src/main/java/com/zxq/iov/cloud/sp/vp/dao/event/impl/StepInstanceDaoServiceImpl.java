@@ -19,8 +19,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 13:49
- * modify date
- * @version 0.1, 2015-6-5
+ * modify date 2015-6-15 14:30
+ * @version 0.2, 2015-6-15
  */
 @Service
 public class StepInstanceDaoServiceImpl extends BaseServiceImpl<IStepInstanceRepository, StepInstance, Long> implements IStepInstanceDaoService {
@@ -79,6 +79,15 @@ public class StepInstanceDaoServiceImpl extends BaseServiceImpl<IStepInstanceRep
 																Integer status) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("eventInstanceId", eventInstanceId);
+		paramMap.put("stepDefinitionId", stepDefinitionId);
+		paramMap.put("status", status);
+		return super.findListViaBatis(paramMap);
+	}
+
+	@Override
+	public List<StepInstance> listStepInstanceByOwner(String owner, Long stepDefinitionId, Integer status) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("owner", owner);
 		paramMap.put("stepDefinitionId", stepDefinitionId);
 		paramMap.put("status", status);
 		return super.findListViaBatis(paramMap);
