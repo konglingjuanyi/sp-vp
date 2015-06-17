@@ -38,6 +38,7 @@ public class EventInstanceDaoServiceImpl extends BaseServiceImpl<IEventInstanceR
 		}
 		eventInstance.setId(null);
 		super.save(eventInstance);
+		super.flush();
 		return eventInstance;
 	}
 

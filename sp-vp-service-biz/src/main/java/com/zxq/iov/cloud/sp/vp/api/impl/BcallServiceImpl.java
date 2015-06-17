@@ -37,6 +37,7 @@ public class BcallServiceImpl implements IBcallService {
     @Autowired
     private ICallRecordDaoService callRecordDaoService;
     @Autowired
+    @Qualifier("statusService")
     private IStatusService statusService;
 
     private static final Integer RUNNING_STATUS = 1;

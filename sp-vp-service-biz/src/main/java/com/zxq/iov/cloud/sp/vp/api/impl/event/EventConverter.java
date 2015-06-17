@@ -15,8 +15,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-8 10:12
- * modify date 2015-6-16 14:45
- * @version 0.4, 2015-6-16
+ * modify date 2015-6-17 10:59
+ * @version 0.5, 2015-6-17
  */
 @Service
 public class EventConverter {
@@ -147,11 +147,9 @@ public class EventConverter {
         }
         if(null == eventInstance) {
             EventDefinition eventDefinition = eventDefinitionDaoService.findEventDefinitionById(eventDefinitionId);
-            if(eventDefinition.isExclusive()) {
-                List<EventInstance> list = eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, RUNNING_STATUS);
-                if(list.size() > 0) {
-                    eventInstance = list.get(0);
-                }
+            List<EventInstance> list = eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, RUNNING_STATUS);
+            if(list.size() > 0) {
+                eventInstance = list.get(0);
             }
         }
         eventInstance.setEndTime(eventCreateTime);

@@ -28,6 +28,7 @@ public class JourneyServiceImpl implements IJourneyService {
     @Autowired
     private IJourneyDaoService journeyDaoService;
     @Autowired
+    @Qualifier("statusService")
     private IStatusService statusService;
 
     private static final Integer RUNNING_STATUS = 1;

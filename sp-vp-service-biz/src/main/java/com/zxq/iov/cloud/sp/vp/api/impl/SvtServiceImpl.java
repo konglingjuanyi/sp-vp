@@ -33,6 +33,7 @@ public class SvtServiceImpl implements ISvtService {
     @Autowired
     private IStolenAlarmDaoService stolenAlarmDaoService;
     @Autowired
+    @Qualifier("statusService")
     private IStatusService statusService;
     @Autowired
     private IEvent event;

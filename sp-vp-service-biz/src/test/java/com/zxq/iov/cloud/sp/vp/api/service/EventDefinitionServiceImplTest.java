@@ -31,10 +31,10 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("车辆被盗追踪事件");
-        eventDefinitionDto.setLifecycle(5184000);
-        eventDefinitionDto.setIsExclusive(true);
-        eventDefinitionDto.setIsContinue(true);
+        eventDefinitionDto.setName("车辆状态警报事件");
+        eventDefinitionDto.setLifecycle(600);
+        eventDefinitionDto.setIsExclusive(false);
+        eventDefinitionDto.setIsContinue(false);
         eventDefinitionDto.setIsRollback(false);
         eventDefinitionService.createEventDefinition(eventDefinitionDto);
     }
@@ -42,35 +42,35 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 19L;
+        Long eventDefinitionId = 21L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("阻止车辆启动");
-        taskDefinitionDto.setPreTaskDefinitionId(47L);
+        taskDefinitionDto.setName("车辆状态警报");
+        //taskDefinitionDto.setPreTaskDefinitionId(47L);
         taskDefinitionDto.setLifecycle(600);
-        taskDefinitionDto.setCycleLimit(0);
+        taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
-        taskDefinitionDto.setIsLast(false);
-        taskDefinitionDto.setSort(7);
+        taskDefinitionDto.setIsLast(true);
+        taskDefinitionDto.setSort(1);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 53L;
+        Long taskDefinitionId = 55L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("响应阻止车辆启动请求");
-        stepDefinitionDto.setStartCode("11410");
+        stepDefinitionDto.setName("车辆状态警报");
+        stepDefinitionDto.setStartCode("1133");
         stepDefinitionDto.setLifecycle(60);
         stepDefinitionDto.setRetryLimit(5);
-        stepDefinitionDto.setPreStepDefinitionId(57L);
+        //stepDefinitionDto.setPreStepDefinitionId(59L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
-        stepDefinitionDto.setSort(2);
+        stepDefinitionDto.setSort(1);
         eventDefinitionService.createStepDefinition(stepDefinitionDto);
     }
 

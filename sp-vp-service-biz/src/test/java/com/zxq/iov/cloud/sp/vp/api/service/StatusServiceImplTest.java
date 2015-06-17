@@ -22,28 +22,39 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-15 11:08
- * @version 0.1, 2015-5-15
+ * modify date 2015-6-16 17:07
+ * @version 0.2, 2015-6-16
  */
 @Transactional
 public class StatusServiceImplTest extends BaseServiceTestCase {
 
     @Autowired
-    @Qualifier("statusService")
+    @Qualifier("statusServiceProxy")
     private IStatusService statusService;
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void testRequestVehicleStatus() {
         VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
         Integer statusType = 1;
+        vehicleInfoDto.setTboxId(1L);
+        vehicleInfoDto.setAid("113");
+        vehicleInfoDto.setMid(1);
+        vehicleInfoDto.setEventCreateTime(new Date());
         statusService.requestVehicleStatus(vehicleInfoDto, statusType);
     }
 
     @Test
-    @Rollback(true)
+    @Rollback(false)
     public void testUpdateVehicleStatus() {
         VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
+        vehicleInfoDto.setTboxId(1L);
+        vehicleInfoDto.setAid("113");
+        vehicleInfoDto.setMid(2);
+        vehicleInfoDto.setEventCreateTime(new Date());
+        vehicleInfoDto.setEventId(46L);
         vehicleInfoDto.setSourceType(1);
+        vehicleInfoDto.setStatusTime(new Date());
         VehiclePosDto vehiclePosDto = new VehiclePosDto();
         vehiclePosDto.setAltitude(1);
         vehiclePosDto.setGpsStatus(1);
@@ -89,6 +100,11 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     public void testLogVehicleAlert() {
         VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
         vehicleInfoDto.setSourceType(1);
+        vehicleInfoDto.setStatusTime(new Date());
+        vehicleInfoDto.setTboxId(1L);
+        vehicleInfoDto.setAid("113");
+        vehicleInfoDto.setMid(3);
+        vehicleInfoDto.setEventCreateTime(new Date());
         VehiclePosDto vehiclePosDto = new VehiclePosDto();
         vehiclePosDto.setAltitude(1);
         vehiclePosDto.setGpsStatus(1);

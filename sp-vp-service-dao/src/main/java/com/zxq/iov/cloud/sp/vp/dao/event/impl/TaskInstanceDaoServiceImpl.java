@@ -38,6 +38,7 @@ public class TaskInstanceDaoServiceImpl extends BaseServiceImpl<ITaskInstanceRep
 		}
 		taskInstance.setId(null);
 		super.save(taskInstance);
+		super.flush();
 		return taskInstance;
 	}
 
