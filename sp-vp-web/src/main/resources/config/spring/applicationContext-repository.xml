@@ -39,7 +39,7 @@
         <property name="packagesToScan" value="com.zxq.iov.cloud.sp.vp" />
     </bean>
 
-    <!--mybatis configuration-->
+    <!--mybatis config-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="typeAliasesPackage" value="com.zxq.iov.cloud.sp.vp" />
@@ -51,7 +51,7 @@
     </bean>
 
     <bean class="com.zxq.iov.cloud.core.dal.repo.mybatis.BaseMyBatisDaoImpl" />
-    <!--mybatis configuration end-->
+    <!--mybatis config end-->
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />

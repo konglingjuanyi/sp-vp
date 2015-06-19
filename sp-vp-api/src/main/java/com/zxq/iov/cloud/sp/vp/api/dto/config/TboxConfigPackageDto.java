@@ -1,12 +1,14 @@
-package com.zxq.iov.cloud.sp.vp.api.dto;
+package com.zxq.iov.cloud.sp.vp.api.dto.config;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * User: 荣杰
- * Date: 2015/4/22
- * Time: 13:24
+ * 安防服务 配置包传输对象
+ * @author 叶荣杰
+ * create date 2015-4-22 13:24
+ * modify date
+ * @version 0.1, 2015-4-22
  */
 public class TboxConfigPackageDto implements Serializable {
 

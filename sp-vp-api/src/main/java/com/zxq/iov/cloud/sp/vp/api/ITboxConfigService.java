@@ -1,47 +1,77 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.TboxConfigDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.TboxConfigPackageDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 
 /**
- * User: 荣杰
- * Date: 2015/4/22
- * Time: 11:19
+ * 安防服务 远程配置接口
+ * @author 叶荣杰
+ * create date 2015-4-22 11:19
+ * modify date 2015-6-19 10:12
+ * @version 0.2, 2015-6-19
  */
 public interface ITboxConfigService {
 
     /**
-     * 检查TBOX配置更新版本，是否需要更新
-     * @param mcuVersion     MCU版本
-     * @param mpuVersion     MPU版本
-     * @param configVersion  配置版本
-     * @param configDelta    TBOX上配置更新版本
-     * @param vin            车辆ID
-     * @return               配置信息
+     * 请求TBOX检查配置更新
+     * @param tboxId                TBOX ID
      */
-    TboxConfigDto checkConfigDelta(String mcuVersion, String mpuVersion,
-                                   String configVersion, String configDelta, String vin);
+    void requestConfigUpdate(Long tboxId);
+
+    /**
+     * TBOX响应是否接受后台的配置更新请求
+     * @param otaDto                OTA传输对象
+     * @param isAccepted            是否接受
+     */
+    void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted);
+
+    /**
+     * 检查TBOX配置更新版本，是否需要更新
+     * @param mcuVersion            MCU版本
+     * @param mpuVersion            MPU版本
+     * @param configVersion         配置版本
+     * @param configDelta           TBOX上配置更新版本
+     * @param iccid                 ICCID
+     * @param vin                   车辆VIN
+     * @param otaDto                OTA传输对象
+     * @return                      配置信息
+     */
+    TboxConfigDto checkConfigDelta(Integer mcuVersion, Integer mpuVersion, Integer configVersion,
+                                   Integer configDelta, String iccid, String vin, OtaDto otaDto);
 
     /**
      * 获得配置更新包
-     * @param eventId       事件ID
-     * @param packageId     包ID
-     * @param vin           车辆ID
-     * @return              配置更新包
+     * @param otaDto                OTA传输对象
+     * @param packageId             包ID
+     * @return                      配置更新包
      */
-    TboxConfigPackageDto getConfigPackage(Long eventId, Integer packageId, String vin);
+    TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId);
 
     /**
      * TBOX配置更新结束
-     * @param eventId       事件ID
-     * @param result        TBOX更新是否成功
-     * @param mcuVersion    MCU版本
-     * @param mpuVersion    MPU版本
-     * @param configVersion 配置版本
-     * @param configDelta   TBOX上配置更新版本
-     * @param vin           车辆ID
+     * @param otaDto                OTA传输对象
+     * @param result                TBOX更新是否成功
+     * @param mcuVersion            MCU版本
+     * @param mpuVersion            MPU版本
+     * @param configVersion         配置版本
+     * @param configDelta           TBOX上配置更新版本
      */
-    void closeConfigUpdate(Long eventId, Boolean result, String mcuVersion, String mpuVersion,
-                           String configVersion, String configDelta, String vin);
+    void closeConfigUpdate(OtaDto otaDto, Boolean result, Integer mcuVersion, Integer mpuVersion,
+                           Integer configVersion, Integer configDelta);
+
+    /**
+     * 请求读取TBOX配置参数
+     * @param tboxId                TBOX ID
+     * @param tboxConfigsettingIds  TBOX配置参数ID列表
+     */
+    void requestReadConfig(Long tboxId, Long[] tboxConfigsettingIds);
+
+    /**
+     * 响应读取TBOX配置参数请求
+     * @param otaDto                OTA传输对象
+     * @param tboxConfigSettings    TBOX配置参数
+     */
+    void responseReadConfig(OtaDto otaDto, String tboxConfigSettings);
 
 }
