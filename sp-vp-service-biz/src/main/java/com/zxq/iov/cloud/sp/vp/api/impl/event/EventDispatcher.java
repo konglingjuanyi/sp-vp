@@ -13,8 +13,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-8 9:35
- * modify date 2015-6-16 14:44
- * @version 0.5, 2015-6-16
+ * modify date 2015-6-17 17:20
+ * @version 0.6, 2015-6-17
  */
 @Service
 public class EventDispatcher {
@@ -33,13 +33,10 @@ public class EventDispatcher {
      * @param eventCreateTime   事件创建时间
      * @param code              代码
      * @param paramMap          参数MAP
-     * @param clazz             结果对象类
-     * @return                  结果对象
+     * @return                  事件实例ID
      */
-    public Object start(String owner, Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap,
-                        Class clazz) {
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap);
-        Object result = null;
+    public Long start(String owner, Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap) {
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         Long eventInstanceId = null;
         Long taskInstanceId = null;
         boolean isCreateEvent = false;
@@ -104,7 +101,7 @@ public class EventDispatcher {
         if(isCreateStep) {
             eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), owner, eventCreateTime);
         }
-        return result;
+        return eventInstanceId;
     }
 
     /**
@@ -116,7 +113,7 @@ public class EventDispatcher {
      * @param result            结果对象
      */
     public void end(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Object result) {
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap);
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, null);
         if(null != result) {
             eventConvert.saveResult(stepInstance.getId(), result);
@@ -139,7 +136,7 @@ public class EventDispatcher {
      * @param errorCode         错误代码
      */
     public void error(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Integer errorCode) {
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap);
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, errorCode);
         eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime, errorCode);
     }
@@ -151,7 +148,7 @@ public class EventDispatcher {
      * @return                  步骤实例
      */
     public StepInstance findInstance(String owner, String code) {
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, null);
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, null, null);
         return eventConvert.findOwnerRunningStepInstance(owner, stepDefinition.getId());
     }
 

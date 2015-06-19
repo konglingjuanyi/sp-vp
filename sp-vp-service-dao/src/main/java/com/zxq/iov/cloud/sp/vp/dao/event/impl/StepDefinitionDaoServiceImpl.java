@@ -20,8 +20,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-3 17:18
- * modify date 2015-6-4 13:27
- * @version 0.2, 2015-6-4
+ * modify date 2015-6-18 12:39
+ * @version 0.3, 2015-6-18
  */
 @Service
 public class StepDefinitionDaoServiceImpl extends BaseServiceImpl<IStepDefinitionRepository, StepDefinition, Long> implements IStepDefinitionDaoService {
@@ -68,9 +68,11 @@ public class StepDefinitionDaoServiceImpl extends BaseServiceImpl<IStepDefinitio
 	}
 
 	@Override
-	public List<StepDefinition> listStepDefinitionByStartCode(String startCode) {
+	public List<StepDefinition> listStepDefinitionByStartCodeAndEventDefinitionId(String startCode,
+																				  Long eventDefinitionId) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("startCode", startCode);
+		paramMap.put("eventDefinitionId", eventDefinitionId);
 		return super.findListViaBatis(paramMap);
 	}
 

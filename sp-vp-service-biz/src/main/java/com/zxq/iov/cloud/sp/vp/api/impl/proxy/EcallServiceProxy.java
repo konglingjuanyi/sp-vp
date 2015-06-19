@@ -6,6 +6,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -32,20 +33,18 @@ public class EcallServiceProxy implements IEcallService {
 
     @Override
     public EcallRecordDto startEcall(EcallDto ecallDto, List<VehicleInfoDto> vehicleInfoDtos) {
-        Object result = event.start(ecallDto, EcallRecordDto.class);
-        if(null == result) {
-            result = ecallService.startEcall(ecallDto, vehicleInfoDtos);
-            event.end(ecallDto, result);
-            OtaDto otaDto = new OtaDto(ecallDto.getTboxId(), "902", 2);
-            event.start(otaDto);
-            event.end(otaDto); // 这里的end就看事务引擎是否提供验证云端是否发送成功的接口了，提供的话则在该接口中end
-        }
-        return (EcallRecordDto)result;
+        event.start(ecallDto);
+        EcallRecordDto ecallRecordDto = ecallService.startEcall(ecallDto, vehicleInfoDtos);
+        event.end(ecallDto, ecallRecordDto);
+        OtaDto otaDto = new OtaDto(ecallDto.getTboxId(), Constants.AID_ECALL, 2);
+        event.start(otaDto);
+        event.end(otaDto); // 这里的end就看事务引擎是否提供验证云端是否发送成功的接口了，提供的话则在该接口中end
+        return ecallRecordDto;
     }
 
     @Override
     public void requestEcallStatus(Long tboxId) {
-        OtaDto otaDto = new OtaDto(tboxId, "902", 3);
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_ECALL, 3);
         event.start(otaDto);
         ecallService.requestEcallStatus(tboxId);
         event.end(otaDto);
@@ -60,7 +59,7 @@ public class EcallServiceProxy implements IEcallService {
 
     @Override
     public void requestHangUp(Long tboxId, Long callRecordId) {
-        OtaDto otaDto = new OtaDto(tboxId, "902", 5);
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_ECALL, 5);
         event.start(otaDto);
         ecallService.requestHangUp(tboxId, callRecordId);
         event.end(otaDto);
@@ -68,7 +67,7 @@ public class EcallServiceProxy implements IEcallService {
 
     @Override
     public void requestCallBack(Long tboxId, Long callId, String callNumber) {
-        OtaDto otaDto = new OtaDto(tboxId, "902", 7);
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_ECALL, 7);
         event.start(otaDto);
         ecallService.requestCallBack(tboxId, callId, callNumber);
         event.end(otaDto);
@@ -83,7 +82,7 @@ public class EcallServiceProxy implements IEcallService {
 
     @Override
     public void requestCloseEcall(Long tboxId, Long callId) {
-        OtaDto otaDto = new OtaDto(tboxId, "902", 6);
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_ECALL, 6);
         event.start(otaDto);
         ecallService.requestCloseEcall(tboxId, callId);
         event.end(otaDto);

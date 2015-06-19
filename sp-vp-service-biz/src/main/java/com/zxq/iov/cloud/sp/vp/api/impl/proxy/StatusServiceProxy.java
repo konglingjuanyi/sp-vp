@@ -34,22 +34,18 @@ public class StatusServiceProxy implements IStatusService {
 
     @Override
     public VehicleInfoDto updateVehicleStatus(VehicleInfoDto vehicleInfoDto) {
-        Object result = event.start(vehicleInfoDto, VehicleInfoDto.class);
-        if(null == result) {
-            result = statusService.updateVehicleStatus(vehicleInfoDto);
-            event.end(vehicleInfoDto, result);
-        }
-        return (VehicleInfoDto)result;
+        event.start(vehicleInfoDto);
+        vehicleInfoDto = statusService.updateVehicleStatus(vehicleInfoDto);
+        event.end(vehicleInfoDto, vehicleInfoDto);
+        return vehicleInfoDto;
     }
 
     @Override
     public VehicleInfoDto getVehicleStatus(VehicleInfoDto vehicleInfoDto) {
-        Object result = event.start(vehicleInfoDto, VehicleInfoDto.class);
-        if(null == result) {
-            result = statusService.getVehicleStatus(vehicleInfoDto);
-            event.end(vehicleInfoDto, result);
-        }
-        return (VehicleInfoDto)result;
+        event.start(vehicleInfoDto);
+        vehicleInfoDto = statusService.getVehicleStatus(vehicleInfoDto);
+        event.end(vehicleInfoDto, vehicleInfoDto);
+        return vehicleInfoDto;
     }
 
     @Override

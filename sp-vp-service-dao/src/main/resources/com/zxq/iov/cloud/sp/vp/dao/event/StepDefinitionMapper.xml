@@ -54,6 +54,9 @@
 
 	<select id="selectList" parameterType="hashmap" resultMap="stepDefinitionResultMap">
 		<include refid="selectPageTemplate"/>
+		<if test="eventDefinitionId != null">
+			AND TASK_DEFINITION_ID in (SELECT ID FROM TB_TASK_DEFINITION WHERE EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=DECIMAL})
+		</if>
 		<if test="taskDefinitionId != null">
 			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=DECIMAL}
 		</if>

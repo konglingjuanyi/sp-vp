@@ -2,6 +2,7 @@ package com.zxq.iov.cloud.sp.vp.api;
 
 
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.StepDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.TaskDefinitionDto;
 
@@ -13,7 +14,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-2 16:50
- * @version 0.1, 2015-6-2
+ * modify date 2015-6-18 10:43
+ * @version 0.2, 2015-6-18
  */
 public interface IEventDefinitionService {
 
@@ -34,6 +36,13 @@ public interface IEventDefinitionService {
      * @param stepDefinitionDto     步骤定义DTO
      */
     void createStepDefinition(StepDefinitionDto stepDefinitionDto);
+
+    /**
+     * 创建步骤定义
+     * @param stepDefinitionDto     步骤定义DTO
+     * @param eventRuleDtos         事件规则DTO列表
+     */
+    void createStepDefinition(StepDefinitionDto stepDefinitionDto, List<EventRuleDto> eventRuleDtos);
 
     /**
      * 根据主键得到事件定义DTO

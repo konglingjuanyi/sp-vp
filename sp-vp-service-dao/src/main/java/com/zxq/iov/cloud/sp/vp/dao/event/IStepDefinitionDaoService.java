@@ -13,8 +13,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-3 17:14
- * modify date 2015-6-4 13:25
- * @version 0.2, 2015-6-4
+ * modify date 2015-6-18 12:37
+ * @version 0.3, 2015-6-18
  */
 public interface IStepDefinitionDaoService extends BaseService<StepDefinition, Long> {
 
@@ -48,9 +48,10 @@ public interface IStepDefinitionDaoService extends BaseService<StepDefinition, L
 	/**
 	 * 根据启动代码得到步骤定义列表
 	 * @param startCode     	启动代码
+	 * @param eventDefinitionId 事件定义ID
 	 * @return                 	步骤定义列表
 	 */
-	List<StepDefinition> listStepDefinitionByStartCode(String startCode);
+	List<StepDefinition> listStepDefinitionByStartCodeAndEventDefinitionId(String startCode, Long eventDefinitionId);
 
 	/**
 	 * 根据任务定义ID得到步骤定义列表

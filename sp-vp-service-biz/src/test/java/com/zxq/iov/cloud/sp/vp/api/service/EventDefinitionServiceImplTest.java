@@ -3,6 +3,7 @@ package com.zxq.iov.cloud.sp.vp.api.service;
 import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IEventDefinitionService;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.StepDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.TaskDefinitionDto;
 import junit.framework.Assert;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-4 13:55
- * modify date 2015-6-16 10:03
- * @version 0.5, 2015-6-16
+ * modify date 2015-6-19 9:41
+ * @version 0.7, 2015-6-19
  */
 @Transactional
 public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
@@ -31,9 +33,9 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("车辆状态警报事件");
-        eventDefinitionDto.setLifecycle(600);
-        eventDefinitionDto.setIsExclusive(false);
+        eventDefinitionDto.setName("空调控制事件");
+        eventDefinitionDto.setLifecycle(3600);
+        eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(false);
         eventDefinitionDto.setIsRollback(false);
         eventDefinitionService.createEventDefinition(eventDefinitionDto);
@@ -42,36 +44,39 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 21L;
+        Long eventDefinitionId = 29L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("车辆状态警报");
-        //taskDefinitionDto.setPreTaskDefinitionId(47L);
-        taskDefinitionDto.setLifecycle(600);
+        taskDefinitionDto.setName("取消空调控制");
+        taskDefinitionDto.setPreTaskDefinitionId(74L);
+        taskDefinitionDto.setLifecycle(300);
         taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
         taskDefinitionDto.setIsLast(true);
-        taskDefinitionDto.setSort(1);
+        taskDefinitionDto.setSort(4);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 55L;
+        Long taskDefinitionId = 77L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("车辆状态警报");
-        stepDefinitionDto.setStartCode("1133");
-        stepDefinitionDto.setLifecycle(60);
+        stepDefinitionDto.setName("响应取消空调控制请求");
+        stepDefinitionDto.setStartCode("1112");
+        stepDefinitionDto.setLifecycle(30);
         stepDefinitionDto.setRetryLimit(5);
-        //stepDefinitionDto.setPreStepDefinitionId(59L);
+        stepDefinitionDto.setPreStepDefinitionId(93L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
-        stepDefinitionDto.setSort(1);
-        eventDefinitionService.createStepDefinition(stepDefinitionDto);
+        stepDefinitionDto.setSort(2);
+        List<EventRuleDto> eventRuleDtos = new ArrayList<>();
+        eventRuleDtos.add(new EventRuleDto("status", "eq", "3"));
+//        eventRuleDtos.add(new EventRuleDto("cancelFlag", "eq", "1"));
+        eventDefinitionService.createStepDefinition(stepDefinitionDto, eventRuleDtos);
     }
 
     @Test

@@ -3,16 +3,20 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 import com.zxq.iov.cloud.core.dal.repo.mybatis.PageResult;
 import com.zxq.iov.cloud.sp.vp.api.IEventDefinitionService;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.StepDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.TaskDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.exception.HasChildException;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.event.EventDefinitionDtoAssembler;
+import com.zxq.iov.cloud.sp.vp.api.impl.assembler.event.EventRuleDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.event.StepDefinitionDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.event.TaskDefinitionDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventDefinitionDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.ITaskDefinitionDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventDefinition;
+import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepDefinition;
 import com.zxq.iov.cloud.sp.vp.entity.event.TaskDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-3 14:24
- * @version 0.1, 2015-6-3
+ * modify date 2015-6-18 11:03
+ * @version 0.2, 2015-6-18
  */
 @Service
 public class EventDefinitionServiceImpl implements IEventDefinitionService {
@@ -37,6 +42,8 @@ public class EventDefinitionServiceImpl implements IEventDefinitionService {
     private ITaskDefinitionDaoService taskDefinitionDaoService;
     @Autowired
     private IStepDefinitionDaoService stepDefinitionDaoService;
+    @Autowired
+    private IEventRuleDaoService eventRuleDaoService;
 
     @Override
     public void createEventDefinition(EventDefinitionDto eventDefinitionDto) {
@@ -54,6 +61,19 @@ public class EventDefinitionServiceImpl implements IEventDefinitionService {
     public void createStepDefinition(StepDefinitionDto stepDefinitionDto) {
         StepDefinition stepDefinition = new StepDefinitionDtoAssembler().fromDto(stepDefinitionDto);
         stepDefinitionDaoService.createStepDefinition(stepDefinition);
+    }
+
+    @Override
+    public void createStepDefinition(StepDefinitionDto stepDefinitionDto, List<EventRuleDto> eventRuleDtos) {
+        StepDefinition stepDefinition = new StepDefinitionDtoAssembler().fromDto(stepDefinitionDto);
+        stepDefinitionDaoService.createStepDefinition(stepDefinition);
+        EventRuleDtoAssembler eventRuleDtoAssembler = new EventRuleDtoAssembler();
+        EventRule eventRule;
+        for(EventRuleDto eventRuleDto : eventRuleDtos) {
+            eventRule = eventRuleDtoAssembler.fromDto(eventRuleDto);
+            eventRule.setStepDefinitionId(stepDefinition.getId());
+            eventRuleDaoService.createEventRule(eventRule);
+        }
     }
 
     @Override

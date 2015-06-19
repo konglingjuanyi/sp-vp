@@ -7,8 +7,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-6-12 9:57
- * @version 0.5, 2015-6-12
+ * modify date 2015-6-17 17:51
+ * @version 0.6, 2015-6-17
  */
 public class OtaDto {
 

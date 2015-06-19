@@ -8,7 +8,7 @@ import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
  *
  * @author 叶荣杰
  * create date 2015-6-15 11:59
- * @version 0.1, 2015-6-9
+ * @version 0.1, 2015-6-15
  */
 public interface IStolenAlarmRepository extends BaseRepository<StolenAlarm, Long> {
 }

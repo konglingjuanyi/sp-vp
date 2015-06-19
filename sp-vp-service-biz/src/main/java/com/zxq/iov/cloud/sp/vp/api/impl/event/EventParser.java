@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.exception.StartCodeNotMatchException;
+import com.zxq.iov.cloud.sp.vp.dao.event.IEventInstanceDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;
@@ -16,12 +17,14 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 16:11
- * modify date 2015-6-10 9:22
- * @version 0.3, 2015-6-10
+ * modify date 2015-6-18 12:34
+ * @version 0.4, 2015-6-18
  */
 @Service
 public class EventParser {
 
+    @Autowired
+    private IEventInstanceDaoService eventInstanceDaoService;
     @Autowired
     private IStepDefinitionDaoService stepDefinitionDaoService;
     @Autowired
@@ -29,12 +32,18 @@ public class EventParser {
 
     /**
      * 定位步骤定义
-     * @param code          代码
-     * @param paramMap      参数MAP
-     * @return
+     * @param code              代码
+     * @param paramMap          参数MAP
+     * @param eventInstanceId   事件实例ID
+     * @return                  步骤定义对象
      */
-    public StepDefinition findStepDefiniton(String code, Map<String, Object> paramMap) {
-        List<StepDefinition> list = stepDefinitionDaoService.listStepDefinitionByStartCode(code);
+    public StepDefinition findStepDefiniton(String code, Map<String, Object> paramMap, Long eventInstanceId) {
+        Long eventDefinitionId = null;
+        if(null != eventInstanceId) {
+            eventDefinitionId = eventInstanceDaoService.findEventInstanceById(eventInstanceId).getEventDefinitionId();
+        }
+        List<StepDefinition> list = stepDefinitionDaoService.listStepDefinitionByStartCodeAndEventDefinitionId(code,
+                eventDefinitionId);
         if(list.size() > 0) {
             if(list.size() == 1) {
                 return list.get(0);
@@ -43,7 +52,7 @@ public class EventParser {
                 for(StepDefinition stepDefinition : list) {
                     boolean isMatch = true;
                     for(EventRule eventRule : eventRuleDaoService.listEventRuleByStepDefinitionId(stepDefinition.getId())) {
-                        isMatch = validateRule(paramMap.get(eventRule.getName()), eventRule.getOperator(), eventRule.getValue());
+                        isMatch = isMatch && validateRule(paramMap.get(eventRule.getName()), eventRule.getOperator(), eventRule.getValue());
                     }
                     if(isMatch) {
                         return stepDefinition;
@@ -62,8 +71,10 @@ public class EventParser {
      * @return
      */
     private boolean validateRule(Object obj, String operator, String value) {
-        if(operator.equals("eq")) {
-            return obj.toString().equals(value);
+        if(null != obj) {
+            if(operator.equals("eq")) {
+                return obj.toString().equals(value);
+            }
         }
         return false;
     }

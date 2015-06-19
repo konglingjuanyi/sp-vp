@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-3 17:47
- * modify date 2015-6-4 13:31
- * @version 0.2, 2015-6-4
+ * modify date 2015-6-18 12:45
+ * @version 0.3, 2015-6-18
  */
 @Transactional
 public class StepDefinitionDaoServiceImplTest extends BaseServiceTestCase {
@@ -65,9 +65,11 @@ public class StepDefinitionDaoServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testListStepDefinitionByStartCode() {
-        String startCode = "1149";
-        List<StepDefinition> list = stepDefinitionDaoService.listStepDefinitionByStartCode(startCode);
+    public void testListStepDefinitionByCodeAndEventDefinitionId() {
+        String startCode = "1113";
+        Long eventDefinitionId = 23L;
+        List<StepDefinition> list = stepDefinitionDaoService.listStepDefinitionByStartCodeAndEventDefinitionId(startCode,
+                eventDefinitionId);
         Assert.assertTrue(list.size() > 0);
     }
 

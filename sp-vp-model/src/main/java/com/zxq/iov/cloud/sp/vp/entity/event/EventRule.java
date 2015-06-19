@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 安防服务 事件规则类
  * @author 叶荣杰
  * create date 2015-6-5 16:54
- * modify date
- * @version 0.1, 2015-6-5
+ * modify date 2015-6-18 10:59
+ * @version 0.2, 2015-6-18
  */
 @Entity()
 @Table(name = "TB_EVENT_RULE")
@@ -40,6 +40,15 @@ public class EventRule extends MyBaseEntity<Long> implements Serializable {
 
     @Column(name = "VALUE", length=255)
     private String value;
+
+    public EventRule() {
+    }
+
+    public EventRule(String name, String operator, String value) {
+        this.name = name;
+        this.operator = operator;
+        this.value = value;
+    }
 
     public Long getId() {
         return id;
