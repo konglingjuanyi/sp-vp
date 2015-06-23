@@ -12,8 +12,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 15:45
- * modify date 2015-6-18 12:09
- * @version 0.8, 2015-6-18
+ * modify date 2015-6-23 10:04
+ * @version 0.9, 2015-6-23
  */
 @Service
 public class EventImpl implements IEvent {
@@ -29,9 +29,12 @@ public class EventImpl implements IEvent {
     @Override
     public Long start(OtaDto otaDto, Map<String, Object> paramMap) {
         String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        String owner = otaDto.getTboxId().toString();
-        if(null == owner) {
-            owner = otaDto.getTboxSn();
+        String owner;
+        if(null != otaDto.getTboxId()) {
+            owner = otaDto.getTboxId().toString();
+        }
+        else {
+            owner = otaDto.getTboxSn().toString();
         }
         return eventDispatch.start(owner, otaDto.getEventId(), otaDto.getEventCreateTime(), code, paramMap);
     }

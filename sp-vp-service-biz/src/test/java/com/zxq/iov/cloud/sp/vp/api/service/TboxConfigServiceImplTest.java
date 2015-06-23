@@ -3,6 +3,7 @@ package com.zxq.iov.cloud.sp.vp.api.service;
 import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import junit.framework.Assert;
@@ -12,12 +13,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * 安防 远程配置服务测试类
  *
  * @author 叶荣杰
  * create date 2015-6-19 14:17
- * @version 0.1, 2015-6-19
+ * modify date 2015-6-23 10:02
+ * @version 0.2, 2015-6-23
  */
 @Transactional
 public class TboxConfigServiceImplTest extends BaseServiceTestCase {
@@ -94,6 +98,26 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         String tboxConfigSettings = "";
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 9);
         tboxConfigService.responseReadConfig(otaDto, tboxConfigSettings);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testGenerateAsymmetricKey() {
+        Long tboxId = 1L;
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 10);
+        tboxConfigService.generateAsymmetricKey(otaDto);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testBindTboxWithSecretKey() {
+        Long tboxId = 1L;
+        KeyDto keyDto = new KeyDto();
+        keyDto.setTboxId(tboxId);
+        keyDto.setAid(Constants.AID_CONFIGURATION);
+        keyDto.setMid(12);
+        keyDto.setEventCreateTime(new Date());
+        tboxConfigService.bindTboxWithSecretKey(keyDto);
     }
 
 }

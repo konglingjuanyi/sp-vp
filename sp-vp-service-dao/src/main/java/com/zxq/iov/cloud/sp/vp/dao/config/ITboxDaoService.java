@@ -10,10 +10,7 @@
  * @CreateDate : 2012-2-2
  * @CreateBy   : Administrator
  */
-package com.zxq.iov.cloud.sp.vp.dao;
-
-import com.zxq.iov.cloud.core.service.BaseService;
-import com.zxq.iov.cloud.sp.vp.entity.event.Event;
+package com.zxq.iov.cloud.sp.vp.dao.config;
 
 /**
  * 安防 TBOX持久化服务接口

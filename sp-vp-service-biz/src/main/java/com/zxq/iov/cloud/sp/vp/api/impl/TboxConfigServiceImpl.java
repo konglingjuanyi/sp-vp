@@ -2,10 +2,11 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigSettingDto;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-19 11:44
- * modify date
- * @version 0.1, 2015-6-19
+ * modify date 2015-6-23 9:33
+ * @version 0.2, 2015-6-23
  */
 @Service
 @Qualifier("tboxConfigService")
@@ -26,6 +27,8 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
 
     @Autowired
     private ITboxPersonalConfigDaoService tboxPersonalConfigDaoService;
+    @Autowired
+    private ITboxDaoService tboxDaoService;
     @Autowired
     @Qualifier("statusService")
     private IStatusService statusService;
@@ -73,5 +76,40 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     @Override
     public void responseReadConfig(OtaDto otaDto, String tboxConfigSettings) {
         // 发给queue，应用get queue后通知后台
+    }
+
+    @Override
+    public KeyDto generateAsymmetricKey(OtaDto otaDto) {
+        if(null != otaDto.getTboxSn()) {
+            // 根据TBOX SN定位到TBOX对象
+        }
+        else {
+            // 根据TBOX ID定位到TBOX对象
+        }
+        // 生成非对称的public key, private key
+        String publicKey = "";
+        String privateKey = "";
+        tboxDaoService.updateAsymmetricKey(otaDto.getTboxId(), publicKey, privateKey); // 绑定tbox写入缓存
+        KeyDto asymmetricKeyDto = new KeyDto();
+        asymmetricKeyDto.setPublicKey(publicKey);
+        return asymmetricKeyDto;
+    }
+
+    @Override
+    public KeyDto bindTboxWithSecretKey(KeyDto keyDto) {
+        Long tboxId = keyDto.getTboxId();
+        if(null != keyDto.getTboxSn()) {
+            // 根据TBOX SN定位到TBOX对象
+        }
+        else {
+            // 根据TBOX ID定位到TBOX对象
+        }
+        String privateKey = tboxDaoService.findPrivateKeyById(tboxId);  // 根据tbox从缓存中读出private key
+        // 用private key对secretKey进行解密
+        String secretKey = "";
+        tboxDaoService.updateSecretKey(tboxId, secretKey);  // 绑定解密后的secretKey
+        keyDto.setTboxId(tboxId);
+        keyDto.setSecretKeyAccepted(true);
+        return keyDto;
     }
 }

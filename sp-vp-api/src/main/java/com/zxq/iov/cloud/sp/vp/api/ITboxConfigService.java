@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
@@ -8,8 +9,8 @@ import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
  * 安防服务 远程配置接口
  * @author 叶荣杰
  * create date 2015-4-22 11:19
- * modify date 2015-6-19 10:12
- * @version 0.2, 2015-6-19
+ * modify date 2015-6-23 9:32
+ * @version 0.3, 2015-6-23
  */
 public interface ITboxConfigService {
 
@@ -73,5 +74,19 @@ public interface ITboxConfigService {
      * @param tboxConfigSettings    TBOX配置参数
      */
     void responseReadConfig(OtaDto otaDto, String tboxConfigSettings);
+
+    /**
+     * 生成非对称密钥，用以对TBOX密钥加解密
+     * @param otaDto    OTA传输对象
+     * @return          密钥传输对象
+     */
+    KeyDto generateAsymmetricKey(OtaDto otaDto);
+
+    /**
+     * 将TBOX密钥与TBOX ID绑定
+     * @param keyDto    密钥传输对象（包含公钥加密过的TBOX密钥）
+     * @return          密钥传输对象
+     */
+    KeyDto bindTboxWithSecretKey(KeyDto keyDto);
 
 }

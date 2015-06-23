@@ -7,13 +7,13 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-6-17 17:51
- * @version 0.6, 2015-6-17
+ * modify date 2015-6-23 9:28
+ * @version 0.7, 2015-6-23
  */
 public class OtaDto {
 
     private String vin;
-    private String tboxSn;
+    private Integer tboxSn;
     private Long tboxId;
     private Integer platform;
     private String aid;
@@ -25,7 +25,7 @@ public class OtaDto {
     public OtaDto() {
     }
 
-    public OtaDto(String tboxSn, String aid, Integer mid) {
+    public OtaDto(Integer tboxSn, String aid, Integer mid) {
         this.tboxSn = tboxSn;
         this.aid = aid;
         this.mid = mid;
@@ -47,11 +47,11 @@ public class OtaDto {
         this.vin = vin;
     }
 
-    public String getTboxSn() {
+    public Integer getTboxSn() {
         return tboxSn;
     }
 
-    public void setTboxSn(String tboxSn) {
+    public void setTboxSn(Integer tboxSn) {
         this.tboxSn = tboxSn;
     }
 

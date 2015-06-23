@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-4 13:55
- * modify date 2015-6-19 9:41
- * @version 0.7, 2015-6-19
+ * modify date 2015-6-23 10:02
+ * @version 0.8, 2015-6-23
  */
 @Transactional
 public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
@@ -33,8 +33,8 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("空调控制事件");
-        eventDefinitionDto.setLifecycle(3600);
+        eventDefinitionDto.setName("备用虚拟钥匙报警事件");
+        eventDefinitionDto.setLifecycle(300);
         eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(false);
         eventDefinitionDto.setIsRollback(false);
@@ -44,39 +44,39 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 29L;
+        Long eventDefinitionId = 35L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("取消空调控制");
-        taskDefinitionDto.setPreTaskDefinitionId(74L);
+        taskDefinitionDto.setName("备用虚拟钥匙报警");
+        //taskDefinitionDto.setPreTaskDefinitionId(83L);
         taskDefinitionDto.setLifecycle(300);
         taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
         taskDefinitionDto.setIsLast(true);
-        taskDefinitionDto.setSort(4);
+        taskDefinitionDto.setSort(1);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 77L;
+        Long taskDefinitionId = 87L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("响应取消空调控制请求");
-        stepDefinitionDto.setStartCode("1112");
+        stepDefinitionDto.setName("备用虚拟钥匙报警");
+        stepDefinitionDto.setStartCode("1155");
         stepDefinitionDto.setLifecycle(30);
         stepDefinitionDto.setRetryLimit(5);
-        stepDefinitionDto.setPreStepDefinitionId(93L);
+        //stepDefinitionDto.setPreStepDefinitionId(110L);
         stepDefinitionDto.setIsRollback(false);
         stepDefinitionDto.setIsLast(true);
-        stepDefinitionDto.setSort(2);
-        List<EventRuleDto> eventRuleDtos = new ArrayList<>();
-        eventRuleDtos.add(new EventRuleDto("status", "eq", "3"));
+        stepDefinitionDto.setSort(1);
+//        List<EventRuleDto> eventRuleDtos = new ArrayList<>();
+//        eventRuleDtos.add(new EventRuleDto("status", "eq", "3"));
 //        eventRuleDtos.add(new EventRuleDto("cancelFlag", "eq", "1"));
-        eventDefinitionService.createStepDefinition(stepDefinitionDto, eventRuleDtos);
+        eventDefinitionService.createStepDefinition(stepDefinitionDto);
     }
 
     @Test

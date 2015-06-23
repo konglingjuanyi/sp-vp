@@ -2,6 +2,7 @@ package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-19 15:19
- * @version 0.1, 2015-6-19
+ * modify date 2015-6-23 9:58
+ * @version 0.2, 2015-6-23
  */
 @Service
 @Qualifier("tboxConfigServiceProxy")
@@ -86,5 +88,27 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
         event.start(otaDto);
         tboxConfigService.responseReadConfig(otaDto, tboxConfigSettings);
         event.end(otaDto);
+    }
+
+    @Override
+    public KeyDto generateAsymmetricKey(OtaDto otaDto) {
+        event.start(otaDto);
+        KeyDto keyDto = tboxConfigService.generateAsymmetricKey(otaDto);
+        event.end(otaDto);
+        OtaDto otaDto2 = new OtaDto(otaDto.getTboxId(), Constants.AID_CONFIGURATION, 11);
+        event.start(otaDto2);
+        event.end(otaDto2);
+        return keyDto;
+    }
+
+    @Override
+    public KeyDto bindTboxWithSecretKey(KeyDto keyDto) {
+        event.start(keyDto);
+        keyDto = tboxConfigService.bindTboxWithSecretKey(keyDto);
+        event.end(keyDto);
+        OtaDto otaDto2 = new OtaDto(keyDto.getTboxId(), Constants.AID_CONFIGURATION, 13);
+        event.start(otaDto2);
+        event.end(otaDto2);
+        return keyDto;
     }
 }
