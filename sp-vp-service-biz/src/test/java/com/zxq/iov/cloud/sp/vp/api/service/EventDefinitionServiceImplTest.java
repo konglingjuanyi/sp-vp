@@ -33,8 +33,8 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testCreateEventDefinition() {
         EventDefinitionDto eventDefinitionDto = new EventDefinitionDto();
-        eventDefinitionDto.setName("备用虚拟钥匙报警事件");
-        eventDefinitionDto.setLifecycle(300);
+        eventDefinitionDto.setName("远程诊断事件");
+        eventDefinitionDto.setLifecycle(3600);
         eventDefinitionDto.setIsExclusive(true);
         eventDefinitionDto.setIsContinue(false);
         eventDefinitionDto.setIsRollback(false);
@@ -44,29 +44,29 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTaskDefinition() {
-        Long eventDefinitionId = 35L;
+        Long eventDefinitionId = 36L;
         TaskDefinitionDto taskDefinitionDto = new TaskDefinitionDto();
         taskDefinitionDto.setEventDefinitionId(eventDefinitionId);
-        taskDefinitionDto.setName("备用虚拟钥匙报警");
-        //taskDefinitionDto.setPreTaskDefinitionId(83L);
+        taskDefinitionDto.setName("响应远程诊断");
+        taskDefinitionDto.setPreTaskDefinitionId(88L);
         taskDefinitionDto.setLifecycle(300);
         taskDefinitionDto.setCycleLimit(1);
         taskDefinitionDto.setIsExclusive(true);
         taskDefinitionDto.setIsContinue(false);
         taskDefinitionDto.setIsRollback(false);
         taskDefinitionDto.setIsLast(true);
-        taskDefinitionDto.setSort(1);
+        taskDefinitionDto.setSort(2);
         eventDefinitionService.createTaskDefinition(taskDefinitionDto);
     }
 
     @Test
     @Rollback(false)
     public void testCreateStepDefinition() {
-        Long taskDefinitionId = 87L;
+        Long taskDefinitionId = 89L;
         StepDefinitionDto stepDefinitionDto = new StepDefinitionDto();
         stepDefinitionDto.setTaskDefinitionId(taskDefinitionId);
-        stepDefinitionDto.setName("备用虚拟钥匙报警");
-        stepDefinitionDto.setStartCode("1155");
+        stepDefinitionDto.setName("响应远程诊断");
+        stepDefinitionDto.setStartCode("8012");
         stepDefinitionDto.setLifecycle(30);
         stepDefinitionDto.setRetryLimit(5);
         //stepDefinitionDto.setPreStepDefinitionId(110L);

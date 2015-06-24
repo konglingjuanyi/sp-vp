@@ -21,7 +21,7 @@ public interface IRemoteKeyDaoService extends BaseService<RemoteKey, Long> {
 	RemoteKey createRemoteKey(RemoteKey remoteKey);
 
 	/**
-	 * 更新TBOX个性化配置
+	 * 更新电子钥匙
 	 * @param remoteKey		电子钥匙对象
 	 * @return				电子钥匙对象
 	 */

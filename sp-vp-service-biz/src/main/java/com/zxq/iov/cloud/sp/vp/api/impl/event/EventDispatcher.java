@@ -4,7 +4,6 @@ import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +12,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-8 9:35
- * modify date 2015-6-17 17:20
- * @version 0.6, 2015-6-17
+ * modify date 2015-6-24 13:48
+ * @version 0.7, 2015-6-24
  */
 @Service
 public class EventDispatcher {
@@ -30,12 +29,11 @@ public class EventDispatcher {
      * 启动事件
      * @param owner             事件拥有者
      * @param eventId           事件ID
-     * @param eventCreateTime   事件创建时间
      * @param code              代码
      * @param paramMap          参数MAP
      * @return                  事件实例ID
      */
-    public Long start(String owner, Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap) {
+    public Long start(String owner, Long eventId, String code, Map<String, Object> paramMap) {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         Long eventInstanceId = null;
         Long taskInstanceId = null;
@@ -92,14 +90,14 @@ public class EventDispatcher {
         }
         if(isCreateEvent) {
             isCreateTask = true;
-            eventInstanceId = eventCreator.createEventInstance(stepDefinition.getTaskDefinition().getEventDefinitionId(), owner, eventCreateTime).getId();
+            eventInstanceId = eventCreator.createEventInstance(stepDefinition.getTaskDefinition().getEventDefinitionId(), owner).getId();
         }
         if(isCreateTask) {
             isCreateStep = true;
-            taskInstanceId = eventCreator.createTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId(), owner, eventCreateTime).getId();
+            taskInstanceId = eventCreator.createTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId(), owner).getId();
         }
         if(isCreateStep) {
-            eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), owner, eventCreateTime);
+            eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), owner);
         }
         return eventInstanceId;
     }
@@ -107,22 +105,21 @@ public class EventDispatcher {
     /**
      * 结束事件
      * @param eventId           事件实例ID
-     * @param eventCreateTime   事件发生时间
      * @param code              代码
      * @param paramMap          参数MAP
      * @param result            结果对象
      */
-    public void end(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Object result) {
+    public void end(Long eventId, String code, Map<String, Object> paramMap, Object result) {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
-        StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, null);
+        StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), null);
         if(null != result) {
             eventConvert.saveResult(stepInstance.getId(), result);
         }
         if(stepDefinition.isLast()) {
-            eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime, null);
+            eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), null);
             if(stepDefinition.getTaskDefinition().isLast()) {
                 eventConvert.finishRunningEventInstance(eventId,
-                        stepDefinition.getTaskDefinition().getEventDefinitionId(), eventCreateTime);
+                        stepDefinition.getTaskDefinition().getEventDefinitionId());
             }
         }
     }
@@ -130,15 +127,14 @@ public class EventDispatcher {
     /**
      * 异常事件
      * @param eventId           事件实例ID
-     * @param eventCreateTime   事件发生时间
      * @param code              代码
      * @param paramMap          参数MAP
      * @param errorCode         错误代码
      */
-    public void error(Long eventId, Date eventCreateTime, String code, Map<String, Object> paramMap, Integer errorCode) {
+    public void error(Long eventId, String code, Map<String, Object> paramMap, Integer errorCode) {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
-        eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), eventCreateTime, errorCode);
-        eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), eventCreateTime, errorCode);
+        eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), errorCode);
+        eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), errorCode);
     }
 
     /**

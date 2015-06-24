@@ -8,8 +8,8 @@ import java.util.TreeMap;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:31
- * modify date 2015-6-23 14:50
- * @version 0.5, 2015-6-23
+ * modify date 2015-6-24 13:29
+ * @version 0.6, 2015-6-24
  */
 public class Constants {
 
@@ -48,6 +48,7 @@ public class Constants {
 	public static final String AID_CONFIGURATION = "100";
 	public static final String AID_REMOTE_KEY = "115";
 	public static final String AID_RVC = "111";
+	public static final String AID_DIAGNOSTIC = "801";
 	public static final String AID_ECALL = "902";
 	public static final String AID_BCALL = "903";
 	public static final String AID_ICALL = "904";

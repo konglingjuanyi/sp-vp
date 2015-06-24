@@ -14,8 +14,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-8 11:09
- * modify date 2015-6-15 14:25
- * @version 0.3, 2015-6-15
+ * modify date 2015-6-24 13:42
+ * @version 0.4, 2015-6-24
  */
 @Service
 public class EventCreator {
@@ -38,16 +38,15 @@ public class EventCreator {
      * @param taskInstanceId        任务实例ID
      * @param stepDefinitionId      步骤定义ID
      * @param owner                 拥有者
-     * @param eventCreateTime       事件时间
      * @return                      步骤实例对象
      */
-    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, String owner, Date eventCreateTime) {
+    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, String owner) {
         validateStep(taskInstanceId, stepDefinitionId);
         StepInstance stepInstance = new StepInstance();
         stepInstance.setTaskInstanceId(taskInstanceId);
         stepInstance.setStepDefinitionId(stepDefinitionId);
         stepInstance.setOwner(owner);
-        stepInstance.setStartTime(eventCreateTime);
+        stepInstance.setStartTime(new Date());
         stepInstance.setRetryCount(0);
         stepInstance.setStatus(RUNNING_STATUS);
         stepInstance = stepInstanceDaoService.createStepInstance(stepInstance);
@@ -69,16 +68,15 @@ public class EventCreator {
      * @param eventInstanceId       事件实例ID
      * @param taskDefinitionId      任务定义ID
      * @param owner                 拥有者
-     * @param eventCreateTime       事件时间
      * @return                      任务实例对象
      */
-    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, String owner, Date eventCreateTime) {
+    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, String owner) {
         validateTask(eventInstanceId, taskDefinitionId);
         TaskInstance taskInstance = new TaskInstance();
         taskInstance.setEventInstanceId(eventInstanceId);
         taskInstance.setTaskDefinitionId(taskDefinitionId);
         taskInstance.setOwner(owner);
-        taskInstance.setStartTime(eventCreateTime);
+        taskInstance.setStartTime(new Date());
         taskInstance.setStatus(RUNNING_STATUS);
         taskInstance = taskInstanceDaoService.createTaskInstance(taskInstance);
         EventInstance eventInstance = eventInstanceDaoService.findEventInstanceById(taskInstance.getEventInstanceId());
@@ -93,14 +91,13 @@ public class EventCreator {
      * 创建事件实例
      * @param eventDefinitionId     事件定义ID
      * @param owner                 事件拥有者
-     * @param eventCreateTime       事件时间
      * @return                      事件实例对象
      */
-    public EventInstance createEventInstance(Long eventDefinitionId, String owner, Date eventCreateTime) {
+    public EventInstance createEventInstance(Long eventDefinitionId, String owner) {
         EventInstance eventInstance = new EventInstance();
         eventInstance.setEventDefinitionId(eventDefinitionId);
         eventInstance.setOwner(owner);
-        eventInstance.setStartTime(eventCreateTime);
+        eventInstance.setStartTime(new Date());
         eventInstance.setStatus(RUNNING_STATUS);
         return eventInstanceDaoService.createEventInstance(eventInstance);
     }
