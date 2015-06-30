@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 安防服务 车辆状态信息类
  * @author 叶荣杰
  * create time 2015-5-13 10:38
- * modify time 2015-5-14 17:05
- * @version 0.2, 2015-5-14
+ * modify time 2015-5-25 11:23
+ * @version 0.3, 2015-5-25
  */
 @Entity()
 @Table(name = "TB_VEHICLE_STATUS")
@@ -35,7 +35,7 @@ public class VehicleStatus extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "CODE", nullable = false, length=50)
     private String code;
 
-    @Column(name = "NAME", nullable = false, length=50)
+    @Column(name = "NAME", length=50)
     private String name;
 
     @Column(name = "VALUE", nullable = false, precision = 11, scale = 0)
@@ -46,10 +46,8 @@ public class VehicleStatus extends MyBaseEntity<Long> implements Serializable {
 
     public VehicleStatus() {}
 
-    public VehicleStatus(Long id, String code, String name, Integer value, String data, Integer type) {
-        this.id = id;
+    public VehicleStatus(String code, Integer value, String data, Integer type) {
         this.code = code;
-        this.name = name;
         this.value = value;
         this.data = data;
         this.type = type;

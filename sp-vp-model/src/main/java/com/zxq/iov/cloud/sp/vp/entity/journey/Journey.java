@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 行程类
  * @author 叶荣杰
  * create date 2015-6-9 13:16
- * modify date 2015-6-11 17:22
- * @version 0.2, 2015-6-11
+ * modify date 2015-6-26 13:19
+ * @version 0.3, 2015-6-26
  */
 @Entity()
 @Table(name = "TB_JOURNEY")
@@ -38,8 +38,8 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "USER_ID", precision = 20, scale = 0)
     private Long userId;
 
-    @Column(name = "KEY_ID", precision = 20, scale = 0)
-    private Long keyId;
+    @Column(name = "KEY_ID", length = 4)
+    private String keyId;
 
     @Column(name = "VIN", length = 17)
     private String vin;
@@ -69,20 +69,11 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
 
     public Journey(){}
 
-    public Journey(Integer tboxJourneyId, Long tboxId, Long ownerId, Long userId, Long keyId, String vin, Date startTime, Long startVehicleInfoId, Date endTime, Long endVehicleInfoId, Integer distance, Integer avgSpeed, Integer fuelConsumption) {
+    public Journey(Integer tboxJourneyId, Long tboxId, Long ownerId, String vin) {
         this.tboxJourneyId = tboxJourneyId;
         this.tboxId = tboxId;
         this.ownerId = ownerId;
-        this.userId = userId;
-        this.keyId = keyId;
         this.vin = vin;
-        this.startTime = startTime;
-        this.startVehicleInfoId = startVehicleInfoId;
-        this.endTime = endTime;
-        this.endVehicleInfoId = endVehicleInfoId;
-        this.distance = distance;
-        this.avgSpeed = avgSpeed;
-        this.fuelConsumption = fuelConsumption;
     }
 
     public Long getId() {
@@ -125,11 +116,11 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
         this.userId = userId;
     }
 
-    public Long getKeyId() {
+    public String getKeyId() {
         return keyId;
     }
 
-    public void setKeyId(Long keyId) {
+    public void setKeyId(String keyId) {
         this.keyId = keyId;
     }
 

@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 安防服务 远程诊断类
  * @author 叶荣杰
  * create date 2015-6-23 17:56
- * modify date 2015-6-24 9:58
- * @version 0.2, 2015-6-24
+ * modify date 2015-6-30 15:23
+ * @version 0.3, 2015-6-30
  */
 @Entity()
 @Table(name = "TB_DIAGNOSTIC")
@@ -27,6 +27,9 @@ public class Diagnostic extends MyBaseEntity<Long> implements Serializable {
 
     @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
     private Long tboxId;
+
+    @Column(name = "VIN", nullable = false, length = 17)
+    private String vin;
 
     @Column(name = "CAN_ID", nullable = false, length = 4)
     private String canId;
@@ -45,8 +48,7 @@ public class Diagnostic extends MyBaseEntity<Long> implements Serializable {
 
     public Diagnostic(){}
 
-    public Diagnostic(Long tboxId, String canId, String serviceId, String parameter) {
-        this.tboxId = tboxId;
+    public Diagnostic(String canId, String serviceId, String parameter) {
         this.canId = canId;
         this.serviceId = serviceId;
         this.parameter = parameter;
@@ -66,6 +68,14 @@ public class Diagnostic extends MyBaseEntity<Long> implements Serializable {
 
     public void setTboxId(Long tboxId) {
         this.tboxId = tboxId;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     public String getCanId() {

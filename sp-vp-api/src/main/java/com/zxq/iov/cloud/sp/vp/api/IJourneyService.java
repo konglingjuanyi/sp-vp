@@ -1,36 +1,54 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.journey.JourneyDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+
+import java.util.Date;
 
 
 /**
  * 安防服务 车辆行程接口
  * @author 叶荣杰
  * create date 2015-6-9 13:00
+ * modify date 2015-6-26 12:40
  * @version 0.1, 2015-6-9
  */
 public interface IJourneyService {
 
     /**
      * 开始车辆行程
-     * @param journeyDto            行程传输对象
+     * @param otaDto                OTA传输对象
+     * @param startTime             行程开始时间
+     * @param tboxJourneyId         TBOX行程ID
+     * @param keyId                 钥匙ID
      */
-    void startJourney(JourneyDto journeyDto);
+    void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId);
 
     /**
      * 更新车辆行程状态
-     * @param journeyDto            行程传输对象
-     * @param vehicleInfoDto        车辆状态传输对象
+     * @param otaDto                OTA传输对象
+     * @param tboxJourneyId         TBOX行程ID
+     * @param instFuelConsumption   瞬时油耗
+     * @param vehiclePosDto         车辆位置传输对象
      */
-    void updateJourney(JourneyDto journeyDto, VehicleInfoDto vehicleInfoDto);
+    void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption, VehiclePosDto vehiclePosDto);
 
     /**
      * 结束车辆行程
-     * @param journeyDto            行程传输对象
-     * @param startVehicleInfoDto   开始状态传输对象
-     * @param endVehicleInfoDto     结束状态传输对象
+     * @param otaDto                OTA传输对象
+     * @param startVehiclePosDto    开始车辆位置传输对象
+     * @param endVehiclePosDto      结束车辆位置传输对象
+     * @param tboxJourneyId         TBOX行程ID
+     * @param distance              行驶距离
+     * @param avgSpeed              平均速度
+     * @param fuelEco               平均油耗
+     * @param odometer              流程表数据
+     * @param fuelLevelPrc          燃油剩余量
+     * @param fuelLevelDisp         剩余燃油刻度
+     * @param fuelRange             剩余燃油可行驶距离
      */
-    void endJourney(JourneyDto journeyDto, VehicleInfoDto startVehicleInfoDto, VehicleInfoDto endVehicleInfoDto);
+    void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
+                    Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
+                    Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange);
 
 }

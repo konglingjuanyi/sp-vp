@@ -9,16 +9,16 @@ import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
  * 安防服务 远程配置接口
  * @author 叶荣杰
  * create date 2015-4-22 11:19
- * modify date 2015-6-23 9:32
- * @version 0.3, 2015-6-23
+ * modify date 2015-6-29 11:50
+ * @version 0.4, 2015-6-29
  */
 public interface ITboxConfigService {
 
     /**
      * 请求TBOX检查配置更新
-     * @param tboxId                TBOX ID
+     * @param vin                   车辆唯一码
      */
-    void requestConfigUpdate(Long tboxId);
+    void requestConfigUpdate(String vin);
 
     /**
      * TBOX响应是否接受后台的配置更新请求
@@ -29,17 +29,17 @@ public interface ITboxConfigService {
 
     /**
      * 检查TBOX配置更新版本，是否需要更新
+     * @param otaDto                OTA传输对象
      * @param mcuVersion            MCU版本
      * @param mpuVersion            MPU版本
+     * @param vin                   车辆VIN
+     * @param iccid                 ICCID
      * @param configVersion         配置版本
      * @param configDelta           TBOX上配置更新版本
-     * @param iccid                 ICCID
-     * @param vin                   车辆VIN
-     * @param otaDto                OTA传输对象
      * @return                      配置信息
      */
-    TboxConfigDto checkConfigDelta(Integer mcuVersion, Integer mpuVersion, Integer configVersion,
-                                   Integer configDelta, String iccid, String vin, OtaDto otaDto);
+    TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
+                                   String iccid, String configVersion, Integer configDelta);
 
     /**
      * 获得配置更新包
@@ -58,15 +58,15 @@ public interface ITboxConfigService {
      * @param configVersion         配置版本
      * @param configDelta           TBOX上配置更新版本
      */
-    void closeConfigUpdate(OtaDto otaDto, Boolean result, Integer mcuVersion, Integer mpuVersion,
-                           Integer configVersion, Integer configDelta);
+    void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
+                           String configVersion, Integer configDelta);
 
     /**
      * 请求读取TBOX配置参数
-     * @param tboxId                TBOX ID
+     * @param vin                   车辆唯一码
      * @param tboxConfigsettingIds  TBOX配置参数ID列表
      */
-    void requestReadConfig(Long tboxId, Long[] tboxConfigsettingIds);
+    void requestReadConfig(String vin, Long[] tboxConfigsettingIds);
 
     /**
      * 响应读取TBOX配置参数请求
@@ -77,16 +77,18 @@ public interface ITboxConfigService {
 
     /**
      * 生成非对称密钥，用以对TBOX密钥加解密
-     * @param otaDto    OTA传输对象
-     * @return          密钥传输对象
+     * @param otaDto                OTA传输对象
+     * @return                      密钥传输对象
      */
     KeyDto generateAsymmetricKey(OtaDto otaDto);
 
     /**
      * 将TBOX密钥与TBOX ID绑定
-     * @param keyDto    密钥传输对象（包含公钥加密过的TBOX密钥）
-     * @return          密钥传输对象
+     * @param otaDto                OTA传输对象
+     * @param secretKeyWithEnc      加密过的TBOX密钥
+     * @param tboxSnWithEnc         加密过的TBOX序列号
+     * @return                      密钥传输对象
      */
-    KeyDto bindTboxWithSecretKey(KeyDto keyDto);
+    KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc);
 
 }

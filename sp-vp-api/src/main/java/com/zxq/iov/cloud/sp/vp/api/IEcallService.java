@@ -1,8 +1,9 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
 import java.util.List;
 
@@ -11,63 +12,75 @@ import java.util.List;
  * 安防服务 eCall接口
  * @author 叶荣杰
  * create date 2015-6-12 11:03
- * modify date
- * @version 0.1, 2015-6-12
+ * modify date 2015-6-25 15:32
+ * @version 0.2, 2015-6-25
  */
 public interface IEcallService {
 
     /**
      * 开始eCall
-     * @param ecallDto              eCall传输对象
-     * @param vehicleInfoDtos       车辆状态传输对象列表
-     * @return                      eCall通话传输对象
+     * @param otaDto                OTA传输对象
+     * @param vehiclePosDtos        车辆GPS位置传输对象列表
+     * @param ecallType             呼叫方式
+     * @param tboxBatteryStatus     TBOX电池状态
+     * @param vehicleBatteryStatus  车辆电池状态
+     * @param vehicleAlertDtos      车辆报警传输对象列表
+     * @return                      bCall通话传输对象
      */
-    EcallRecordDto startEcall(EcallDto ecallDto, List<VehicleInfoDto> vehicleInfoDtos);
+    EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
+                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                              List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
      * 请求eCall状态
-     * @param tboxId                TBOX ID
+     * @param vin                   车辆唯一码
      */
-    void requestEcallStatus(Long tboxId);
+    void requestEcallStatus(String vin);
 
     /**
      * 更新eCall状态
-     * @param ecallDto              eCall传输对象
-     * @param vehicleInfoDtos       车辆状态传输对象列表
+     * @param otaDto                OTA传输对象
+     * @param vehiclePosDtos        车辆GPS位置传输对象列表
+     * @param ecallType             呼叫方式
+     * @param tboxBatteryStatus     TBOX电池状态
+     * @param vehicleBatteryStatus  车辆电池状态
+     * @param vehicleAlertDtos      车辆报警传输对象列表
+     * @return                      呼叫对象ID
      */
-    void updateEcall(EcallDto ecallDto, List<VehicleInfoDto> vehicleInfoDtos);
+    Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
+                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                     List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
      * 请求挂断通话
-     * @param tboxId                TBOX ID
-     * @param callRecordId          呼叫记录ID
+     * @param vin                   车辆唯一码
      */
-    void requestHangUp(Long tboxId, Long callRecordId);
+    void requestHangUp(String vin);
 
     /**
      * 请求车辆回拨
-     * @param tboxId                TBOX ID
-     * @param callId                呼叫ID
+     * @param vin                   车辆唯一码
      * @param callNumber            呼叫号码
      */
-    void requestCallBack(Long tboxId, Long callId, String callNumber);
+    void requestCallBack(String vin, String callNumber);
 
     /**
-     * 回应车辆回拨
-     * @param ecallRecordDto        呼叫记录传输对象
+     * 响应车辆回拨请求
+     * @param otaDto                OTA传输对象
+     * @param callbackAccepted      是否接受回拨
+     * @param rejectReason          拒绝理由
      */
-    void responseCallBack(EcallRecordDto ecallRecordDto);
+    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason);
 
     /**
      * 请求结束eCall
-     * @param tboxId                TBOX ID
-     * @param callId                呼叫ID
+     * @param vin                   车辆唯一码
      */
-    void requestCloseEcall(Long tboxId, Long callId);
+    void requestCloseEcall(String vin);
 
     /**
      * 结束eCall
-     * @param ecallDto              呼叫传输对象
+     * @param otaDto                OTA传输对象
      */
-    void closeEcall(EcallDto ecallDto);
+    void closeEcall(OtaDto otaDto);
 }

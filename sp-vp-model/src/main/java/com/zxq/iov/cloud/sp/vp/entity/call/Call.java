@@ -10,14 +10,15 @@ import java.util.Date;
  * 安防服务 呼叫类
  * @author 叶荣杰
  * create date 2015-6-11 9:23
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-25 13:24
+ * @version 0.3, 2015-6-25
  */
 @Entity()
 @Table(name = "TB_CALL")
 public class Call extends MyBaseEntity<Long> implements Serializable {
 
     private static final String SEQ_NAME = "seq_tb_call";
+    private static final Integer RUNNDING_STATUS = 1;
 
     @Id
     @Column(name = "ID", nullable = false, updatable = false, length=20)
@@ -25,6 +26,9 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
     @TableGenerator(name = SEQ_NAME, table = MY_SEQ_TABLE, allocationSize = 1,
             pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
     private Long id;
+
+    @Column(name = "VIN", nullable = false, length = 17)
+    private String vin;
 
     @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
     private Long tboxId;
@@ -45,12 +49,13 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
 
     public Call(){}
 
-    public Call(Long tboxId, Integer type, Integer callType, Date startTime, Date endTime) {
+    public Call(String vin, Long tboxId, Integer type, Integer callType, Date startTime) {
+        this.vin = vin;
         this.tboxId = tboxId;
         this.type = type;
         this.callType = callType;
         this.startTime = startTime;
-        this.endTime = endTime;
+        this.status = RUNNDING_STATUS;
     }
 
     public Long getId() {
@@ -59,6 +64,14 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     public Long getTboxId() {

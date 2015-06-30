@@ -20,8 +20,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-19 14:17
- * modify date 2015-6-23 10:02
- * @version 0.2, 2015-6-23
+ * modify date 2015-6-29 13:07
+ * @version 0.3, 2015-6-29
  */
 @Transactional
 public class TboxConfigServiceImplTest extends BaseServiceTestCase {
@@ -30,17 +30,18 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Qualifier("tboxConfigServiceProxy")
     private ITboxConfigService tboxConfigService;
 
+    private String vin = "1";
+    private Long tboxId = 1L;
+
     @Test
     @Rollback(false)
     public void testRequestConfigUpdate() {
-        Long tboxId = 1L;
-        tboxConfigService.requestConfigUpdate(tboxId);
+        tboxConfigService.requestConfigUpdate(vin);
     }
 
     @Test
     @Rollback(false)
     public void testResponseConfigUpdate() {
-        Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 4);
         tboxConfigService.responseConfigUpdate(otaDto, true);
     }
@@ -48,22 +49,19 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCheckConfigDelta() {
-        Integer mcuVersion = 1;
-        Integer mpuVersion = 1;
-        Integer configVersion = 1;
+        String mcuVersion = "1";
+        String mpuVersion = "1";
+        String configVersion = "1";
         Integer configDelta = 1;
         String iccid = "1";
-        String vin = "1";
         Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
-        tboxConfigService.checkConfigDelta(mcuVersion, mpuVersion, configVersion, configDelta,
-                iccid, vin, otaDto);
+        tboxConfigService.checkConfigDelta(otaDto, mcuVersion, mpuVersion, vin, iccid, configVersion, configDelta);
     }
 
     @Test
     @Rollback(false)
     public void testGetConfigPackage() {
-        Long tboxId = 1L;
         Integer packageId = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 6);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
@@ -73,11 +71,10 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCloseConfigUpdate() {
-        Long tboxId = 1L;
         Boolean result = true;
-        Integer mcuVersion = 1;
-        Integer mpuVersion = 1;
-        Integer configVersion = 1;
+        String mcuVersion = "1";
+        String mpuVersion = "1";
+        String configVersion = "1";
         Integer configDelta = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 5);
         tboxConfigService.closeConfigUpdate(otaDto, result, mcuVersion, mpuVersion, configVersion, configDelta);
@@ -86,15 +83,13 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRequestReadConfig() {
-        Long tboxId = 1L;
         Long[] tboxConfigsettingIds = {1L, 2L};
-        tboxConfigService.requestReadConfig(tboxId, tboxConfigsettingIds);
+        tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
     }
 
     @Test
     @Rollback(false)
     public void testResponseReadConfig() {
-        Long tboxId = 1L;
         String tboxConfigSettings = "";
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 9);
         tboxConfigService.responseReadConfig(otaDto, tboxConfigSettings);
@@ -103,7 +98,6 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testGenerateAsymmetricKey() {
-        Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 10);
         tboxConfigService.generateAsymmetricKey(otaDto);
     }
@@ -111,13 +105,10 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testBindTboxWithSecretKey() {
-        Long tboxId = 1L;
-        KeyDto keyDto = new KeyDto();
-        keyDto.setTboxId(tboxId);
-        keyDto.setAid(Constants.AID_CONFIGURATION);
-        keyDto.setMid(12);
-        keyDto.setEventCreateTime(new Date());
-        tboxConfigService.bindTboxWithSecretKey(keyDto);
+        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 12);
+        String secretKeyWithEnc = "1";
+        String tboxSnWithEnc = "1";
+        tboxConfigService.bindTboxWithSecretKey(otaDto, secretKeyWithEnc, tboxSnWithEnc);
     }
 
 }

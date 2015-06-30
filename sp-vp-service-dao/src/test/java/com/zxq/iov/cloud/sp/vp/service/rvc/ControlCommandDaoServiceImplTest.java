@@ -32,7 +32,7 @@ public class ControlCommandDaoServiceImplTest extends BaseServiceTestCase {
         ControlCommand controlCommand = new ControlCommand();
         controlCommand.setTboxId(tboxId);
         controlCommand.setEventId(eventId);
-        controlCommand.setCode(0);
+        controlCommand.setCode("0");
         controlCommand.setName(Constants.RVC_CMD.get(0));
         controlCommand = controlCommandDaoService.createControlCommand(controlCommand);
         Assert.assertNotNull(controlCommand);

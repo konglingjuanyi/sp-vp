@@ -8,8 +8,9 @@
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
 		<result column="EVENT_ID" jdbcType="DECIMAL" property="eventId"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
-		<result column="CODE" jdbcType="DECIMAL" property="code"/>
+		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="PARAMETER" jdbcType="VARCHAR" property="parameter"/>
+		<result column="COMMAND_STATUS" jdbcType="VARCHAR" property="commandStatus"/>
 		<result column="IS_CANCEL" jdbcType="DECIMAL" property="isCancel"/>
 		<result column="FAILURE_TYPE" jdbcType="DECIMAL" property="failureType"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>

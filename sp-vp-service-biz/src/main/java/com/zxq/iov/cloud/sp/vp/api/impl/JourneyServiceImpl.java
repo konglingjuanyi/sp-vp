@@ -2,24 +2,29 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IJourneyService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
-import com.zxq.iov.cloud.sp.vp.api.dto.journey.JourneyDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.exception.TboxJourneyIdNotFindException;
-import com.zxq.iov.cloud.sp.vp.api.impl.assembler.journey.JourneyDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.journey.IJourneyDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * 安防 行程服务实现类
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-6-12 9:19
- * @version 0.4, 2015-6-12
+ * modify date 2015-6-26 13:16
+ * @version 0.6, 2015-6-26
  */
 @Service
 @Qualifier("journeyService")
@@ -28,6 +33,8 @@ public class JourneyServiceImpl implements IJourneyService {
     @Autowired
     private IJourneyDaoService journeyDaoService;
     @Autowired
+    private ITboxDaoService tboxDaoService;
+    @Autowired
     @Qualifier("statusService")
     private IStatusService statusService;
 
@@ -35,63 +42,67 @@ public class JourneyServiceImpl implements IJourneyService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public void startJourney(JourneyDto journeyDto) {
-        Journey journey = findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId) {
+        Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
-            journey = new JourneyDtoAssembler().fromDto(journeyDto);
-            journey.setTboxId(journeyDto.getTboxId());
+            Long ownerId = 1L; // 从主数据获得
+            journey = new Journey(tboxJourneyId, otaDto.getTboxId(), ownerId,
+                    tboxDaoService.findVinById(otaDto.getTboxId()));
+            journey.setStartTime(startTime);
+            journey.setKeyId(keyId);
             journey.setStatus(RUNNING_STATUS);
             journeyDaoService.createJourney(journey);
         }
         else {
-            journey.setStartTime(journeyDto.getStartTime());
-            journey.setKeyId(journeyDto.getKeyId());
+            journey.setStartTime(startTime);
+            journey.setKeyId(keyId);
             journeyDaoService.updateJourney(journey);
         }
     }
 
     @Override
-    public void updateJourney(JourneyDto journeyDto, VehicleInfoDto vehicleInfoDto) {
-        Journey journey = findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+    public void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption, VehiclePosDto vehiclePosDto) {
+        Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
-            journey = new JourneyDtoAssembler().fromDto(journeyDto);
-            journey.setTboxId(journeyDto.getTboxId());
+            Long ownerId = 1L; // 从主数据获得
+            journey = new Journey(tboxJourneyId, otaDto.getTboxId(), ownerId,
+                    tboxDaoService.findVinById(otaDto.getTboxId()));
             journey.setStatus(RUNNING_STATUS);
             journeyDaoService.createJourney(journey);
         }
-        vehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_JOURNEY);
-        statusService.updateVehicleStatus(vehicleInfoDto);
+        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
+        vehicleStatusDtos.add(new VehicleStatusDto("instFuelConsumption", instFuelConsumption));
+        statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
+                journey.getId(), vehiclePosDto, vehicleStatusDtos);
     }
 
     @Override
-    public void endJourney(JourneyDto journeyDto, VehicleInfoDto startVehicleInfoDto, VehicleInfoDto endVehicleInfoDto) {
-        Journey journey = findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+    public void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
+                           Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
+                           Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange) {
+        Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
-            journey = new JourneyDtoAssembler().fromDto(journeyDto);
-            journey.setTboxId(journeyDto.getTboxId());
+            Long ownerId = 1L; // 从主数据获得
+            journey = new Journey(tboxJourneyId, otaDto.getTboxId(), ownerId,
+                    tboxDaoService.findVinById(otaDto.getTboxId()));
             journey.setStatus(END_STATUS);
             journeyDaoService.createJourney(journey);
         }
         else {
-            if(null != journey.getStartTime() && null != journeyDto.getStartTime()
-                    && journeyDto.getStartTime().before(journey.getStartTime())) {
-                journey.setStartTime(journeyDto.getStartTime());
+            if(null != journey.getStartTime() && startVehiclePosDto.getGpsTime().before(journey.getStartTime())) {
+                journey.setStartTime(startVehiclePosDto.getGpsTime());
             }
-            journey.setEndTime(journeyDto.getEndTime());
-            journey.setDistance(journeyDto.getDistance());
-            journey.setAvgSpeed(journeyDto.getAvgSpeed());
-            journey.setFuelConsumption(journeyDto.getFuelConsumption());
+            journey.setEndTime(endVehiclePosDto.getGpsTime());
+            journey.setDistance(distance);
+            journey.setAvgSpeed(avgSpeed);
+            journey.setFuelConsumption(fuelEco);
             journey.setStatus(END_STATUS);
             journeyDaoService.updateJourney(journey);
         }
-        startVehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_JOURNEY);
-        startVehicleInfoDto.setSourceId(journey.getId());
-        startVehicleInfoDto = statusService.updateVehicleStatus(startVehicleInfoDto);
-        endVehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_JOURNEY);
-        endVehicleInfoDto.setSourceId(journey.getId());
-        endVehicleInfoDto = statusService.updateVehicleStatus(endVehicleInfoDto);
-        journey.setStartVehicleInfoId(startVehicleInfoDto.getId());
-        journey.setEndVehicleInfoId(endVehicleInfoDto.getId());
+        journey.setStartVehicleInfoId(statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
+                journey.getId(), startVehiclePosDto));
+        journey.setEndVehicleInfoId(statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
+                journey.getId(), endVehiclePosDto));
         journeyDaoService.updateJourney(journey);
     }
 

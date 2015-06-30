@@ -67,7 +67,7 @@ public class EventDispatcher {
         else {
             EventDefinition eventDefinition = stepDefinition.getTaskDefinition().getEventDefinition();
             if(eventDefinition.isExclusive()) {
-                List<EventInstance> list = eventConvert.findRunningEventInstance(eventDefinition.getId());
+                List<EventInstance> list = eventConvert.findRunningEventInstance(eventDefinition.getId(), owner);
                 if(list.size()>0) {
                     eventInstanceId = list.get(0).getId();
                     TaskInstance taskInstance = eventConvert.findRunningTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId());
@@ -104,12 +104,13 @@ public class EventDispatcher {
 
     /**
      * 结束事件
+     * @param owner             事件拥有者
      * @param eventId           事件实例ID
      * @param code              代码
      * @param paramMap          参数MAP
      * @param result            结果对象
      */
-    public void end(Long eventId, String code, Map<String, Object> paramMap, Object result) {
+    public void end(String owner, Long eventId, String code, Map<String, Object> paramMap, Object result) {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), null);
         if(null != result) {
@@ -119,7 +120,7 @@ public class EventDispatcher {
             eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), null);
             if(stepDefinition.getTaskDefinition().isLast()) {
                 eventConvert.finishRunningEventInstance(eventId,
-                        stepDefinition.getTaskDefinition().getEventDefinitionId());
+                        stepDefinition.getTaskDefinition().getEventDefinitionId(), owner);
             }
         }
     }

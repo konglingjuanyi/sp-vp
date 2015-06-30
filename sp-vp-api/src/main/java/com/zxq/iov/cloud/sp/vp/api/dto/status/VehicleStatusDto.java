@@ -5,31 +5,19 @@ package com.zxq.iov.cloud.sp.vp.api.dto.status;
  *
  * @author 叶荣杰
  * create date 2015-5-13 15:10
- * modify date 2015-5-14 17:18
- * @version 0.2, 2015-5-14
+ * modify date 2015-6-24 16:54
+ * @version 0.3, 2015-6-24
  */
 public class VehicleStatusDto {
 
-    private Long id;
     private String code;
-    private String name;
     private Integer value;
 
     public VehicleStatusDto() {}
 
-    public VehicleStatusDto(Long id, String code, String name, Integer value) {
-        this.id = id;
+    public VehicleStatusDto(String code, Integer value) {
         this.code = code;
-        this.name = name;
         this.value = value;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {
@@ -38,14 +26,6 @@ public class VehicleStatusDto {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getValue() {

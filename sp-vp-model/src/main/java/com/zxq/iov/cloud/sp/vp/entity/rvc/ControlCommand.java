@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 安防服务 控制命令类
  * @author 叶荣杰
  * create date 2015-6-17 11:24
- * modify date 2015-6-18 9:50
- * @version 0.2, 2015-6-18
+ * modify date 2015-6-29 10:13
+ * @version 0.3, 2015-6-29
  */
 @Entity()
 @Table(name = "TB_CONTROL_COMMAND")
@@ -28,17 +28,23 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
     private Long tboxId;
 
+    @Column(name = "VIN", nullable = false, length = 17)
+    private String vin;
+
     @Column(name = "EVENT_ID", precision = 20, scale = 0)
     private Long eventId;
 
     @Column(name = "NAME", length = 50)
     private String name;
 
-    @Column(name = "CODE", nullable = false, precision = 4, scale = 0)
-    private Integer code;
+    @Column(name = "CODE", nullable = false, length = 2)
+    private String code;
 
     @Column(name = "PARAMETER", length = 255)
     private String parameter;
+
+    @Column(name = "COMMAND_STATUS", nullable = false, length = 2)
+    private String commandStatus;
 
     @Column(name = "IS_CANCEL", nullable = false, precision = 1, scale = 0)
     private Boolean isCancel;
@@ -48,8 +54,9 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
 
     public ControlCommand(){}
 
-    public ControlCommand(Long tboxId, String name, Integer code, String parameter) {
+    public ControlCommand(Long tboxId, String vin, String name, String code, String parameter) {
         this.tboxId = tboxId;
+        this.vin = vin;
         this.name = name;
         this.code = code;
         this.parameter = parameter;
@@ -71,6 +78,14 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
         this.tboxId = tboxId;
     }
 
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
     public Long getEventId() {
         return eventId;
     }
@@ -87,11 +102,11 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
         this.name = name;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -101,6 +116,14 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
 
     public void setParameter(String parameter) {
         this.parameter = parameter;
+    }
+
+    public String getCommandStatus() {
+        return commandStatus;
+    }
+
+    public void setCommandStatus(String commandStatus) {
+        this.commandStatus = commandStatus;
     }
 
     public Boolean isCancel() {

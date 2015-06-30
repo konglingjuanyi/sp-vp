@@ -10,8 +10,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 9:37
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-25 13:45
+ * @version 0.2, 2015-6-25
  */
 public interface ICallDaoService extends BaseService<Call, Long> {
 
@@ -49,5 +49,13 @@ public interface ICallDaoService extends BaseService<Call, Long> {
 	 * @return        	呼叫对象列表
 	 */
 	List<Call> listCallByTboxId(Long tboxId, Integer status);
+
+	/**
+	 * 根据车辆唯一码得到呼叫对象列表
+	 * @param vin  		车辆唯一码
+	 * @param status 	状态
+	 * @return        	呼叫对象列表
+	 */
+	List<Call> listCallByVin(String vin, Integer status);
 	
 }

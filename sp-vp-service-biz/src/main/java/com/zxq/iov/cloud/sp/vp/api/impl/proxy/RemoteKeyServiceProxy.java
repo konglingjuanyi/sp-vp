@@ -1,10 +1,11 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
+import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.key.RemoteKeyDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 14:46
- * modify date
- * @version 0.1, 2015-6-23
+ * modify date 2015-6-29 16:03
+ * @version 0.2, 2015-6-29
  */
 @Service
 @Qualifier("remoteKeyServiceProxy")
@@ -31,13 +32,23 @@ public class RemoteKeyServiceProxy implements IRemoteKeyService {
     private IEvent event;
 
     @Override
-    public void requestWriteKey(RemoteKeyDto remoteKeyDto) {
-        remoteKeyDto.setAid(Constants.AID_REMOTE_KEY);
-        remoteKeyDto.setMid(1);
-        remoteKeyDto.setEventCreateTime(new Date());
-        event.start(remoteKeyDto);
-        remoteKeyService.requestWriteKey(remoteKeyDto);
-        event.end(remoteKeyDto);
+    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+                                Date keyValidityStartTime, Date keyValidityEndTime) {
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_REMOTE_KEY, 1);
+        Long eventId = event.start(otaDto);
+        remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, keyValidityStartTime,
+                keyValidityEndTime);
+        JSONObject msg = new JSONObject();
+        msg.put("eventId", eventId);
+        msg.put("owner", vin);
+        msg.put("method", "writeKey");
+        msg.put("keyType", keyType);
+        msg.put("keyValue", keyValue);
+        msg.put("keyReference", keyReference);
+        msg.put("keyValidityStartTime", keyValidityStartTime);
+        msg.put("keyValidityEndTime", keyValidityEndTime);
+        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        event.end(otaDto);
     }
 
     @Override
@@ -48,10 +59,16 @@ public class RemoteKeyServiceProxy implements IRemoteKeyService {
     }
 
     @Override
-    public void requestDeleteKey(Long tboxId, Integer keyReference) {
-        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 3);
-        event.start(otaDto);
-        remoteKeyService.requestDeleteKey(tboxId, keyReference);
+    public void requestDeleteKey(String vin, Integer keyReference) {
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_REMOTE_KEY, 3);
+        Long eventId = event.start(otaDto);
+        remoteKeyService.requestDeleteKey(vin, keyReference);
+        JSONObject msg = new JSONObject();
+        msg.put("eventId", eventId);
+        msg.put("owner", vin);
+        msg.put("method", "deleteKey");
+        msg.put("keyReference", keyReference);
+        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
         event.end(otaDto);
     }
 

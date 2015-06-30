@@ -1,13 +1,15 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleAlertDtoAssembler;
-import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleInfoDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleInfoDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehiclePosDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleStatusDaoService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +28,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-6-15 17:04
- * @version 0.4, 2015-6-15
+ * modify date 2015-6-29 9:15
+ * @version 0.7, 2015-6-29
  */
 @Service
 @Qualifier("statusService")
@@ -37,88 +40,97 @@ public class StatusServiceImpl implements IStatusService {
     @Autowired
     private IVehiclePosDaoService vehiclePosDaoService;
     @Autowired
+    private ITboxDaoService tboxDaoService;
+    @Autowired
     private IVehicleStatusDaoService vehicleStatusDaoService;
 
     @Override
-    public void requestVehicleStatus(VehicleInfoDto vehicleInfoDto, Integer statusType) {
-         // 通知TAP对TBOX发送OTA_RVMVehicleStatusReq
+    public void requestVehicleStatus(String vin, Integer statusType) {
+         // 无业务操作，仅发送给TBOX
     }
 
     @Override
-    public VehicleInfoDto updateVehicleStatus(VehicleInfoDto vehicleInfoDto) {
-        VehicleInfoDtoAssembler vehicleInfoDtoAssembler = new VehicleInfoDtoAssembler();
-        VehicleInfo vehicleInfo = vehicleInfoDtoAssembler.fromDto(vehicleInfoDto);
-        vehicleInfo.setVin("001"); // 此处应根据TBOXID查询主数据获得车辆的VIN
+    public void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos, List<VehicleAlertDto> vehicleAlertDtos) {
+        updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_STATUS, null, statusTime,
+                vehiclePosDto, vehicleStatusDtos, vehicleAlertDtos);
+    }
+
+    @Override
+    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId, VehiclePosDto vehiclePosDto) {
+        return updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto.getGpsTime(),
+                vehiclePosDto, null, null);
+    }
+
+    @Override
+    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
+        return updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto.getGpsTime(),
+                vehiclePosDto, vehicleStatusDtos, null);
+    }
+
+    @Override
+    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId, List<VehicleStatusDto> vehicleStatusDtos) {
+        return updateVehicleStatus(otaDto, sourceType, sourceId, otaDto.getEventCreateTime(), null,
+                vehicleStatusDtos, null);
+    }
+
+    private Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                                    Date statusTime, VehiclePosDto vehiclePosDto,
+                                    List<VehicleStatusDto> vehicleStatusDtos,
+                                    List<VehicleAlertDto> vehicleAlertDtos) {
+        VehicleInfo vehicleInfo = new VehicleInfo(otaDto.getTboxId(), tboxDaoService.findVinById(otaDto.getTboxId()),
+                sourceType, sourceId);
         vehicleInfo.setOwnerId(1L); // 此处应根据TBOXID查询主数据获得车主的USERID
         if(null == vehicleInfo.getStatusTime()) {
-            vehicleInfo.setStatusTime(vehicleInfoDto.getEventCreateTime());
+            vehicleInfo.setStatusTime(otaDto.getEventCreateTime());
+        }
+        else {
+            vehicleInfo.setStatusTime(statusTime);
         }
         vehicleInfoDaoService.createVehicleInfo(vehicleInfo);
-        if(null != vehicleInfoDto.getVehiclePosDto()) {
-            VehiclePos vehiclePos = new VehiclePosDtoAssembler().fromDto(vehicleInfoDto.getVehiclePosDto());
+        if(null != vehiclePosDto) {
+            VehiclePos vehiclePos = new VehiclePosDtoAssembler().fromDto(vehiclePosDto);
             vehiclePos.setVehicleInfo(vehicleInfo);
             vehiclePosDaoService.createVehiclePos(vehiclePos);
         }
-        if(null != vehicleInfoDto.getVehicleStatusDtos()) {
+        if(null != vehicleStatusDtos) {
             VehicleStatusDtoAssembler vehicleStatusDtoAssembler = new VehicleStatusDtoAssembler();
-            for(VehicleStatusDto vehicleStatusDto : vehicleInfoDto.getVehicleStatusDtos()) {
+            for(VehicleStatusDto vehicleStatusDto : vehicleStatusDtos) {
                 VehicleStatus vehicleStatus = vehicleStatusDtoAssembler.fromDto(vehicleStatusDto);
                 vehicleStatus.setVehicleInfo(vehicleInfo);
                 vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
             }
         }
-        if(null != vehicleInfoDto.getVehicleAlertDtos()) {
+        if(null != vehicleAlertDtos) {
             VehicleAlertDtoAssembler vehicleAlertDtoAssembler = new VehicleAlertDtoAssembler();
-            for(VehicleAlertDto vehicleAlertDto : vehicleInfoDto.getVehicleAlertDtos()) {
+            for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
                 VehicleStatus vehicleStatus = vehicleAlertDtoAssembler.fromDto(vehicleAlertDto);
                 vehicleStatus.setVehicleInfo(vehicleInfo);
                 vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
             }
         }
-        return vehicleInfoDtoAssembler.toDto(vehicleInfo);
+        return vehicleInfo.getId();
     }
 
     @Override
-    public VehicleInfoDto getVehicleStatus(VehicleInfoDto vehicleInfoDto) {
-        VehicleInfo vehicleInfo = null;
-        VehiclePos vehiclePos = null;
-        List<VehicleStatus> vehicleStatuses = null;
-        List<VehicleStatus> vehicleAlerts = null;
-        if(null != vehicleInfoDto.getId()) {
-            vehicleInfo = vehicleInfoDaoService.findVehicleInfoById(vehicleInfoDto.getId());
-            vehiclePos = vehiclePosDaoService.findVehiclePosByVehicleInfoId(vehicleInfoDto.getId());
-            vehicleStatuses = vehicleStatusDaoService.findVehicleStatusByVehicleInfoId(vehicleInfoDto.getId(), 1);
-            vehicleAlerts = vehicleStatusDaoService.findVehicleStatusByVehicleInfoId(vehicleInfoDto.getId(), 2);
-        }
-        else {
-            vehicleInfo = vehicleInfoDaoService.findLatestVehicleInfo(vehicleInfoDto.getVin());
-            vehiclePos = vehiclePosDaoService.findLatestVehiclePos(vehicleInfoDto.getVin());
-            vehicleStatuses = vehicleStatusDaoService.findLatestVehicleStatus(vehicleInfoDto.getVin(), 1);
-            vehicleAlerts = vehicleStatusDaoService.findLatestVehicleStatus(vehicleInfoDto.getVin(), 2);
-        }
-        vehicleInfoDto = new VehicleInfoDtoAssembler().toDto(vehicleInfo);
-        vehicleInfoDto.setVehiclePosDto(new VehiclePosDtoAssembler().toDto(vehiclePos));
-        vehicleInfoDto.setVehicleStatusDtos(new VehicleStatusDtoAssembler().toDtoList(vehicleStatuses));
-        vehicleInfoDto.setVehicleAlertDtos(new VehicleAlertDtoAssembler().toDtoList(vehicleAlerts));
-        return vehicleInfoDto;
+    public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) {
+        logVehicleAlert(otaDto, Constants.VEHICLE_INFO_SOURCE_STATUS, null, vehicleAlertDtos);
     }
 
     @Override
-    public void logVehicleAlert(VehicleInfoDto vehicleInfoDto) {
-        VehicleInfo vehicleInfo = new VehicleInfoDtoAssembler().fromDto(vehicleInfoDto);
-        vehicleInfo.setVin("001"); // 此处应根据TBOXID查询主数据获得车辆的VIN
-        vehicleInfo.setOwnerId(1L); // 此处应根据TBOXID查询主数据获得车主的USERID
-        vehicleInfoDaoService.createVehicleInfo(vehicleInfo);
-        VehiclePos vehiclePos = new VehiclePosDtoAssembler().fromDto(vehicleInfoDto.getVehiclePosDto());
-        vehiclePos.setVehicleInfo(vehicleInfo);
-        vehiclePosDaoService.createVehiclePos(vehiclePos);
-        VehicleAlertDtoAssembler vehicleAlertDtoAssembler = new VehicleAlertDtoAssembler();
-        for(VehicleAlertDto vehicleAlertDto : vehicleInfoDto.getVehicleAlertDtos()) {
-            VehicleStatus vehicleStatus = vehicleAlertDtoAssembler.fromDto(vehicleAlertDto);
+    public void logVehicleAlert(OtaDto otaDto, Integer sourceType, Long sourceId, List<VehicleAlertDto> vehicleAlertDtos) {
+        String vin = tboxDaoService.findVinById(otaDto.getTboxId());
+        for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
+            VehicleInfo vehicleInfo = new VehicleInfo(otaDto.getTboxId(), vin, sourceType, sourceId);
+            vehicleInfo.setOwnerId(1L); // 此处应根据TBOXID查询主数据获得车主的USERID
+            vehicleInfo.setStatusTime(vehicleAlertDto.getAlertTime());
+            vehicleInfoDaoService.createVehicleInfo(vehicleInfo);
+            VehiclePos vehiclePos = new VehiclePosDtoAssembler().fromDto(vehicleAlertDto.getVehiclePosDto());
+            vehiclePos.setVehicleInfo(vehicleInfo);
+            vehiclePosDaoService.createVehiclePos(vehiclePos);
+            VehicleStatus vehicleStatus = new VehicleAlertDtoAssembler().fromDto(vehicleAlertDto);
             vehicleStatus.setVehicleInfo(vehicleInfo);
             vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
         }
-        // 调用消息接口通知用户
     }
-
 }

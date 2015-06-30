@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-19 11:44
- * modify date 2015-6-23 9:33
- * @version 0.2, 2015-6-23
+ * modify date 2015-6-29 12:05
+ * @version 0.3, 2015-6-29
  */
 @Service
 @Qualifier("tboxConfigService")
@@ -34,18 +34,18 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     private IStatusService statusService;
 
     @Override
-    public void requestConfigUpdate(Long tboxId) {
-        // 发给queue，应用get queue后发给tbox
+    public void requestConfigUpdate(String vin) {
+        // 无业务操作
     }
 
     @Override
     public void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted) {
-        // 发给queue，应用get queue后通知后台
+        // 无业务操作，拒绝也没有原因？
     }
 
     @Override
-    public TboxConfigDto checkConfigDelta(Integer mcuVersion, Integer mpuVersion, Integer configVersion,
-                                          Integer configDelta, String iccid, String vin, OtaDto otaDto) {
+    public TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
+                                          String iccid, String configVersion, Integer configDelta) {
         TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDaoService.findTboxPersonalConfigByTboxId(otaDto.getTboxId());
         TboxConfigDto tboxConfigDto = new TboxConfigDto();
         if(tboxPersonalConfig.getConfigDelta().intValue() > configDelta.intValue()) {
@@ -63,23 +63,24 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public void closeConfigUpdate(OtaDto otaDto, Boolean result, Integer mcuVersion, Integer mpuVersion,
-                                  Integer configVersion, Integer configDelta) {
+    public void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
+                                  String configVersion, Integer configDelta) {
         // 暂时不知道需要做啥
     }
 
     @Override
-    public void requestReadConfig(Long tboxId, Long[] tboxConfigsettingIds) {
-        // 发给queue，应用get queue后发给tbox
+    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
+        // 无业务操作
     }
 
     @Override
     public void responseReadConfig(OtaDto otaDto, String tboxConfigSettings) {
-        // 发给queue，应用get queue后通知后台
+        // 暂不知道做什么
     }
 
     @Override
     public KeyDto generateAsymmetricKey(OtaDto otaDto) {
+        Long tboxId = null;
         if(null != otaDto.getTboxSn()) {
             // 根据TBOX SN定位到TBOX对象
         }
@@ -89,25 +90,28 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
         // 生成非对称的public key, private key
         String publicKey = "";
         String privateKey = "";
-        tboxDaoService.updateAsymmetricKey(otaDto.getTboxId(), publicKey, privateKey); // 绑定tbox写入缓存
+        tboxDaoService.updateAsymmetricKey(tboxId, publicKey, privateKey); // 绑定tbox写入缓存
         KeyDto asymmetricKeyDto = new KeyDto();
         asymmetricKeyDto.setPublicKey(publicKey);
         return asymmetricKeyDto;
     }
 
     @Override
-    public KeyDto bindTboxWithSecretKey(KeyDto keyDto) {
-        Long tboxId = keyDto.getTboxId();
-        if(null != keyDto.getTboxSn()) {
+    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc) {
+        Long tboxId = null;
+        if(null != otaDto.getTboxSn()) {
             // 根据TBOX SN定位到TBOX对象
         }
         else {
             // 根据TBOX ID定位到TBOX对象
         }
         String privateKey = tboxDaoService.findPrivateKeyById(tboxId);  // 根据tbox从缓存中读出private key
+        // 用private Key对tboxSnWithEnc进行解密，验证是否正确，如果正确的话对secretKey进行解密
         // 用private key对secretKey进行解密
         String secretKey = "";
         tboxDaoService.updateSecretKey(tboxId, secretKey);  // 绑定解密后的secretKey
+        KeyDto keyDto = new KeyDto();
+        keyDto.setEventId(otaDto.getEventId());
         keyDto.setTboxId(tboxId);
         keyDto.setSecretKeyAccepted(true);
         return keyDto;

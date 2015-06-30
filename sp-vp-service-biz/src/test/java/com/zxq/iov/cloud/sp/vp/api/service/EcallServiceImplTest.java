@@ -2,11 +2,9 @@ package com.zxq.iov.cloud.sp.vp.api.service;
 
 import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IEcallService;
-import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 13:22
- * modify date
- * @version 0.1, 2015-6-12
+ * modify date 2015-6-25 16:14
+ * @version 0.2, 2015-6-25
  */
 @Transactional
 public class EcallServiceImplTest extends BaseServiceTestCase {
@@ -32,135 +30,64 @@ public class EcallServiceImplTest extends BaseServiceTestCase {
     @Qualifier("ecallServiceProxy")
     private IEcallService ecallService;
 
+    private String vin = "1";
+    private Long tboxId = 1L;
+
     @Test
     @Rollback(false)
     public void testStartEcall() {
-        EcallDto ecallDto = new EcallDto();
-        ecallDto.setAid("902");
-        ecallDto.setMid(1);
-        ecallDto.setEventCreateTime(new Date());
-        ecallDto.setTboxId(1L);
-        List<VehicleInfoDto> vehicleInfoDtos = new ArrayList<>();
-        VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
-        vehicleInfoDto.setStatusTime(ecallDto.getEventCreateTime());
-        VehiclePosDto vehiclePosDto = new VehiclePosDto();
-        vehiclePosDto.setAltitude(1);
-        vehiclePosDto.setGpsStatus(1);
-        vehiclePosDto.setGpsTime(new Date());
-        vehiclePosDto.setHdop(1);
-        vehiclePosDto.setHeading(1);
-        vehiclePosDto.setLatitude(1);
-        vehiclePosDto.setLongitude(1);
-        vehiclePosDto.setSatellites(1);
-        vehiclePosDto.setSpeed(1);
-        vehicleInfoDto.setVehiclePosDto(vehiclePosDto);
-        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
-        VehicleStatusDto vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("TBOX剩余电量");
-        vehicleStatusDto.setCode("tboxInternalBatteryStatus");
-        vehicleStatusDto.setValue(65);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("车辆剩余电量");
-        vehicleStatusDto.setCode("vehicleBatteryStatus");
-        vehicleStatusDto.setValue(75);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleInfoDto.setVehicleStatusDtos(vehicleStatusDtos);
-        vehicleInfoDtos.add(vehicleInfoDto);
-        ecallService.startEcall(ecallDto, vehicleInfoDtos);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 1);
+        List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
+        vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
+        ecallService.startEcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestEcallStatus() {
-        Long tboxId = 1L;
-        ecallService.requestEcallStatus(tboxId);
+        ecallService.requestEcallStatus(vin);
     }
 
     @Test
     @Rollback(false)
     public void testUpdateEcall() {
-        EcallDto ecallDto = new EcallDto();
-        ecallDto.setEventCreateTime(new Date());
-        ecallDto.setAid("902");
-        ecallDto.setMid(4);
-        ecallDto.setTboxId(1L);
-        List<VehicleInfoDto> vehicleInfoDtos = new ArrayList<>();
-        VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
-        vehicleInfoDto.setStatusTime(ecallDto.getEventCreateTime());
-        VehiclePosDto vehiclePosDto = new VehiclePosDto();
-        vehiclePosDto.setAltitude(1);
-        vehiclePosDto.setGpsStatus(1);
-        vehiclePosDto.setGpsTime(new Date());
-        vehiclePosDto.setHdop(1);
-        vehiclePosDto.setHeading(1);
-        vehiclePosDto.setLatitude(1);
-        vehiclePosDto.setLongitude(1);
-        vehiclePosDto.setSatellites(1);
-        vehiclePosDto.setSpeed(1);
-        vehicleInfoDto.setVehiclePosDto(vehiclePosDto);
-        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
-        VehicleStatusDto vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("TBOX剩余电量");
-        vehicleStatusDto.setCode("tboxInternalBatteryStatus");
-        vehicleStatusDto.setValue(65);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("车辆剩余电量");
-        vehicleStatusDto.setCode("vehicleBatteryStatus");
-        vehicleStatusDto.setValue(75);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleInfoDto.setVehicleStatusDtos(vehicleStatusDtos);
-        vehicleInfoDtos.add(vehicleInfoDto);
-        ecallService.updateEcall(ecallDto, vehicleInfoDtos);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 4);
+        List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
+        vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
+        ecallService.updateEcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestHangUp() {
-        Long tboxId = 1L;
-        Long callRecordId = 20L;
-        ecallService.requestHangUp(tboxId, callRecordId);
+        ecallService.requestHangUp(vin);
     }
 
     @Test
     @Rollback(false)
     public void testRequestCallBack() {
-        Long tboxId = 1L;
-        Long callId = 21L;
         String callNumber = "4008208888";
-        ecallService.requestCallBack(tboxId, callId, callNumber);
+        ecallService.requestCallBack(vin, callNumber);
     }
 
     @Test
     @Rollback(false)
     public void testResponseCallBack() {
-        EcallRecordDto ecallRecordDto = new EcallRecordDto();
-        ecallRecordDto.setTboxId(1L);
-        ecallRecordDto.setAid("902");
-        ecallRecordDto.setMid(8);
-        ecallRecordDto.setEventCreateTime(new Date());
-        ecallRecordDto.setErrorCode("1");
-        ecallService.responseCallBack(ecallRecordDto);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 8);
+        ecallService.responseCallBack(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestCloseEcall() {
-        Long tboxId = 1L;
-        Long callId = 20L;
-        ecallService.requestCloseEcall(tboxId, callId);
+        ecallService.requestCloseEcall(vin);
     }
 
     @Test
     @Rollback(false)
     public void testCloseEcall() {
-        EcallDto ecallDto = new EcallDto();
-        ecallDto.setTboxId(1L);
-        ecallDto.setEventCreateTime(new Date());
-        ecallDto.setAid("902");
-        ecallDto.setMid(9);
-        ecallService.closeEcall(ecallDto);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 9);
+        ecallService.closeEcall(otaDto);
     }
 
 }

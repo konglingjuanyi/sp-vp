@@ -1,8 +1,9 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
 import java.util.List;
 
@@ -11,63 +12,75 @@ import java.util.List;
  * 安防服务 bCall接口
  * @author 叶荣杰
  * create date 2015-6-10 16:47
- * modify date 2015-6-11 11:45
- * @version 0.2, 2015-6-11
+ * modify date 2015-6-25 9:54
+ * @version 0.4, 2015-6-25
  */
 public interface IBcallService {
 
     /**
      * 开始bCall
-     * @param bcallDto              bCall传输对象
-     * @param vehicleInfoDtos       车辆状态传输对象列表
+     * @param otaDto                OTA传输对象
+     * @param vehiclePosDtos        车辆GPS位置传输对象列表
+     * @param bcallType             呼叫方式
+     * @param tboxBatteryStatus     TBOX电池状态
+     * @param vehicleBatteryStatus  车辆电池状态
+     * @param vehicleAlertDtos      车辆报警传输对象列表
      * @return                      bCall通话传输对象
      */
-    BcallRecordDto startBcall(BcallDto bcallDto, List<VehicleInfoDto> vehicleInfoDtos);
+    BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
+                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                              List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
      * 请求bCall状态
-     * @param tboxId                TBOX ID
+     * @param vin                   车辆唯一码
      */
-    void requestBcallStatus(Long tboxId);
+    void requestBcallStatus(String vin);
 
     /**
      * 更新bCall状态
-     * @param bcallDto              bCall传输对象
-     * @param vehicleInfoDtos       车辆状态传输对象列表
+     * @param otaDto                OTA传输对象
+     * @param vehiclePosDtos        车辆GPS位置传输对象列表
+     * @param bcallType             呼叫方式
+     * @param tboxBatteryStatus     TBOX电池状态
+     * @param vehicleBatteryStatus  车辆电池状态
+     * @param vehicleAlertDtos      车辆报警传输对象列表
+     * @return                      呼叫对象ID
      */
-    void updateBcall(BcallDto bcallDto, List<VehicleInfoDto> vehicleInfoDtos);
+    Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
+                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                     List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
      * 请求挂断通话
-     * @param tboxId                TBOX ID
-     * @param callRecordId          呼叫记录ID
+     * @param vin                   车辆唯一码
      */
-    void requestHangUp(Long tboxId, Long callRecordId);
+    void requestHangUp(String vin);
 
     /**
      * 请求车辆回拨
-     * @param tboxId                TBOX ID
-     * @param callId                呼叫ID
+     * @param vin                   车辆唯一码
      * @param callNumber            呼叫号码
      */
-    void requestCallBack(Long tboxId, Long callId, String callNumber);
+    void requestCallBack(String vin, String callNumber);
 
     /**
-     * 回应车辆回拨
-     * @param bcallRecordDto        呼叫记录传输对象
+     * 响应车辆回拨请求
+     * @param otaDto                OTA传输对象
+     * @param callbackAccepted      是否接受回拨
+     * @param rejectReason          拒绝理由
      */
-    void responseCallBack(BcallRecordDto bcallRecordDto);
+    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason);
 
     /**
      * 请求结束bCall
-     * @param tboxId                TBOX ID
-     * @param callId                呼叫ID
+     * @param vin                   车辆唯一码
      */
-    void requestCloseBcall(Long tboxId, Long callId);
+    void requestCloseBcall(String vin);
 
     /**
      * 结束bCall
-     * @param bcallDto              呼叫传输对象
+     * @param otaDto                OTA传输对象
      */
-    void closeBcall(BcallDto bcallDto);
+    void closeBcall(OtaDto otaDto);
 }

@@ -18,8 +18,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 11:38
- * modify date
- * @version 0.1, 2015-6-17
+ * modify date 2015-6-29 10:39
+ * @version 0.2, 2015-6-29
  */
 @Service
 public class ControlCommandDaoServiceImpl extends BaseServiceImpl<IControlCommandRepository, ControlCommand, Long> implements IControlCommandDaoService {
@@ -72,5 +72,14 @@ public class ControlCommandDaoServiceImpl extends BaseServiceImpl<IControlComman
 		paramMap.put("eventId", eventId);
 		List<ControlCommand> list = super.findListViaBatis(paramMap);
 		return (list.size()>0)?list.get(0):null;
+	}
+
+	@Override
+	public List<ControlCommand> listControlCommandByVinAndCommand(String vin, String command, Integer status) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("vin", vin);
+		paramMap.put("command", command);
+		paramMap.put("status", status);
+		return super.findListViaBatis(paramMap);
 	}
 }

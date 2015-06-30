@@ -1,26 +1,31 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
+
+import java.util.List;
 
 /**
  * 安防服务 远程诊断接口
  * @author 叶荣杰
  * create date 2015-6-23 17:45
- * modify date
- * @version 0.1, 2015-6-23
+ * modify date 2015-6-30 15:10
+ * @version 0.2, 2015-6-30
  */
 public interface IDiagnosticService {
 
     /**
      * 请求远程诊断
-     * @param diagnosticDto         远程诊断传输对象
+     * @param vin                   车辆唯一码
+     * @param diagnosticDtos        远程诊断传输对象列表
      */
-    void requestDiagnostic(DiagnosticDto diagnosticDto);
+    void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos);
 
     /**
      * 响应远程诊断请求
-     * @param diagnosticDto         远程诊断传输对象
+     * @param otaDto                OTA传输对象
+     * @param diagnosticDtos        远程诊断传输对象列表
      */
-    void responseDiagnostic(DiagnosticDto diagnosticDto);
+    void responseDiagnostic(OtaDto otaDto, List<DiagnosticDto> diagnosticDtos);
 
 }

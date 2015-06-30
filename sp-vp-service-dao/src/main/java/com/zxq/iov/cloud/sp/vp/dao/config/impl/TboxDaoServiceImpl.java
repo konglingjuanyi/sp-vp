@@ -1,15 +1,3 @@
-/**
- * Copyright (c) 2007-2011 SAIC. All Rights Reserved.
- * This software is published under the terms of the SAIC IS Dept.
- * 
- * @Project: 
- * @Title: VehicleServiceImpl.java
- * @Package com.saicmotor.telematics.tsgp.tcmp.vehicle.service
- * @Description: 
- *
- * @CreateDate : 2012-2-2
- * @CreateBy   : Administrator
- */
 package com.zxq.iov.cloud.sp.vp.dao.config.impl;
 
 import com.zxq.iov.cloud.core.log.LoggerFactory;
@@ -21,8 +9,9 @@ import org.springframework.stereotype.Service;
  * 安防 TBOX持久化服务接口实现类
  *
  * @author 叶荣杰
- * create date 2015-4-29 15:01:07
- * @version 0.1, 2015-4-29
+ * create date 2015-4-29 15:01
+ * modify date 2015-6-29 10:18
+ * @version 0.3, 2015-6-29
  */
 @Service
 public class TboxDaoServiceImpl implements ITboxDaoService {
@@ -44,4 +33,24 @@ public class TboxDaoServiceImpl implements ITboxDaoService {
 		return null;
 	}
 
+	@Override
+	public String findVinById(Long tboxId) {
+		// 如何获得待定
+		String vin = "1";
+		return vin;
+	}
+
+	@Override
+	public String findVinByTboxSn(String tboxSn) {
+		// 如何获得待定
+		String vin = "1";
+		return vin;
+	}
+
+	@Override
+	public Long findTboxIdByVin(String vin) {
+		// 如何获得待定
+		Long tboxId = 1L;
+		return tboxId;
+	}
 }

@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.svt;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
 import java.util.Date;
 
@@ -9,60 +9,60 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-15 12:26
- * modify date
- * @version 0.1, 2015-6-15
+ * modify date 2015-6-26 12:01
+ * @version 0.3, 2015-6-26
  */
-public class StolenAlarmDto extends OtaDto {
+public class StolenAlarmDto {
 
-    private Long id;
-    private Long tboxId;
-    private Integer alarmType;
-    private String alarmData;
+    private Integer alarmTypeId;
+    private Boolean trigAlarmSts;
+    private Boolean currentAlarmSts;
+    private VehiclePosDto vehiclePosDto;
     private Date alarmTime;
-    private Long vehicleInfoId;
+    private String alarmData;
 
     public StolenAlarmDto() {}
 
-    public StolenAlarmDto(Long id, Long tboxId, Integer alarmType, String alarmData, Date alarmTime) {
-        this.id = id;
-        this.tboxId = tboxId;
-        this.alarmType = alarmType;
-        this.alarmData = alarmData;
+    public StolenAlarmDto(Integer alarmTypeId, Boolean trigAlarmSts, Boolean currentAlarmSts,
+                          VehiclePosDto vehiclePosDto, Date alarmTime, String alarmData) {
+        this.alarmTypeId = alarmTypeId;
+        this.trigAlarmSts = trigAlarmSts;
+        this.currentAlarmSts = currentAlarmSts;
+        this.vehiclePosDto = vehiclePosDto;
         this.alarmTime = alarmTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public Long getTboxId() {
-        return tboxId;
-    }
-
-    @Override
-    public void setTboxId(Long tboxId) {
-        this.tboxId = tboxId;
-    }
-
-    public Integer getAlarmType() {
-        return alarmType;
-    }
-
-    public void setAlarmType(Integer alarmType) {
-        this.alarmType = alarmType;
-    }
-
-    public String getAlarmData() {
-        return alarmData;
-    }
-
-    public void setAlarmData(String alarmData) {
         this.alarmData = alarmData;
+    }
+
+    public Integer getAlarmTypeId() {
+        return alarmTypeId;
+    }
+
+    public void setAlarmTypeId(Integer alarmTypeId) {
+        this.alarmTypeId = alarmTypeId;
+    }
+
+    public Boolean isTrigAlarmSts() {
+        return trigAlarmSts;
+    }
+
+    public void setTrigAlarmSts(Boolean trigAlarmSts) {
+        this.trigAlarmSts = trigAlarmSts;
+    }
+
+    public Boolean isCurrentAlarmSts() {
+        return currentAlarmSts;
+    }
+
+    public void setCurrentAlarmSts(Boolean currentAlarmSts) {
+        this.currentAlarmSts = currentAlarmSts;
+    }
+
+    public VehiclePosDto getVehiclePosDto() {
+        return vehiclePosDto;
+    }
+
+    public void setVehiclePosDto(VehiclePosDto vehiclePosDto) {
+        this.vehiclePosDto = vehiclePosDto;
     }
 
     public Date getAlarmTime() {
@@ -73,11 +73,12 @@ public class StolenAlarmDto extends OtaDto {
         this.alarmTime = alarmTime;
     }
 
-    public Long getVehicleInfoId() {
-        return vehicleInfoId;
+    public String getAlarmData() {
+        return alarmData;
     }
 
-    public void setVehicleInfoId(Long vehicleInfoId) {
-        this.vehicleInfoId = vehicleInfoId;
+    public void setAlarmData(String alarmData) {
+        this.alarmData = alarmData;
     }
+
 }

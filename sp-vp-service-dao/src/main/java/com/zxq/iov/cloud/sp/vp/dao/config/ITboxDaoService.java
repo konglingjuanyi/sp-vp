@@ -1,23 +1,12 @@
-/**
- * Copyright (c) 2007-2011 SAIC. All Rights Reserved.
- * This software is published under the terms of the SAIC IS Dept.
- * 
- * @Project: 
- * @Title: IVehicleService.java
- * @Package com.saicmotor.telematics.tsgp.tcmp.vehicle.service
- * @Description: 
- *
- * @CreateDate : 2012-2-2
- * @CreateBy   : Administrator
- */
 package com.zxq.iov.cloud.sp.vp.dao.config;
 
 /**
  * 安防 TBOX持久化服务接口
  *
  * @author 叶荣杰
- * create date 2015-5-4 15:15:07
- * @version 0.1, 2015-5-4
+ * create date 2015-5-4 15:15
+ * modify date 2015-6-29 10:18
+ * @version 0.3, 2015-6-29
  */
 public interface ITboxDaoService {
 
@@ -42,5 +31,26 @@ public interface ITboxDaoService {
 	 * @return				私钥
 	 */
 	String findPrivateKeyById(Long tboxId);
+
+	/**
+	 * 根据TBOX ID得到VIN码
+	 * @param tboxId     	TBOX ID
+	 * @return          	VIN码
+	 */
+	String findVinById(Long tboxId);
+
+	/**
+	 * 根据TBOX序列号得到VIN码
+	 * @param tboxSn     	TBOX序列号
+	 * @return            	VIN码
+	 */
+	String findVinByTboxSn(String tboxSn);
+
+	/**
+	 * 根据车辆唯一码得到TBOX ID
+	 * @param vin         	车辆唯一码
+	 * @return            	TBOX ID
+	 */
+	Long findTboxIdByVin(String vin);
 	
 }

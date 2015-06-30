@@ -2,11 +2,9 @@ package com.zxq.iov.cloud.sp.vp.api.service;
 
 import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IBcallService;
-import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 12:56
- * modify date 2015-6-12 10:46
- * @version 0.2, 2015-6-12
+ * modify date 2015-6-25 10:45
+ * @version 0.3, 2015-6-25
  */
 @Transactional
 public class BcallServiceImplTest extends BaseServiceTestCase {
@@ -32,135 +30,64 @@ public class BcallServiceImplTest extends BaseServiceTestCase {
     @Qualifier("bcallServiceProxy")
     private IBcallService bcallService;
 
+    private String vin = "1";
+    private Long tboxId = 1L;
+
     @Test
     @Rollback(false)
     public void testStartBcall() {
-        BcallDto bcallDto = new BcallDto();
-        bcallDto.setAid("903");
-        bcallDto.setMid(1);
-        bcallDto.setEventCreateTime(new Date());
-        bcallDto.setTboxId(1L);
-        List<VehicleInfoDto> vehicleInfoDtos = new ArrayList<>();
-        VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
-        vehicleInfoDto.setStatusTime(bcallDto.getEventCreateTime());
-        VehiclePosDto vehiclePosDto = new VehiclePosDto();
-        vehiclePosDto.setAltitude(1);
-        vehiclePosDto.setGpsStatus(1);
-        vehiclePosDto.setGpsTime(new Date());
-        vehiclePosDto.setHdop(1);
-        vehiclePosDto.setHeading(1);
-        vehiclePosDto.setLatitude(1);
-        vehiclePosDto.setLongitude(1);
-        vehiclePosDto.setSatellites(1);
-        vehiclePosDto.setSpeed(1);
-        vehicleInfoDto.setVehiclePosDto(vehiclePosDto);
-        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
-        VehicleStatusDto vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("TBOX剩余电量");
-        vehicleStatusDto.setCode("tboxInternalBatteryStatus");
-        vehicleStatusDto.setValue(65);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("车辆剩余电量");
-        vehicleStatusDto.setCode("vehicleBatteryStatus");
-        vehicleStatusDto.setValue(75);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleInfoDto.setVehicleStatusDtos(vehicleStatusDtos);
-        vehicleInfoDtos.add(vehicleInfoDto);
-        bcallService.startBcall(bcallDto, vehicleInfoDtos);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 1);
+        List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
+        vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
+        bcallService.startBcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestBcallStatus() {
-        Long tboxId = 1L;
-        bcallService.requestBcallStatus(tboxId);
+        bcallService.requestBcallStatus(vin);
     }
 
     @Test
     @Rollback(false)
     public void testUpdateBcall() {
-        BcallDto bcallDto = new BcallDto();
-        bcallDto.setEventCreateTime(new Date());
-        bcallDto.setAid("903");
-        bcallDto.setMid(4);
-        bcallDto.setTboxId(1L);
-        List<VehicleInfoDto> vehicleInfoDtos = new ArrayList<>();
-        VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
-        vehicleInfoDto.setStatusTime(bcallDto.getEventCreateTime());
-        VehiclePosDto vehiclePosDto = new VehiclePosDto();
-        vehiclePosDto.setAltitude(1);
-        vehiclePosDto.setGpsStatus(1);
-        vehiclePosDto.setGpsTime(new Date());
-        vehiclePosDto.setHdop(1);
-        vehiclePosDto.setHeading(1);
-        vehiclePosDto.setLatitude(1);
-        vehiclePosDto.setLongitude(1);
-        vehiclePosDto.setSatellites(1);
-        vehiclePosDto.setSpeed(1);
-        vehicleInfoDto.setVehiclePosDto(vehiclePosDto);
-        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
-        VehicleStatusDto vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("TBOX剩余电量");
-        vehicleStatusDto.setCode("tboxInternalBatteryStatus");
-        vehicleStatusDto.setValue(65);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleStatusDto = new VehicleStatusDto();
-        vehicleStatusDto.setName("车辆剩余电量");
-        vehicleStatusDto.setCode("vehicleBatteryStatus");
-        vehicleStatusDto.setValue(75);
-        vehicleStatusDtos.add(vehicleStatusDto);
-        vehicleInfoDto.setVehicleStatusDtos(vehicleStatusDtos);
-        vehicleInfoDtos.add(vehicleInfoDto);
-        bcallService.updateBcall(bcallDto, vehicleInfoDtos);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 4);
+        List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
+        vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
+        bcallService.updateBcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestHangUp() {
-        Long tboxId = 1L;
-        Long callRecordId = 16L;
-        bcallService.requestHangUp(tboxId, callRecordId);
+        bcallService.requestHangUp(vin);
     }
 
     @Test
     @Rollback(false)
     public void testRequestCallBack() {
-        Long tboxId = 1L;
-        Long callId = 19L;
         String callNumber = "4008208888";
-        bcallService.requestCallBack(tboxId, callId, callNumber);
+        bcallService.requestCallBack(vin, callNumber);
     }
 
     @Test
     @Rollback(false)
     public void testResponseCallBack() {
-        BcallRecordDto bcallRecordDto = new BcallRecordDto();
-        bcallRecordDto.setTboxId(1L);
-        bcallRecordDto.setAid("903");
-        bcallRecordDto.setMid(8);
-        bcallRecordDto.setEventCreateTime(new Date());
-        bcallRecordDto.setErrorCode("1");
-        bcallService.responseCallBack(bcallRecordDto);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 8);
+        bcallService.responseCallBack(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
     public void testRequestCloseBcall() {
-        Long tboxId = 1L;
-        Long callId = 19L;
-        bcallService.requestCloseBcall(tboxId, callId);
+        bcallService.requestCloseBcall(vin);
     }
 
     @Test
     @Rollback(false)
     public void testCloseBcall() {
-        BcallDto bcallDto = new BcallDto();
-        bcallDto.setTboxId(1L);
-        bcallDto.setEventCreateTime(new Date());
-        bcallDto.setAid("903");
-        bcallDto.setMid(9);
-        bcallService.closeBcall(bcallDto);
+        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 9);
+        bcallService.closeBcall(otaDto);
     }
 
 }

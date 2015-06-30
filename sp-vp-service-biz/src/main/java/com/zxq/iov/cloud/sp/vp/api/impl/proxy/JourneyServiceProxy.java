@@ -1,14 +1,16 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
 import com.zxq.iov.cloud.sp.vp.api.IJourneyService;
-import com.zxq.iov.cloud.sp.vp.api.dto.journey.JourneyDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.dao.journey.IJourneyDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * 安防 行程服务代理实现类
@@ -33,44 +35,48 @@ public class JourneyServiceProxy implements IJourneyService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public void startJourney(JourneyDto journeyDto) {
+    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
-            journeyService.startJourney(journeyDto);
+            journeyService.startJourney(otaDto, startTime, tboxJourneyId, keyId);
         }
         else {
-            event.start(journeyDto);
-            journeyService.startJourney(journeyDto);
-            event.end(journeyDto);
+            event.start(otaDto);
+            journeyService.startJourney(otaDto, startTime, tboxJourneyId, keyId);
+            event.end(otaDto);
         }
     }
 
     @Override
-    public void updateJourney(JourneyDto journeyDto, VehicleInfoDto vehicleInfoDto) {
+    public void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption, VehiclePosDto vehiclePosDto) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
-            journeyService.updateJourney(journeyDto, vehicleInfoDto);
+            journeyService.updateJourney(otaDto, tboxJourneyId, instFuelConsumption, vehiclePosDto);
         }
         else {
-            event.start(journeyDto);
-            journeyService.updateJourney(journeyDto, vehicleInfoDto);
-            event.end(journeyDto);
+            event.start(otaDto);
+            journeyService.updateJourney(otaDto, tboxJourneyId, instFuelConsumption, vehiclePosDto);
+            event.end(otaDto);
         }
     }
 
     @Override
-    public void endJourney(JourneyDto journeyDto, VehicleInfoDto startVehicleInfoDto, VehicleInfoDto endVehicleInfoDto) {
+    public void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
+                           Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
+                           Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
-        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(journeyDto.getTboxJourneyId(), journeyDto.getTboxId());
+        Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
-            journeyService.endJourney(journeyDto, startVehicleInfoDto, endVehicleInfoDto);
+            journeyService.endJourney(otaDto, startVehiclePosDto, endVehiclePosDto, tboxJourneyId, distance,
+                    avgSpeed, fuelEco, odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
         }
         else {
-            event.start(journeyDto);
-            journeyService.endJourney(journeyDto, startVehicleInfoDto, endVehicleInfoDto);
-            event.end(journeyDto);
+            event.start(otaDto);
+            journeyService.endJourney(otaDto, startVehiclePosDto, endVehiclePosDto, tboxJourneyId, distance,
+                    avgSpeed, fuelEco, odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
+            event.end(otaDto);
         }
     }
 }

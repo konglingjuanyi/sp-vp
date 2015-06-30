@@ -19,8 +19,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 10:46
- * modify date 2015-6-8 13:32
- * @version 0.2, 2015-6-8
+ * modify date 2015-6-24 17:36
+ * @version 0.3, 2015-6-24
  */
 @Service
 public class EventInstanceDaoServiceImpl extends BaseServiceImpl<IEventInstanceRepository, EventInstance, Long> implements IEventInstanceDaoService {
@@ -68,9 +68,10 @@ public class EventInstanceDaoServiceImpl extends BaseServiceImpl<IEventInstanceR
 	}
 
 	@Override
-	public List<EventInstance> listEventInstanceByEventDefinitionId(Long eventDefinitionId, Integer status) {
+	public List<EventInstance> listEventInstanceByEventDefinitionId(Long eventDefinitionId, String owner, Integer status) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("eventDefinitionId", eventDefinitionId);
+		paramMap.put("owner", owner);
 		paramMap.put("status", status);
 		return super.findListViaBatis(paramMap);
 	}

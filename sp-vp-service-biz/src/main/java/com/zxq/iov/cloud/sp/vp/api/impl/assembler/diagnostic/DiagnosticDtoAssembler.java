@@ -8,13 +8,13 @@ import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
  *
  * @author 叶荣杰
  * create date 2015-6-24 10:11
- * modify date
- * @version 0.1, 2015-6-24
+ * modify date 2015-6-30 15:24
+ * @version 0.2, 2015-6-30
  */
 public class DiagnosticDtoAssembler {
 
     public Diagnostic fromDto(final DiagnosticDto diagnosticDto) {
-        return new Diagnostic(diagnosticDto.getTboxId(), diagnosticDto.getCanId(), diagnosticDto.getServiceId(),
+        return new Diagnostic(diagnosticDto.getCanId(), diagnosticDto.getServiceId(),
                 diagnosticDto.getParameter());
     }
 

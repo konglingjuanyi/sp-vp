@@ -6,9 +6,11 @@ import com.alibaba.dubbo.common.json.JSONObject;
 import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,8 +27,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-6-18 10:28
- * @version 0.1, 2015-6-16
+ * modify date 2015-6-29 10:50
+ * @version 0.3, 2015-6-29
  */
 @Service
 @Qualifier("rvcServiceProxy")
@@ -39,9 +42,11 @@ public class RvcServiceProxy implements IRvcService {
     @Autowired
     private IEvent event;
 
+    private static final Integer RUNNING_STATUS = 1;
+
     @Override
-    public Long requestControl(Long tboxId, Integer command, String parameter) {
-        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_RVC, 1);
+    public Long requestControl(String vin, String command, String parameter) {
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", command);
         paramMap.put("cancelFlag", 0);
@@ -60,32 +65,51 @@ public class RvcServiceProxy implements IRvcService {
             }
         }
         Long eventId = event.start(otaDto, paramMap);
-        Long controlCommandId = rvcService.requestControl(tboxId, command, parameter);
+        Long controlCommandId = rvcService.requestControl(vin, command, parameter);
         bindEventId(controlCommandId, eventId);
+        JSONObject msg = new JSONObject();
+        msg.put("eventId", eventId);
+        msg.put("owner", vin);
+        msg.put("method", "control");
+        msg.put("command", command);
+        msg.put("parameter", parameter);
+        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
         event.end(otaDto, paramMap);
         return controlCommandId;
     }
 
     @Override
-    public void cancelControl(Long controlCommandId) {
-        ControlCommand controlCommand = controlCommandDaoService.findControlCommandById(controlCommandId);
-        OtaDto otaDto = new OtaDto(controlCommand.getTboxId(), Constants.AID_RVC, 1);
-        otaDto.setEventId(controlCommand.getEventId());
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("command", controlCommand.getCode());
-        paramMap.put("cancelFlag", 1);
-        event.start(otaDto, paramMap);
-        rvcService.cancelControl(controlCommandId);
-        event.end(otaDto, paramMap);
+    public void cancelControl(String vin, String command) {
+        List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
+                command, RUNNING_STATUS);
+        if(list.size() > 0) {
+            OtaDto otaDto = new OtaDto(vin, Constants.AID_RVC, 1);
+            Long eventId = list.get(0).getEventId();
+            otaDto.setEventId(eventId);
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("command", list.get(0).getCode());
+            paramMap.put("cancelFlag", 1);
+            event.start(otaDto, paramMap);
+            rvcService.cancelControl(vin, command);
+            JSONObject msg = new JSONObject();
+            msg.put("eventId", eventId);
+            msg.put("owner", vin);
+            msg.put("method", "control");
+            msg.put("command", command);
+            msg.put("parameter", "{'cancelFlag':1}");
+            new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+            event.end(otaDto, paramMap);
+        }
     }
 
     @Override
-    public void responseControl(Integer rvcStatus, Integer failureType, VehicleInfoDto vehicleInfoDto) {
+    public void updateControlStatus(OtaDto otaDto, String rvcStatus, Integer failureType,
+                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);
-        event.start(vehicleInfoDto, paramMap);
-        rvcService.responseControl(rvcStatus, failureType, vehicleInfoDto);
-        event.end(vehicleInfoDto, paramMap);
+        event.start(otaDto, paramMap);
+        rvcService.updateControlStatus(otaDto, rvcStatus, failureType, vehiclePosDto, vehicleStatusDtos);
+        event.end(otaDto, paramMap);
     }
 
 

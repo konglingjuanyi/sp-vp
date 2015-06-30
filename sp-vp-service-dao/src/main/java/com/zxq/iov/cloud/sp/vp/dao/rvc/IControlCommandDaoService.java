@@ -3,13 +3,15 @@ package com.zxq.iov.cloud.sp.vp.dao.rvc;
 import com.zxq.iov.cloud.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 
+import java.util.List;
+
 /**
  * 安防 控制命令持久化服务接口
  *
  * @author 叶荣杰
  * create date 2015-6-17 11:32
- * modify date
- * @version 0.1, 2015-6-17
+ * modify date 2015-6-29 10:37
+ * @version 0.2, 2015-6-29
  */
 public interface IControlCommandDaoService extends BaseService<ControlCommand, Long> {
 
@@ -46,5 +48,14 @@ public interface IControlCommandDaoService extends BaseService<ControlCommand, L
 	 * @return                	控制命令对象
 	 */
 	ControlCommand findControlCommandByEventId(Long eventId);
+
+	/**
+	 * 根据命令得到控制命令列表
+	 * @param vin				车辆唯一码
+	 * @param command      		控制命令
+	 * @param status         	状态
+	 * @return               	控制命令对象列表
+	 */
+	List<ControlCommand> listControlCommandByVinAndCommand(String vin, String command, Integer status);
 	
 }

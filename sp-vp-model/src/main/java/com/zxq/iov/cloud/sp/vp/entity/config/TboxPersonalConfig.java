@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 安防服务 TBOX个性化配置类
  * @author 叶荣杰
  * create date 2015-6-19 11:54
- * modify date
- * @version 0.1, 2015-6-19
+ * modify date 2015-6-29 11:57
+ * @version 0.2, 2015-6-29
  */
 @Entity()
 @Table(name = "TB_TBOX_PERSONAL_CONFIG")
@@ -27,6 +27,9 @@ public class TboxPersonalConfig extends MyBaseEntity<Long> implements Serializab
 
     @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
     private Long tboxId;
+
+    @Column(name = "VIN", nullable = false, length = 17)
+    private String vin;
 
     @Column(name = "CONFIG_DELTA", nullable = false, precision = 10, scale = 0)
     private Integer configDelta;
@@ -47,6 +50,14 @@ public class TboxPersonalConfig extends MyBaseEntity<Long> implements Serializab
 
     public void setTboxId(Long tboxId) {
         this.tboxId = tboxId;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     public Integer getConfigDelta() {

@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 被盗报警类
  * @author 叶荣杰
  * create date 2015-6-15 11:50
- * modify date
- * @version 0.1, 2015-6-15
+ * modify date 2015-6-26 12:02
+ * @version 0.2, 2015-6-26
  */
 @Entity()
 @Table(name = "TB_STOLEN_ALARM")
@@ -44,8 +44,7 @@ public class StolenAlarm extends MyBaseEntity<Long> implements Serializable {
 
     public StolenAlarm(){}
 
-    public StolenAlarm(Long tboxId, Integer alarmType, String alarmData, Date alarmTime) {
-        this.tboxId = tboxId;
+    public StolenAlarm(Integer alarmType, String alarmData, Date alarmTime) {
         this.alarmType = alarmType;
         this.alarmData = alarmData;
         this.alarmTime = alarmTime;

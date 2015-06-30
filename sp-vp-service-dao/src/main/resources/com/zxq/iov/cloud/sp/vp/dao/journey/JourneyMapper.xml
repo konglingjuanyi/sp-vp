@@ -9,7 +9,7 @@
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
 		<result column="OWNER_ID" jdbcType="DECIMAL" property="ownerId"/>
 		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
-		<result column="KEY_ID" jdbcType="DECIMAL" property="keyId"/>
+		<result column="KEY_ID" jdbcType="VARCHAR" property="keyId"/>
 		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="START_VEHICLE_INFO_ID" jdbcType="DECIMAL" property="startVehicleInfoId"/>

@@ -1,40 +1,91 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 安防服务 车辆状态接口
  * @author 叶荣杰
  * create date 2015-5-13 13:48
- * modify date 2015-6-11 17:39
- * @version 0.2, 2015-6-11
+ * modify date 2015-6-29 9:00
+ * @version 0.5, 2015-6-29
  */
 public interface IStatusService {
 
     /**
      * 请求车辆状态信息
-     * @param vehicleInfoDto    车辆信息传输对象
+     * @param vin               车辆唯一码
      * @param statusType        请求车辆状态类别
      */
-    void requestVehicleStatus(VehicleInfoDto vehicleInfoDto, Integer statusType);
+    void requestVehicleStatus(String vin, Integer statusType);
+
+    /**
+     * 响应车辆状态请求
+     * @param otaDto            OTA传输对象
+     * @param statusTime        状态时间
+     * @param vehiclePosDto     车辆位置传输对象
+     * @param vehicleStatusDtos 车辆状态传输对象列表
+     * @param vehicleAlertDtos  车辆报警传输对象列表
+     */
+    void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto,
+                             List<VehicleStatusDto> vehicleStatusDtos,
+                             List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
      * 更新车辆状态
-     * @param vehicleInfoDto    车辆信息传输对象
+     * @param otaDto            OTA传输对象
+     * @param sourceType        来源类型
+     * @param sourceId          来源ID
+     * @param vehiclePosDto     车辆位置传输对象
+     * @return                  车辆信息对象ID
      */
-    VehicleInfoDto updateVehicleStatus(VehicleInfoDto vehicleInfoDto);
+    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                             VehiclePosDto vehiclePosDto);
 
     /**
-     * 获得车辆状态信息
-     * @param vehicleInfoDto    车辆信息传输对象
-     * @return                  车辆信息传输对象
+     * 更新车辆状态
+     * @param otaDto            OTA传输对象
+     * @param sourceType        来源类型
+     * @param sourceId          来源ID
+     * @param vehiclePosDto     车辆位置传输对象
+     * @param vehicleStatusDtos 车辆状态传输对象列表
+     * @return                  车辆信息对象ID
      */
-    VehicleInfoDto getVehicleStatus(VehicleInfoDto vehicleInfoDto);
+    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                             VehiclePosDto vehiclePosDto,
+                             List<VehicleStatusDto> vehicleStatusDtos);
+
+    /**
+     * 更新车辆状态
+     * @param otaDto            OTA传输对象
+     * @param sourceType        来源类型
+     * @param sourceId          来源ID
+     * @param vehicleStatusDtos 车辆状态传输对象列表
+     * @return                  车辆信息对象ID
+     */
+    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                             List<VehicleStatusDto> vehicleStatusDtos);
 
     /**
      * 记录车辆警告信息
-     * @param vehicleInfoDto    车辆信息传输对象
+     * @param otaDto            OTA传输对象
+     * @param vehicleAlertDtos  车辆报警信息传输对象列表
      */
-    void logVehicleAlert(VehicleInfoDto vehicleInfoDto);
+    void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos);
+
+    /**
+     * 记录车辆警告信息
+     * @param otaDto            OTA传输对象
+     * @param sourceType        来源类型
+     * @param sourceId          来源ID
+     * @param vehicleAlertDtos  车辆报警信息传输对象列表
+     */
+    void logVehicleAlert(OtaDto otaDto, Integer sourceType, Long sourceId,
+                         List<VehicleAlertDto> vehicleAlertDtos);
 
 }

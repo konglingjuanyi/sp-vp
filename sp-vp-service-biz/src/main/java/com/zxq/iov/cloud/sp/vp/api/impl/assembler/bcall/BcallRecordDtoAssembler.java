@@ -8,18 +8,12 @@ import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
  *
  * @author 叶荣杰
  * create date 2015-6-11 11:05
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-24 17:06
+ * @version 0.2, 2015-6-24
  */
 public class BcallRecordDtoAssembler {
 
-    public CallRecord fromDto(final BcallRecordDto bcallRecordDto) {
-        return new CallRecord(bcallRecordDto.getCallId(), bcallRecordDto.getCallNumber(), bcallRecordDto.getCallTime(),
-                bcallRecordDto.getHangUpTime(), bcallRecordDto.getErrorCode());
-    }
-
     public BcallRecordDto toDto(final CallRecord callRecord) {
-        return new BcallRecordDto(callRecord.getId(), callRecord.getCallId(), callRecord.getCallNumber(),
-                callRecord.getCallTime(), callRecord.getHangUpTime(), callRecord.getErrorCode());
+        return new BcallRecordDto(callRecord.getCallNumber());
     }
 }

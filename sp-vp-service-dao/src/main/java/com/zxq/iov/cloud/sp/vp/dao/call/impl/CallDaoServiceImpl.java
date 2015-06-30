@@ -19,8 +19,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-11 9:41
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-25 13:46
+ * @version 0.2, 2015-6-25
  */
 @Service
 public class CallDaoServiceImpl extends BaseServiceImpl<ICallRepository, Call, Long> implements ICallDaoService {
@@ -71,6 +71,14 @@ public class CallDaoServiceImpl extends BaseServiceImpl<ICallRepository, Call, L
 	public List<Call> listCallByTboxId(Long tboxId, Integer status) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tboxId", tboxId);
+		paramMap.put("status", status);
+		return super.findListViaBatis(paramMap);
+	}
+
+	@Override
+	public List<Call> listCallByVin(String vin, Integer status) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("vin", vin);
 		paramMap.put("status", status);
 		return super.findListViaBatis(paramMap);
 	}

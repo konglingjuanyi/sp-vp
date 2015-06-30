@@ -8,18 +8,14 @@ import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
  *
  * @author 叶荣杰
  * create date 2015-6-15 13:07
- * modify date
- * @version 0.1, 2015-6-15
+ * modify date 2015-6-26 10:36
+ * @version 0.2, 2015-6-26
  */
 public class StolenAlarmDtoAssembler {
 
     public StolenAlarm fromDto(final StolenAlarmDto stolenAlarmDto) {
-        return new StolenAlarm(stolenAlarmDto.getTboxId(), stolenAlarmDto.getAlarmType(),
+        return new StolenAlarm(stolenAlarmDto.getAlarmTypeId(),
                 stolenAlarmDto.getAlarmData(), stolenAlarmDto.getAlarmTime());
     }
 
-    public StolenAlarmDto toDto(final StolenAlarm stolenAlarm) {
-        return new StolenAlarmDto(stolenAlarm.getId(),stolenAlarm.getTboxId(), stolenAlarm.getAlarmType(),
-                stolenAlarm.getAlarmData(), stolenAlarm.getAlarmTime());
-    }
 }

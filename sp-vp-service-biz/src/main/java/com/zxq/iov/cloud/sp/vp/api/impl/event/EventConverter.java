@@ -46,11 +46,12 @@ public class EventConverter {
     /**
      * 得到指定事件定义的未结束实例
      * @param eventDefinitionId     事件定义ID
+     * @param owner                 拥有者
      * @return                      事件实例列表
      */
-    public List<EventInstance> findRunningEventInstance(Long eventDefinitionId) {
-        Integer runningStatus = 1;
-        return eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, runningStatus);
+    public List<EventInstance> findRunningEventInstance(Long eventDefinitionId, String owner) {
+        return eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, owner,
+                RUNNING_STATUS);
     }
 
     /**
@@ -131,15 +132,17 @@ public class EventConverter {
      * 完成运行的事件实例
      * @param eventInstanceId       事件实例ID
      * @param eventDefinitionId     事件定义ID
+     * @param owner                 拥有者
      * @return                      事件实例对象
      */
-    public EventInstance finishRunningEventInstance(Long eventInstanceId, Long eventDefinitionId) {
+    public EventInstance finishRunningEventInstance(Long eventInstanceId, Long eventDefinitionId, String owner) {
         EventInstance eventInstance = null;
         if(null != eventInstanceId) {
             eventInstance = eventInstanceDaoService.findEventInstanceById(eventInstanceId);
         }
         if(null == eventInstance) {
-            List<EventInstance> list = eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, RUNNING_STATUS);
+            List<EventInstance> list = eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId,
+                    owner, RUNNING_STATUS);
             if(list.size() > 0) {
                 eventInstance = list.get(0);
             }

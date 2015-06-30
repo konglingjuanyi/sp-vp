@@ -30,7 +30,7 @@ public class RemoteKeyDaoServiceImplTest extends BaseServiceTestCase {
         RemoteKey remoteKey = new RemoteKey();
         remoteKey.setTboxId(tboxId);
         remoteKey.setType(1);
-        remoteKey.setValue(1);
+        remoteKey.setValue("1");
         remoteKey = remoteKeyDaoService.createRemoteKey(remoteKey);
         Assert.assertNotNull(remoteKey);
     }

@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,16 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 15:45
- * modify date 2015-6-24 13:58
- * @version 0.10, 2015-6-24
+ * modify date 2015-6-25 11:01
+ * @version 0.11, 2015-6-25
  */
 @Service
 public class EventImpl implements IEvent {
 
     @Autowired
     private EventDispatcher eventDispatch;
+    @Autowired
+    private ITboxDaoService tboxDaoService;
 
     @Override
     public Long start(OtaDto otaDto) {
@@ -29,12 +32,12 @@ public class EventImpl implements IEvent {
     @Override
     public Long start(OtaDto otaDto, Map<String, Object> paramMap) {
         String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        String owner;
-        if(null != otaDto.getTboxId()) {
-            owner = otaDto.getTboxId().toString();
+        String owner = otaDto.getVin();
+        if(null == owner) {
+            owner = tboxDaoService.findVinById(otaDto.getTboxId());
         }
-        else {
-            owner = otaDto.getTboxSn().toString();
+        if(null == owner) {
+            owner = tboxDaoService.findVinByTboxSn(otaDto.getTboxSn().toString());
         }
         return eventDispatch.start(owner, otaDto.getEventId(), code, paramMap);
     }
@@ -57,7 +60,11 @@ public class EventImpl implements IEvent {
     @Override
     public void end(OtaDto otaDto, Map<String, Object> paramMap, Object result) {
         String code = otaDto.getAid().toString() + otaDto.getMid().toString();
-        eventDispatch.end(otaDto.getEventId(), code, paramMap, result);
+        String owner = tboxDaoService.findVinById(otaDto.getTboxId());
+        if(null == owner) {
+            owner = tboxDaoService.findVinByTboxSn(otaDto.getTboxSn().toString());
+        }
+        eventDispatch.end(owner, otaDto.getEventId(), code, paramMap, result);
     }
 
     @Override

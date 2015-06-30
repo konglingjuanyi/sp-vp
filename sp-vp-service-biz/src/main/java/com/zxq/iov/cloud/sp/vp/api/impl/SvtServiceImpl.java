@@ -2,13 +2,16 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.ISvtService;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.svt.ImmoDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.svt.KeyAuthDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.svt.ProtectStrategySettingDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenAlarmDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.svt.TrackDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.svt.StolenAlarmDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.svt.IStolenAlarmDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
@@ -16,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +28,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-15 13:03
- * modify date 2015-6-16 11:08
- * @version 0.2, 2015-6-16
+ * modify date 2015-6-26 10:07
+ * @version 0.4, 2015-6-26
  */
 @Service
 @Qualifier("svtService")
@@ -33,101 +38,111 @@ public class SvtServiceImpl implements ISvtService {
     @Autowired
     private IStolenAlarmDaoService stolenAlarmDaoService;
     @Autowired
+    private ITboxDaoService tboxDaoService;
+    @Autowired
     @Qualifier("statusService")
     private IStatusService statusService;
     @Autowired
     private IEvent event;
 
     @Override
-    public void alarm(List<StolenAlarmDto> stolenAlarmDtos, List<VehicleInfoDto> vehicleInfoDtos) {
+    public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) {
         StolenAlarm stolenAlarm;
-        VehicleInfoDto vehicleInfoDto;
         StolenAlarmDtoAssembler stolenAlarmDtoAssembler = new StolenAlarmDtoAssembler();
-        StolenAlarmDto stolenAlarmDto = stolenAlarmDtos.get(0);
-        StepInstance stepInstance = null;
-        if(null != stolenAlarmDto.getAid()) {
-            stepInstance = event.findInstance(stolenAlarmDto.getTboxId().toString(),
-                    stolenAlarmDto.getAid()+stolenAlarmDto.getMid());
-        }
-        for(int i=0; i<stolenAlarmDtos.size(); i++) {
-            stolenAlarm = stolenAlarmDtoAssembler.fromDto(stolenAlarmDtos.get(i));
-            vehicleInfoDto = vehicleInfoDtos.get(i);
-            vehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_SVT);
-            if(null != stepInstance) {
-                vehicleInfoDto.setSourceId(stepInstance.getTaskInstance().getEventInstance().getId());
-            }
-            stolenAlarm.setVehicleInfoId(statusService.updateVehicleStatus(vehicleInfoDtos.get(i)).getId());
+        StepInstance stepInstance = event.findInstance(tboxDaoService.findVinById(otaDto.getTboxId()),
+                otaDto.getAid()+otaDto.getMid());
+        Long eventId = stepInstance.getTaskInstance().getEventInstanceId();
+        for(StolenAlarmDto stolenAlarmDto : stolenAlarmDtos) {
+            stolenAlarm = stolenAlarmDtoAssembler.fromDto(stolenAlarmDto);
+            stolenAlarm.setTboxId(otaDto.getTboxId());
+            stolenAlarm.setVehicleInfoId(statusService.updateVehicleStatus(otaDto,
+                    Constants.VEHICLE_INFO_SOURCE_SVT, eventId, stolenAlarmDto.getVehiclePosDto()));
             stolenAlarmDaoService.createStolenAlarm(stolenAlarm);
         }
     }
 
     @Override
-    public void updateTrack(VehicleInfoDto vehicleInfoDto) {
-        vehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_SVT);
-        StepInstance stepInstance = null;
-        if(null != vehicleInfoDto.getAid()) {
-            stepInstance = event.findInstance(vehicleInfoDto.getTboxId().toString(),
-                    vehicleInfoDto.getAid()+vehicleInfoDto.getMid());
-            if(null != stepInstance) {
-                vehicleInfoDto.setSourceId(stepInstance.getTaskInstance().getEventInstance().getId());
-            }
+    public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) {
+        StepInstance stepInstance = event.findInstance(tboxDaoService.findVinById(otaDto.getTboxId()),
+                otaDto.getAid() + otaDto.getMid());
+        Long eventId = stepInstance.getTaskInstance().getEventInstanceId();
+        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
+        for(TrackDto trackDto : trackDtos) {
+            vehicleStatusDtos.add(new VehicleStatusDto("gnssSpeed", trackDto.getGnssSpeed()));
+            vehicleStatusDtos.add(new VehicleStatusDto("gsmAntConnected", (trackDto.isGsmAntConnected())?1:0));
+            vehicleStatusDtos.add(new VehicleStatusDto("gnssAntConnected", (trackDto.isGnssAntConnected())?1:0));
+            vehicleStatusDtos.add(new VehicleStatusDto("vehicleBatteryConnected", (trackDto.isVehicleBatteryConnected())?1:0));
+            vehicleStatusDtos.add(new VehicleStatusDto("intBattV", trackDto.getIntBattV()));
+            vehicleStatusDtos.add(new VehicleStatusDto("vehicleAlarmStatus", trackDto.getVehicleAlarmStatus()));
+            vehicleStatusDtos.add(new VehicleStatusDto("engineStatus", trackDto.getEngineStatus()));
+            vehicleStatusDtos.add(new VehicleStatusDto("powerMode", trackDto.getPowerMode()));
+            vehicleStatusDtos.add(new VehicleStatusDto("lastKeySeen", trackDto.getLastKeySeen()));
+            vehicleStatusDtos.add(new VehicleStatusDto("fuelLevelPrc", trackDto.getFuelLevelPrc()));
+            vehicleStatusDtos.add(new VehicleStatusDto("fuelRange", trackDto.getFuelRange()));
+            vehicleStatusDtos.add(new VehicleStatusDto("canBusActive", (trackDto.isCanBusActive())?1:0));
+            vehicleStatusDtos.add(new VehicleStatusDto("lastCanBusActiveityTime", (int)(trackDto.getLastCanBusActivityTime().getTime()/1000)));
+            vehicleStatusDtos.add(new VehicleStatusDto("ttnTrackPoint", trackDto.getTtnTrackPoint()));
+            statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_SVT,
+                    eventId, trackDto.getVehiclePosDto(), vehicleStatusDtos);
+            vehicleStatusDtos.clear();
         }
-        statusService.updateVehicleStatus(vehicleInfoDto);
     }
 
     @Override
-    public void requestTrackSetting(Long tboxId, Integer trackInterval, Integer tracks) {
-        // 此处发送给queue，不记录进数据库
+    public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void requestSingleTrack(Long tboxId) {
-        // 此处发送给queue，不记录进数据库
+    public void requestSingleTrack(String vin) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void requestCloseAlarm(Long tboxId) {
-        // 此处发送给queue，不记录进数据库
+    public void requestCloseAlarm(String vin) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void responseCloseAlarm(Boolean allAlarmClosed, List<StolenAlarmDto> stolenAlarmDtos,
-                                   List<VehicleInfoDto> vehicleInfoDtos) {
-        alarm(stolenAlarmDtos, vehicleInfoDtos);
+    public void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed, List<StolenAlarmDto> stolenAlarmDtos) {
+//        alarm(stolenAlarmDtos, vehicleInfoDtos);
     }
 
     @Override
-    public void requestAuthKey(Long tboxId, Long keyId) {
-        // 此处发送给queue，到底要不要进数据库不确定，用户有没有必要在云端查询绑定了多少KEY？
+    public void requestAuthKey(String vin, Integer keyId) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void responseAuthKey(KeyAuthDto keyAuthDto) {
-        // 如果不在数据库记录则直接将反馈信息推送掉
+    public void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted, Integer failureReason) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void requestImmobilise(Long tboxId, Integer requestStatus) {
-        // 此处发送给queue，不记录进数据库
+    public void requestImmobilise(String vin, Integer immoStatus) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void responseImmobilise(ImmoDto immoDto) {
-        // 如果不在数据库记录则直接将反馈信息推送掉
+    public void responseImmobilise(OtaDto otaDto, Integer immoStatus, Integer failureReason) {
+        if(null != failureReason) {
+            MsgUtil.pushDevice("", failureReason.toString());
+        }
     }
 
     @Override
-    public void requestUpdateProtectStrategy(Long tboxId) {
-        // 此处发送给queue，不记录进数据库
+    public void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
+                                             List<ProtectStrategySettingDto> protectStrategySettingDtos) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
     public void responseUpdateProtectStrategy() {
-        // 如果不在数据库记录则直接将反馈信息推送掉
+        // 此处输入有问题，待确认
     }
 
     @Override
-    public void requestAlarm(Long tboxId) {
-        // 此处发送给queue，不记录进数据库
+    public void requestAlarm(String vin) {
+        // 此处没有业务，仅仅将指令发给TBOX
     }
 }

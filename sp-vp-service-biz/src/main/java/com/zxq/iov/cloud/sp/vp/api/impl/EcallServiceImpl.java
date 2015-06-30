@@ -1,22 +1,24 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.zxq.iov.cloud.sp.vp.api.IEcallService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
-import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
-import com.zxq.iov.cloud.sp.vp.api.impl.assembler.ecall.EcallDtoAssembler;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.ecall.EcallRecordDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallRecordDaoService;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.call.Call;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +27,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:26
- * modify date
- * @version 0.1, 2015-6-12
+ * modify date 2015-6-29 9:14
+ * @version 0.4, 2015-6-29
  */
 @Service
 @Qualifier("ecallService")
@@ -37,6 +39,8 @@ public class EcallServiceImpl implements IEcallService {
     @Autowired
     private ICallRecordDaoService callRecordDaoService;
     @Autowired
+    private ITboxDaoService tboxDaoService;
+    @Autowired
     @Qualifier("statusService")
     private IStatusService statusService;
 
@@ -44,100 +48,123 @@ public class EcallServiceImpl implements IEcallService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public EcallRecordDto startEcall(EcallDto ecallDto, List<VehicleInfoDto> vehicleInfoDtos) {
+    public EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
+                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                                     List<VehicleAlertDto> vehicleAlertDtos) {
+        Long callId = updateEcall(otaDto, vehiclePosDtos, ecallType, tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
+        String callNumber = "4008888888"; // 此处默认的呼叫号码以什么形式获得还不确定
+        return new EcallRecordDtoAssembler().toDto(callRecordDaoService.createCallRecord(
+                new CallRecord(callId, callNumber, otaDto.getEventCreateTime())));
+    }
+
+    @Override
+    public void requestEcallStatus(String vin) {
+        // 暂无业务处理
+    }
+
+    @Override
+    public Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
+                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
+                            List<VehicleAlertDto> vehicleAlertDtos) {
         Call call;
-        List<Call> list = callDaoService.listCallByTboxId(ecallDto.getTboxId(), RUNNING_STATUS);
-        if(list.size() == 0) {
-            call = new EcallDtoAssembler().fromDto(ecallDto);
-            call.setStartTime(ecallDto.getEventCreateTime());
-            call.setStatus(RUNNING_STATUS);
-            call = callDaoService.createCall(call);
-        }
-        else {
+        List<Call> list = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
+        if(list.size() > 0) {
             call = list.get(0);
         }
-        for(VehicleInfoDto vehicleInfoDto : vehicleInfoDtos) {
-            vehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_ECALL);
-            vehicleInfoDto.setSourceId(call.getId());
-            statusService.updateVehicleStatus(vehicleInfoDto);
-        }
-        String callNumber = "4008888888"; // 此处callNumber以什么形式获得还不确定
-        CallRecord callRecord = new CallRecord();
-        callRecord.setCallId(call.getId());
-        callRecord.setCallTime(new Date());
-        callRecord.setCallNumber(callNumber);
-        callRecord.setStatus(RUNNING_STATUS);
-        callRecord = callRecordDaoService.createCallRecord(callRecord);
-        return new EcallRecordDtoAssembler().toDto(callRecord);
-    }
-
-    @Override
-    public void requestEcallStatus(Long tboxId) {
-        // 此处向queue发送请求命令
-    }
-
-    @Override
-    public void updateEcall(EcallDto ecallDto, List<VehicleInfoDto> vehicleInfoDtos) {
-        Call call;
-        if(null != ecallDto.getId()) {
-            call = callDaoService.findCallById(ecallDto.getId());
-        }
         else {
-            call = callDaoService.listCallByTboxId(ecallDto.getTboxId(), RUNNING_STATUS).get(0);
+            call = callDaoService.createCall(new Call(tboxDaoService.findVinById(otaDto.getTboxId()),
+                    otaDto.getTboxId(), Constants.CALL_TYPE_ECALL, ecallType, otaDto.getEventCreateTime()));
         }
-        for(VehicleInfoDto vehicleInfoDto : vehicleInfoDtos) {
-            vehicleInfoDto.setSourceType(Constants.VEHICLE_INFO_SOURCE_ECALL);
-            vehicleInfoDto.setSourceId(call.getId());
-            statusService.updateVehicleStatus(vehicleInfoDto);
+        // 位置状态
+        for(VehiclePosDto vehiclePosDto : vehiclePosDtos) {
+            statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ECALL,
+                    call.getId(), vehiclePosDto);
+        }
+        // 车辆状态及报警
+        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
+        vehicleStatusDtos.add(new VehicleStatusDto("tboxBatteryStatus", tboxBatteryStatus));
+        vehicleStatusDtos.add(new VehicleStatusDto("vehicleBatteryStatus", vehicleBatteryStatus));
+        statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ECALL,
+                call.getId(), vehicleStatusDtos);
+        if(null != vehicleAlertDtos && vehicleAlertDtos.size() > 0) {
+            statusService.logVehicleAlert(otaDto, Constants.VEHICLE_INFO_SOURCE_ECALL,
+                    call.getId(), vehicleAlertDtos);
+        }
+        return call.getId();
+    }
+
+    @Override
+    public void requestHangUp(String vin) {
+        List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
+        if(calls.size() > 0) {
+            List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(calls.get(0).getId(), RUNNING_STATUS);
+            if(callRecords.size() > 0) {
+                CallRecord callRecord = callRecords.get(0);
+                callRecord.setHangUpTime(new Date());
+                callRecord.setStatus(END_STATUS);
+                callRecordDaoService.updateCallRecord(callRecord);
+            }
         }
     }
 
     @Override
-    public void requestHangUp(Long tboxId, Long callRecordId) {
-        CallRecord callRecord = callRecordDaoService.findCallRecordById(callRecordId);
-        callRecord.setHangUpTime(new Date());
-        callRecord.setStatus(END_STATUS);
-        callRecordDaoService.updateCallRecord(callRecord);
-        // 此处向queue发送请求命令
-    }
-
-    @Override
-    public void requestCallBack(Long tboxId, Long callId, String callNumber) {
-        CallRecord callRecord = new CallRecord();
-        callRecord.setCallId(callId);
-        callRecord.setCallNumber(callNumber);
-        callRecord.setCallTime(new Date());
-        callRecord.setStatus(RUNNING_STATUS);
-        callRecordDaoService.createCallRecord(callRecord);
-        // 此处向queue发送请求命令
-    }
-
-    @Override
-    public void responseCallBack(EcallRecordDto ecallRecordDto) {
-        if(StringUtils.isNotEmpty(ecallRecordDto.getErrorCode())) {
-            Call call = callDaoService.listCallByTboxId(ecallRecordDto.getTboxId(), RUNNING_STATUS).get(0);
-            CallRecord callRecord = callRecordDaoService.listCallRecordByCallId(call.getId(), RUNNING_STATUS).get(0);
-            callRecord.setErrorCode(ecallRecordDto.getErrorCode());
-            callRecord.setStatus(END_STATUS);
-            callRecordDaoService.updateCallRecord(callRecord);
+    public void requestCallBack(String vin, String callNumber) {
+        List<Call> list = callDaoService.listCallByVin(vin, RUNNING_STATUS);
+        if(list.size() > 0) {
+            if(null == callNumber) {
+                callNumber = "4008888888"; // 此处默认的呼叫号码以什么形式获得还不确定
+            }
+            callRecordDaoService.createCallRecord(new CallRecord(list.get(0).getId(), callNumber, new Date()));
         }
-
     }
 
     @Override
-    public void requestCloseEcall(Long tboxId, Long callId) {
-        Call call = callDaoService.findCallById(callId);
-        call.setEndTime(new Date());
-        call.setStatus(END_STATUS);
-        callDaoService.updateCall(call);
-        // 此处向queue发送请求命令
+    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) {
+        if(!callbackAccepted) {
+            List<Call> calls = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
+            if(calls.size() > 0) {
+                List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(calls.get(0).getId(), RUNNING_STATUS);
+                if(callRecords.size() > 0) {
+                    CallRecord callRecord = callRecords.get(0);
+                    callRecord.setRejectReason(rejectReason);
+                    callRecord.setStatus(END_STATUS);
+                    callRecordDaoService.updateCallRecord(callRecord);
+                }
+            }
+        }
     }
 
     @Override
-    public void closeEcall(EcallDto ecallDto) {
-        Call call = callDaoService.listCallByTboxId(ecallDto.getTboxId(), RUNNING_STATUS).get(0);
-        call.setEndTime(new Date());
-        call.setStatus(END_STATUS);
-        callDaoService.updateCall(call);
+    public void requestCloseEcall(String vin) {
+        List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
+        if(calls.size() > 0) {
+            Call call = calls.get(0);
+            call.setEndTime(new Date());
+            call.setStatus(END_STATUS);
+            callDaoService.updateCall(call);
+            // 关闭所有未关闭的通话
+            List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(call.getId(), RUNNING_STATUS);
+            for(CallRecord callRecord : callRecords) {
+                callRecord.setStatus(END_STATUS);
+                callRecordDaoService.updateCallRecord(callRecord);
+            }
+        }
+    }
+
+    @Override
+    public void closeEcall(OtaDto otaDto) {
+        List<Call> list = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
+        if(list.size() > 0) {
+            Call call = list.get(0);
+            call.setEndTime(new Date());
+            call.setStatus(END_STATUS);
+            callDaoService.updateCall(call);
+            // 关闭所有未关闭的通话
+            List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(call.getId(), RUNNING_STATUS);
+            for(CallRecord callRecord : callRecords) {
+                callRecord.setStatus(END_STATUS);
+                callRecordDaoService.updateCallRecord(callRecord);
+            }
+        }
     }
 }

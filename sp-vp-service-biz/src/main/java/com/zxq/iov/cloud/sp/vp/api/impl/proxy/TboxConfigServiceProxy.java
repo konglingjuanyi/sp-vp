@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
+import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
@@ -7,6 +8,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-19 15:19
- * modify date 2015-6-23 9:58
- * @version 0.2, 2015-6-23
+ * modify date 2015-6-29 12:57
+ * @version 0.3, 2015-6-29
  */
 @Service
 @Qualifier("tboxConfigServiceProxy")
@@ -31,10 +33,15 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     private IEvent event;
 
     @Override
-    public void requestConfigUpdate(Long tboxId) {
-        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 3);
-        event.start(otaDto);
-        tboxConfigService.requestConfigUpdate(tboxId);
+    public void requestConfigUpdate(String vin) {
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 3);
+        Long eventId = event.start(otaDto);
+        tboxConfigService.requestConfigUpdate(vin);
+        JSONObject msg = new JSONObject();
+        msg.put("eventId", eventId);
+        msg.put("owner", vin);
+        msg.put("method", "checkConfigUpdate");
+        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
         event.end(otaDto);
     }
 
@@ -46,14 +53,15 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     }
 
     @Override
-    public TboxConfigDto checkConfigDelta(Integer mcuVersion, Integer mpuVersion, Integer configVersion,
-                                          Integer configDelta, String iccid, String vin, OtaDto otaDto) {
+    public TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
+                                          String iccid, String configVersion, Integer configDelta) {
         event.start(otaDto);
-        TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(mcuVersion, mpuVersion, configVersion, configDelta, iccid, vin, otaDto);
+        TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, mcuVersion, mpuVersion,
+                vin, iccid, configVersion, configDelta);
         event.end(otaDto);
-        OtaDto otaDto2 = new OtaDto(otaDto.getTboxId(), Constants.AID_CONFIGURATION, 2);
-        event.start(otaDto2);
-        event.end(otaDto2);
+        otaDto.setMid(2);
+        event.start(otaDto);
+        event.end(otaDto);
         return tboxConfigDto;
     }
 
@@ -62,24 +70,30 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
         event.start(otaDto);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
         event.end(otaDto);
-        OtaDto otaDto2 = new OtaDto(otaDto.getTboxId(), Constants.AID_CONFIGURATION, 7);
-        event.start(otaDto2);
-        event.end(otaDto2);
+        otaDto.setMid(7);
+        event.start(otaDto);
+        event.end(otaDto);
         return tboxConfigPackageDto;
     }
 
     @Override
-    public void closeConfigUpdate(OtaDto otaDto, Boolean result, Integer mcuVersion, Integer mpuVersion, Integer configVersion, Integer configDelta) {
+    public void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
+                                  String configVersion, Integer configDelta) {
         event.start(otaDto);
         tboxConfigService.closeConfigUpdate(otaDto, result, mcuVersion, mpuVersion, configVersion, configDelta);
         event.end(otaDto);
     }
 
     @Override
-    public void requestReadConfig(Long tboxId, Long[] tboxConfigsettingIds) {
-        OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 8);
-        event.start(otaDto);
-        tboxConfigService.requestReadConfig(tboxId, tboxConfigsettingIds);
+    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 8);
+        Long eventId = event.start(otaDto);
+        tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
+        JSONObject msg = new JSONObject();
+        msg.put("eventId", eventId);
+        msg.put("owner", vin);
+        msg.put("method", "checkConfigUpdate");
+        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
         event.end(otaDto);
     }
 
@@ -95,20 +109,20 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.generateAsymmetricKey(otaDto);
         event.end(otaDto);
-        OtaDto otaDto2 = new OtaDto(otaDto.getTboxId(), Constants.AID_CONFIGURATION, 11);
-        event.start(otaDto2);
-        event.end(otaDto2);
+        otaDto.setMid(11);
+        event.start(otaDto);
+        event.end(otaDto);
         return keyDto;
     }
 
     @Override
-    public KeyDto bindTboxWithSecretKey(KeyDto keyDto) {
-        event.start(keyDto);
-        keyDto = tboxConfigService.bindTboxWithSecretKey(keyDto);
-        event.end(keyDto);
-        OtaDto otaDto2 = new OtaDto(keyDto.getTboxId(), Constants.AID_CONFIGURATION, 13);
-        event.start(otaDto2);
-        event.end(otaDto2);
+    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc) {
+        event.start(otaDto);
+        KeyDto keyDto = tboxConfigService.bindTboxWithSecretKey(otaDto, secretKeyWithEnc, tboxSnWithEnc);
+        event.end(otaDto);
+        otaDto.setMid(13);
+        event.start(otaDto);
+        event.end(otaDto);
         return keyDto;
     }
 }

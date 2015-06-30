@@ -9,8 +9,9 @@ import java.util.Date;
 /**
  * 安防服务 车辆位置信息类
  * @author 叶荣杰
- * create time 2015-5-13 10:14
- * @version 0.1, 2015-5-13
+ * create date 2015-5-13 10:14
+ * modify date 2015-6-25 11:06
+ * @version 0.2, 2015-6-25
  */
 @Entity()
 @Table(name = "TB_VEHICLE_POS")
@@ -59,8 +60,7 @@ public class VehiclePos extends MyBaseEntity<Long> implements Serializable {
 
     public VehiclePos() {}
 
-    public VehiclePos(Long id, Integer longitude, Integer latitude, Integer altitude, Integer heading, Integer speed, Integer hdop, Integer satellites, Date gpsTime, Integer gpsStatus) {
-        this.id = id;
+    public VehiclePos(Integer longitude, Integer latitude, Integer altitude, Integer heading, Integer speed, Integer hdop, Integer satellites, Date gpsTime, Integer gpsStatus) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.altitude = altitude;

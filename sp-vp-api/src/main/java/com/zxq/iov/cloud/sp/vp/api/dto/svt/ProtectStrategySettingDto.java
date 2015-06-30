@@ -10,12 +10,12 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
  * modify date
  * @version 0.1, 2015-6-16
  */
-public class ImmoDto extends OtaDto {
+public class ProtectStrategySettingDto extends OtaDto {
 
     private Integer immoStatus;
     private String failureReason;
 
-    public ImmoDto() {}
+    public ProtectStrategySettingDto() {}
 
     public Integer getImmoStatus() {
         return immoStatus;

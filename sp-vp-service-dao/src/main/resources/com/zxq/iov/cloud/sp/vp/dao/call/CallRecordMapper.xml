@@ -9,7 +9,7 @@
 		<result column="CALL_NUMBER" jdbcType="VARCHAR" property="callNumber"/>
 		<result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime"/>
 		<result column="HANG_UP_TIME" jdbcType="TIMESTAMP" property="hangUpTime"/>
-		<result column="ERROR_CODE" jdbcType="VARCHAR" property="errorCode"/>
+		<result column="REJECT_REASON" jdbcType="DECIMAL" property="rejectReason"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
 		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>

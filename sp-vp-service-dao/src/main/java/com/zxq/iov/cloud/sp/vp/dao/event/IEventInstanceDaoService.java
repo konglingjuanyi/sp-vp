@@ -11,8 +11,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-5 10:28
- * modify date 2015-6-8	13:23
- * @version 0.2, 2015-6-8
+ * modify date 2015-6-24 17:36
+ * @version 0.3, 2015-6-24
  */
 public interface IEventInstanceDaoService extends BaseService<EventInstance, Long> {
 
@@ -46,9 +46,10 @@ public interface IEventInstanceDaoService extends BaseService<EventInstance, Lon
 	/**
 	 * 根据事件定义ID得到事件实例列表
 	 * @param eventDefinitionId 事件定义ID
+	 * @param owner 			拥有者
 	 * @param status           	状态
 	 * @return                 	事件实例列表
 	 */
-	List<EventInstance> listEventInstanceByEventDefinitionId(Long eventDefinitionId, Integer status);
+	List<EventInstance> listEventInstanceByEventDefinitionId(Long eventDefinitionId, String owner, Integer status);
 	
 }

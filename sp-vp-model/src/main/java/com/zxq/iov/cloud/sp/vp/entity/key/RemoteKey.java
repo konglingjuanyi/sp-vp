@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 电子钥匙类
  * @author 叶荣杰
  * create date 2015-6-23 11:37
- * modify date
- * @version 0.1, 2015-6-23
+ * modify date 2015-6-29 15:58
+ * @version 0.2, 2015-6-29
  */
 @Entity()
 @Table(name = "TB_REMOTE_KEY")
@@ -32,8 +32,8 @@ public class RemoteKey extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "TYPE", nullable = false, precision = 4, scale = 0)
     private Integer type;
 
-    @Column(name = "VALUE", nullable = false, precision = 10, scale = 0)
-    private Integer value;
+    @Column(name = "VALUE", nullable = false, length = 32)
+    private String value;
 
     @Column(name = "REFERENCE", precision = 10, scale = 0)
     private Integer reference;
@@ -48,7 +48,7 @@ public class RemoteKey extends MyBaseEntity<Long> implements Serializable {
 
     public RemoteKey(){}
 
-    public RemoteKey(Long tboxId, Integer type, Integer value, Integer reference, Date validStartTime, Date validEndTime) {
+    public RemoteKey(Long tboxId, Integer type, String value, Integer reference, Date validStartTime, Date validEndTime) {
         this.tboxId = tboxId;
         this.type = type;
         this.value = value;
@@ -81,11 +81,11 @@ public class RemoteKey extends MyBaseEntity<Long> implements Serializable {
         this.type = type;
     }
 
-    public Integer getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

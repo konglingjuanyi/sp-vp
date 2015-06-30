@@ -1,68 +1,70 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.status;
 
+import java.util.Date;
+
 /**
  * 安防 车辆警告信息传输对象
  *
  * @author 叶荣杰
  * create date 2015-5-13 15:58
- * modify date 2015-5-14 17:27
- * @version 0.2, 2015-5-14
+ * modify date 2015-6-24 15:24
+ * @version 0.3, 2015-6-24
  */
 public class VehicleAlertDto {
 
-    private Long id;
-    private String code;
-    private String name;
-    private Integer value;
-    private String data;
+    private Integer alertId;
+    private Date alertTime;
+    private VehiclePosDto vehiclePosDto;
+    private Boolean alertStatus;
+    private Integer alertData;
 
     public VehicleAlertDto() {}
 
-    public VehicleAlertDto(Long id, String code, String name, Integer value, String data) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.value = value;
-        this.data = data;
+    public VehicleAlertDto(Integer alertId, Date alertTime, VehiclePosDto vehiclePosDto, Boolean alertStatus, Integer alertData) {
+        this.alertId = alertId;
+        this.alertTime = alertTime;
+        this.vehiclePosDto = vehiclePosDto;
+        this.alertStatus = alertStatus;
+        this.alertData = alertData;
     }
 
-    public Long getId() {
-        return id;
+    public Integer getAlertId() {
+        return alertId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAlertId(Integer alertId) {
+        this.alertId = alertId;
     }
 
-    public String getCode() {
-        return code;
+    public Date getAlertTime() {
+        return alertTime;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setAlertTime(Date alertTime) {
+        this.alertTime = alertTime;
     }
 
-    public String getName() {
-        return name;
+    public VehiclePosDto getVehiclePosDto() {
+        return vehiclePosDto;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVehiclePosDto(VehiclePosDto vehiclePosDto) {
+        this.vehiclePosDto = vehiclePosDto;
     }
 
-    public Integer getValue() {
-        return value;
+    public Boolean isAlertStatus() {
+        return alertStatus;
     }
 
-    public void setValue(Integer value) {
-        this.value = value;
+    public void setAlertStatus(Boolean alertStatus) {
+        this.alertStatus = alertStatus;
     }
 
-    public String getData() {
-        return data;
+    public Integer getAlertData() {
+        return alertData;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setAlertData(Integer alertData) {
+        this.alertData = alertData;
     }
 }

@@ -7,12 +7,11 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-13 14:22
- * modify date 2015-5-14 17:11
- * @version 0.2, 2015-5-14
+ * modify date 2015-6-24 14:22
+ * @version 0.3, 2015-6-24
  */
 public class VehiclePosDto {
 
-    private Long id;
     private Integer latitude;
     private Integer longitude;
     private Integer altitude;
@@ -25,10 +24,10 @@ public class VehiclePosDto {
 
     public VehiclePosDto() {}
 
-    public VehiclePosDto(Long id, Integer longitude, Integer latitude, Integer altitude, Integer heading, Integer speed, Integer hdop, Integer satellites, Date gpsTime, Integer gpsStatus) {
-        this.id = id;
-        this.longitude = longitude;
+    public VehiclePosDto(Integer latitude, Integer longitude, Integer altitude, Integer heading,
+                         Integer speed, Integer hdop, Integer satellites, Date gpsTime, Integer gpsStatus) {
         this.latitude = latitude;
+        this.longitude = longitude;
         this.altitude = altitude;
         this.heading = heading;
         this.speed = speed;
@@ -36,14 +35,6 @@ public class VehiclePosDto {
         this.satellites = satellites;
         this.gpsTime = gpsTime;
         this.gpsStatus = gpsStatus;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getLatitude() {

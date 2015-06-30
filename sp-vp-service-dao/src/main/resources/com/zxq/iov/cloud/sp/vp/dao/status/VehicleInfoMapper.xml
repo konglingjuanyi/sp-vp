@@ -5,6 +5,7 @@
 
 	<resultMap id="vehicleInfoResultMap" type="VehicleInfo">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
 		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="SOURCE_TYPE" jdbcType="DECIMAL" property="sourceType"/>
 		<result column="STATUS_TIME" jdbcType="TIMESTAMP" property="statusTime"/>

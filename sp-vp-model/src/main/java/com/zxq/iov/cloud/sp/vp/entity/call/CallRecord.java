@@ -10,14 +10,15 @@ import java.util.Date;
  * 安防服务 呼叫记录类
  * @author 叶荣杰
  * create date 2015-6-11 9:29
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-25 10:14
+ * @version 0.3, 2015-6-25
  */
 @Entity()
 @Table(name = "TB_CALL_RECORD")
 public class CallRecord extends MyBaseEntity<Long> implements Serializable {
 
     private static final String SEQ_NAME = "seq_tb_call_record";
+    private static final Integer RUNNING_STATUS = 1;
 
     @Id
     @Column(name = "ID", nullable = false, updatable = false, length=20)
@@ -44,17 +45,16 @@ public class CallRecord extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "HANG_UP_TIME", length = 7)
     private Date hangUpTime;
 
-    @Column(name = "ERROR_CODE", length = 50)
-    private String errorCode;
+    @Column(name = "REJECT_REASON", precision = 4, scale = 0)
+    private Integer rejectReason;
 
     public CallRecord(){}
 
-    public CallRecord(Long callId, String callNumber, Date callTime, Date hangUpTime, String errorCode) {
+    public CallRecord(Long callId, String callNumber, Date callTime) {
         this.callId = callId;
         this.callNumber = callNumber;
         this.callTime = callTime;
-        this.hangUpTime = hangUpTime;
-        this.errorCode = errorCode;
+        this.status = RUNNING_STATUS;
     }
 
     public Long getId() {
@@ -105,11 +105,11 @@ public class CallRecord extends MyBaseEntity<Long> implements Serializable {
         this.hangUpTime = hangUpTime;
     }
 
-    public String getErrorCode() {
-        return errorCode;
+    public Integer getRejectReason() {
+        return rejectReason;
     }
 
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public void setRejectReason(Integer rejectReason) {
+        this.rejectReason = rejectReason;
     }
 }

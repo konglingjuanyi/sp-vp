@@ -7,8 +7,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-6-23 9:28
- * @version 0.7, 2015-6-23
+ * modify date 2015-6-25 14:10
+ * @version 0.9, 2015-6-25
  */
 public class OtaDto {
 
@@ -34,6 +34,20 @@ public class OtaDto {
 
     public OtaDto(Long tboxId, String aid, Integer mid) {
         this.tboxId = tboxId;
+        this.aid = aid;
+        this.mid = mid;
+        this.eventCreateTime = new Date();
+    }
+
+    public OtaDto(Long tboxId, Date eventCreateTime, String aid, Integer mid) {
+        this.tboxId = tboxId;
+        this.aid = aid;
+        this.mid = mid;
+        this.eventCreateTime = eventCreateTime;
+    }
+
+    public OtaDto(String vin, String aid, Integer mid) {
+        this.vin = vin;
         this.aid = aid;
         this.mid = mid;
         this.eventCreateTime = new Date();

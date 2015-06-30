@@ -10,14 +10,15 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防 呼叫持久化服务测试类
  *
  * @author 叶荣杰
  * create date 2015-6-11 9:50
- * modify date
- * @version 0.1, 2015-6-11
+ * modify date 2015-6-25 13:50
+ * @version 0.2, 2015-6-25
  */
 @Transactional
 public class CallDaoServiceImplTest extends BaseServiceTestCase {
@@ -28,14 +29,11 @@ public class CallDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateCall(){
+        String vin = "1";
         Long tboxId = 1L;
         Integer type = 1;
-        Call call = new Call();
-        call.setStartTime(new Date());
-        call.setTboxId(tboxId);
-        call.setType(type);
-        call = callDaoService.createCall(call);
-        Assert.assertNotNull(call);
+        Integer callType = 1;
+        Assert.assertNotNull(callDaoService.createCall(new Call(vin, tboxId, type, callType, new Date())));
     }
 
     @Test
@@ -51,8 +49,23 @@ public class CallDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRemoveCall(){
-        Long callId = 5L;
+        Long callId = 29L;
         callDaoService.removeCall(callId);
     }
 
+    @Test
+    @Rollback(false)
+    public void testListCallByTboxId(){
+        Long tboxId = 1L;
+        List<Call> list = callDaoService.listCallByTboxId(tboxId, 1);
+        Assert.assertTrue(list.size() > 0);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testListCallByVin(){
+        String vin = "1";
+        List<Call> list = callDaoService.listCallByVin(vin, 1);
+        Assert.assertTrue(list.size() > 0);
+    }
 }

@@ -6,6 +6,7 @@
 	<resultMap id="tboxPersonalConfigResultMap" type="TboxPersonalConfig">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="CONFIG_DELTA" jdbcType="DECIMAL" property="configDelta"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
 		<result column="STATUS" jdbcType="DECIMAL" property="status"/>

@@ -5,6 +5,7 @@
 
 	<resultMap id="callResultMap" type="Call">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
 		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
 		<result column="CALL_TYPE" jdbcType="DECIMAL" property="callType"/>
@@ -46,6 +47,9 @@
 
 	<select id="selectList" parameterType="hashmap" resultMap="callResultMap">
 		<include refid="selectPageTemplate"/>
+		<if test="vin != null and vin != ''">
+			AND VIN = #{vin, jdbcType=VARCHAR}
+		</if>
 		<if test="tboxId != null">
 			AND TBOX_ID = #{tboxId,jdbcType=DECIMAL}
 		</if>

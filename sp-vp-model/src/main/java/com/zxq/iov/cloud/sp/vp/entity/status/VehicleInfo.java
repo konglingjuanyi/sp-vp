@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 车辆信息类
  * @author 叶荣杰
  * create time 2015-5-13 9:54
- * modify time 2015-6-11 13:41
- * @version 0.4, 2015-6-11
+ * modify time 2015-6-26 15:23
+ * @version 0.7, 2015-6-26
  */
 @Entity()
 @Table(name = "TB_VEHICLE_INFO")
@@ -25,6 +25,9 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
     @TableGenerator(name = SEQ_NAME, table = MY_SEQ_TABLE, allocationSize = 1,
             pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
     private Long id;
+
+    @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
+    private Long tboxId;
 
     @Column(name = "VIN", nullable = false, length=17)
     private String vin;
@@ -50,21 +53,11 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     public VehicleInfo(){}
 
-    public VehicleInfo(Integer sourceType, Long sourceId, Long eventId, Date statusTime) {
-        this.sourceType = sourceType;
-        this.sourceId = sourceId;
-        this.eventId = eventId;
-        this.statusTime = statusTime;
-    }
-
-    public VehicleInfo(Long id, String vin, Integer sourceType, Long eventId, Date statusTime, Long ownerId, Long userId) {
-        this.id = id;
+    public VehicleInfo(Long tboxId, String vin, Integer sourceType, Long sourceId) {
+        this.tboxId = tboxId;
         this.vin = vin;
         this.sourceType = sourceType;
-        this.eventId = eventId;
-        this.statusTime = statusTime;
-        this.ownerId = ownerId;
-        this.userId = userId;
+        this.sourceId = sourceId;
     }
 
     public Long getId() {
@@ -73,6 +66,14 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTboxId() {
+        return tboxId;
+    }
+
+    public void setTboxId(Long tboxId) {
+        this.tboxId = tboxId;
     }
 
     public String getVin() {

@@ -2,15 +2,16 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.key.RemoteKeyDto;
-import com.zxq.iov.cloud.sp.vp.api.impl.assembler.key.RemoteKeyDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
+import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.key.IRemoteKeyDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * 安防 电子钥匙服务实现类
@@ -26,10 +27,15 @@ public class RemoteKeyServiceImpl implements IRemoteKeyService {
 
     @Autowired
     private IRemoteKeyDaoService remoteKeyDaoService;
+    @Autowired
+    private ITboxDaoService tboxDaoService;
 
     @Override
-    public void requestWriteKey(RemoteKeyDto remoteKeyDto) {
-        RemoteKey remoteKey = new RemoteKeyDtoAssembler().fromDto(remoteKeyDto);
+    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+                                Date keyValidityStartTime, Date keyValidityEndTime) {
+        Long tboxId = tboxDaoService.findTboxIdByVin(vin);
+        RemoteKey remoteKey = new RemoteKey(tboxId, keyType, keyValue, keyReference,
+                keyValidityStartTime, keyValidityEndTime);
         remoteKeyDaoService.createRemoteKey(remoteKey);
     }
 
@@ -45,7 +51,7 @@ public class RemoteKeyServiceImpl implements IRemoteKeyService {
     }
 
     @Override
-    public void requestDeleteKey(Long tboxId, Integer keyReference) {
+    public void requestDeleteKey(String vin, Integer keyReference) {
 
     }
 
