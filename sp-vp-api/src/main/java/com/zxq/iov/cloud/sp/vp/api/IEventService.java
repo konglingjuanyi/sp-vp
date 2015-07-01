@@ -1,124 +1,30 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
-
-import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.event.StepDefinitionDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.event.TaskDefinitionDto;
-
-import java.util.List;
-import java.util.Map;
-
 /**
- * 安防 事件定义接口
+ * 安防 事件接口
  *
  * @author 叶荣杰
- * create date 2015-6-2 16:50
- * modify date 2015-6-18 10:43
- * @version 0.2, 2015-6-18
+ * create date 2015-6-29 17:04
+ * modify date 2015-7-1 9:26
+ * @version 0.3, 2015-7-1
  */
 public interface IEventService {
 
     /**
-     * 创建事件定义
-     * @param eventDefinitionDto    事件定义DTO
+     * Dispatch超时
+     * @param stepInstanceId    步骤实例ID
      */
-    void createEventDefinition(EventDefinitionDto eventDefinitionDto);
+    void dispatchTimeout(Long stepInstanceId);
+
 
     /**
-     * 创建任务定义
-     * @param taskDefinitionDto     任务定义DTO
+     * Dispatch确认
+     * @param stepInstanceId     步骤实例ID
      */
-    void createTaskDefinition(TaskDefinitionDto taskDefinitionDto);
+    void dispatchAck(Long stepInstanceId);
 
     /**
-     * 创建步骤定义
-     * @param stepDefinitionDto     步骤定义DTO
+     * 检查超时步骤、任务及事件
      */
-    void createStepDefinition(StepDefinitionDto stepDefinitionDto);
-
-    /**
-     * 创建步骤定义
-     * @param stepDefinitionDto     步骤定义DTO
-     * @param eventRuleDtos         事件规则DTO列表
-     */
-    void createStepDefinition(StepDefinitionDto stepDefinitionDto, List<EventRuleDto> eventRuleDtos);
-
-    /**
-     * 根据主键得到事件定义DTO
-     * @param eventDefinitionId     事件定义主键
-     * @return                      事件定义DTO
-     */
-    EventDefinitionDto findEventDefinitionById(Long eventDefinitionId);
-
-    /**
-     * 根据主键得到任务定义DTO
-     * @param taskDefinitionId      任务定义主键
-     * @return                      任务定义DTO
-     */
-    TaskDefinitionDto findTaskDefinitionById(Long taskDefinitionId);
-
-    /**
-     * 根据主键得到步骤定义DTO
-     * @param stepDefinitionId      步骤定义主键
-     * @return                      步骤定义DTO
-     */
-    StepDefinitionDto findStepDefinitionById(Long stepDefinitionId);
-
-    /**
-     * 列出事件定义下的所有任务定义
-     * @param eventDefinitionId
-     * @return
-     */
-    List<TaskDefinitionDto> listTaskDefinitionByEventDefinitionId(Long eventDefinitionId);
-
-    /**
-     * 列出任务定义下的所有步骤定义
-     * @param taskDefinitionId
-     * @return
-     */
-    List<StepDefinitionDto> listStepDefinitionByTaskDefinitionId(Long taskDefinitionId);
-
-    /**
-     * 查询事件定义
-     * @param paramMap
-     */
-    void pagingEventDefinition(Map<String, Object> paramMap);
-
-    /**
-     * 删除事件定义
-     * @param eventDefinitionId     事件定义主键
-     */
-    void removeEventDefinition(Long eventDefinitionId);
-
-    /**
-     * 删除任务定义
-     * @param taskDefinitionId      任务定义主键
-     */
-    void removeTaskDefinition(Long taskDefinitionId);
-
-    /**
-     * 删除步骤定义
-     * @param stepDefinitionId      步骤定义主键
-     */
-    void removeStepDefinition(Long stepDefinitionId);
-
-    /**
-     * 修改事件定义
-     * @param eventDefinitionDto    事件定义DTO
-     */
-    void updateEventDefinition(EventDefinitionDto eventDefinitionDto);
-
-    /**
-     * 修改任务定义
-     * @param taskDefinitionDto     任务定义DTO
-     */
-    void updateTaskDefinition(TaskDefinitionDto taskDefinitionDto);
-
-    /**
-     * 修改步骤定义
-     * @param stepDefinitionDto     步骤定义DTO
-     */
-    void updateStepDefinition(StepDefinitionDto stepDefinitionDto);
-
+    void checkTimeout();
 }

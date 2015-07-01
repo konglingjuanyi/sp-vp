@@ -4,6 +4,8 @@ import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +14,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-8 9:35
- * modify date 2015-6-24 13:48
- * @version 0.7, 2015-6-24
+ * modify date 2015-6-30 9:43
+ * @version 0.8, 2015-6-30
  */
 @Service
 public class EventDispatcher {
@@ -126,6 +128,22 @@ public class EventDispatcher {
     }
 
     /**
+     * 结束事件
+     * @param owner             事件拥有者
+     * @param stepId            步骤实例ID
+     */
+    public void end(String owner, Long stepId) {
+        StepInstance stepInstance = eventConvert.finishRunningStepInstance(stepId, null);
+        if(stepInstance.getStepDefinition().isLast()) {
+            eventConvert.finishRunningTaskInstance(stepInstance.getTaskInstanceId(), null);
+            if(stepInstance.getStepDefinition().getTaskDefinition().isLast()) {
+                eventConvert.finishRunningEventInstance(stepInstance.getTaskInstance().getEventInstanceId(),
+                        stepInstance.getStepDefinition().getTaskDefinition().getEventDefinitionId(), owner);
+            }
+        }
+    }
+
+    /**
      * 异常事件
      * @param eventId           事件实例ID
      * @param code              代码
@@ -139,6 +157,18 @@ public class EventDispatcher {
     }
 
     /**
+     * 超时事件
+     * @param stepId            步骤实例ID
+     */
+    public void timeout(Long stepId) {
+        Integer timeoutErrorCode = 2;
+        StepInstance stepInstance = eventConvert.finishRunningStepInstance(stepId, timeoutErrorCode);
+        eventConvert.finishRunningTaskInstance(stepInstance.getTaskInstanceId(), timeoutErrorCode);
+        callback(eventParse.findStepCallbackClass(stepInstance.getStepDefinitionId()), "timeout",
+                stepInstance.getStepDefinition().getStartCode());
+    }
+
+    /**
      * 得到拥有者当前实例
      * @param owner             拥有者
      * @param code              代码
@@ -149,4 +179,27 @@ public class EventDispatcher {
         return eventConvert.findOwnerRunningStepInstance(owner, stepDefinition.getId());
     }
 
+    /**
+     * 调用业务方法
+     * @param classPath         业务类路径
+     * @param methodName        方法名
+     * @param code              代码
+     */
+    public void callback(String classPath, String methodName, String code) {
+        try {
+            Class cls = ClassLoader.getSystemClassLoader().loadClass(classPath);
+            Method method = cls.getMethod(methodName, String.class);
+            method.invoke(cls.newInstance(), code);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }

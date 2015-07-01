@@ -44,7 +44,6 @@ public class DiagnosticServiceProxy implements IDiagnosticService, IEventCallbac
         msg.put("method", "diagnostic");
         msg.put("command", diagnosticDtos);
         new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
-        event.end(otaDto);
     }
 
     @Override

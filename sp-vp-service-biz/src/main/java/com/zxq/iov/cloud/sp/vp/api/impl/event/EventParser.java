@@ -17,8 +17,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 16:11
- * modify date 2015-6-18 12:34
- * @version 0.4, 2015-6-18
+ * modify date 2015-6-30 17:39
+ * @version 0.5, 2015-6-30
  */
 @Service
 public class EventParser {
@@ -61,6 +61,15 @@ public class EventParser {
             }
         }
         throw new StartCodeNotMatchException();
+    }
+
+    /**
+     * 查询步骤对应的业务类
+     * @param stepDefinitionId  步骤定义ID
+     * @return                  业务类路径
+     */
+    public String findStepCallbackClass(Long stepDefinitionId) {
+        return null;
     }
 
     /**
