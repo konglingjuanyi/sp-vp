@@ -12,8 +12,8 @@ import java.util.List;
  * 安防服务 车辆状态接口
  * @author 叶荣杰
  * create date 2015-5-13 13:48
- * modify date 2015-6-29 9:00
- * @version 0.5, 2015-6-29
+ * modify date 2015-7-2 10:40
+ * @version 0.6, 2015-7-2
  */
 public interface IStatusService {
 
@@ -37,55 +37,10 @@ public interface IStatusService {
                              List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
-     * 更新车辆状态
-     * @param otaDto            OTA传输对象
-     * @param sourceType        来源类型
-     * @param sourceId          来源ID
-     * @param vehiclePosDto     车辆位置传输对象
-     * @return                  车辆信息对象ID
-     */
-    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                             VehiclePosDto vehiclePosDto);
-
-    /**
-     * 更新车辆状态
-     * @param otaDto            OTA传输对象
-     * @param sourceType        来源类型
-     * @param sourceId          来源ID
-     * @param vehiclePosDto     车辆位置传输对象
-     * @param vehicleStatusDtos 车辆状态传输对象列表
-     * @return                  车辆信息对象ID
-     */
-    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                             VehiclePosDto vehiclePosDto,
-                             List<VehicleStatusDto> vehicleStatusDtos);
-
-    /**
-     * 更新车辆状态
-     * @param otaDto            OTA传输对象
-     * @param sourceType        来源类型
-     * @param sourceId          来源ID
-     * @param vehicleStatusDtos 车辆状态传输对象列表
-     * @return                  车辆信息对象ID
-     */
-    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                             List<VehicleStatusDto> vehicleStatusDtos);
-
-    /**
      * 记录车辆警告信息
      * @param otaDto            OTA传输对象
      * @param vehicleAlertDtos  车辆报警信息传输对象列表
      */
     void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos);
-
-    /**
-     * 记录车辆警告信息
-     * @param otaDto            OTA传输对象
-     * @param sourceType        来源类型
-     * @param sourceId          来源ID
-     * @param vehicleAlertDtos  车辆报警信息传输对象列表
-     */
-    void logVehicleAlert(OtaDto otaDto, Integer sourceType, Long sourceId,
-                         List<VehicleAlertDto> vehicleAlertDtos);
 
 }

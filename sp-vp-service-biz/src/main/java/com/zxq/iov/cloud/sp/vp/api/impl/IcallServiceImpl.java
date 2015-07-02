@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IIcallService;
-import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.icall.IcallRecordDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
@@ -27,8 +26,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 15:30
- * modify date 2015-6-29 9:14
- * @version 0.4, 2015-6-29
+ * modify date 2015-7-2 10:55
+ * @version 0.5, 2015-7-2
  */
 @Service
 @Qualifier("icallService")
@@ -41,8 +40,7 @@ public class IcallServiceImpl implements IIcallService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    @Qualifier("statusService")
-    private IStatusService statusService;
+    private StatusServiceImpl statusService;
 
     private static final Integer RUNNING_STATUS = 1;
     private static final Integer END_STATUS = 2;
@@ -78,18 +76,14 @@ public class IcallServiceImpl implements IIcallService {
         // 位置状态
         for(VehiclePosDto vehiclePosDto : vehiclePosDtos) {
             statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ICALL,
-                    call.getId(), vehiclePosDto);
+                    call.getId(), vehiclePosDto, null, null);
         }
         // 车辆状态及报警
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         vehicleStatusDtos.add(new VehicleStatusDto("tboxBatteryStatus", tboxBatteryStatus));
         vehicleStatusDtos.add(new VehicleStatusDto("vehicleBatteryStatus", vehicleBatteryStatus));
         statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ICALL,
-                call.getId(), vehicleStatusDtos);
-        if(null != vehicleAlertDtos && vehicleAlertDtos.size() > 0) {
-            statusService.logVehicleAlert(otaDto, Constants.VEHICLE_INFO_SOURCE_ICALL,
-                    call.getId(), vehicleAlertDtos);
-        }
+                call.getId(), null, vehicleStatusDtos, vehicleAlertDtos);
         return call.getId();
     }
 

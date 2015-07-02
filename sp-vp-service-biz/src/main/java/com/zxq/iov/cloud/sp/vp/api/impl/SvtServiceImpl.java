@@ -1,6 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
-import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.ISvtService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -28,8 +27,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-15 13:03
- * modify date 2015-6-26 10:07
- * @version 0.4, 2015-6-26
+ * modify date 2015-7-2 11:04
+ * @version 0.5, 2015-7-2
  */
 @Service
 @Qualifier("svtService")
@@ -40,8 +39,7 @@ public class SvtServiceImpl implements ISvtService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    @Qualifier("statusService")
-    private IStatusService statusService;
+    private StatusServiceImpl statusService;
     @Autowired
     private IEvent event;
 
@@ -56,7 +54,7 @@ public class SvtServiceImpl implements ISvtService {
             stolenAlarm = stolenAlarmDtoAssembler.fromDto(stolenAlarmDto);
             stolenAlarm.setTboxId(otaDto.getTboxId());
             stolenAlarm.setVehicleInfoId(statusService.updateVehicleStatus(otaDto,
-                    Constants.VEHICLE_INFO_SOURCE_SVT, eventId, stolenAlarmDto.getVehiclePosDto()));
+                    Constants.VEHICLE_INFO_SOURCE_SVT, eventId, stolenAlarmDto.getVehiclePosDto(), null, null));
             stolenAlarmDaoService.createStolenAlarm(stolenAlarm);
         }
     }
@@ -83,7 +81,7 @@ public class SvtServiceImpl implements ISvtService {
             vehicleStatusDtos.add(new VehicleStatusDto("lastCanBusActiveityTime", (int)(trackDto.getLastCanBusActivityTime().getTime()/1000)));
             vehicleStatusDtos.add(new VehicleStatusDto("ttnTrackPoint", trackDto.getTtnTrackPoint()));
             statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_SVT,
-                    eventId, trackDto.getVehiclePosDto(), vehicleStatusDtos);
+                    eventId, trackDto.getVehiclePosDto(), vehicleStatusDtos, null);
             vehicleStatusDtos.clear();
         }
     }

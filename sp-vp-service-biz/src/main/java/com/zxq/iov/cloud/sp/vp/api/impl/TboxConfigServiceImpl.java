@@ -1,6 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
-import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -29,9 +28,6 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     private ITboxPersonalConfigDaoService tboxPersonalConfigDaoService;
     @Autowired
     private ITboxDaoService tboxDaoService;
-    @Autowired
-    @Qualifier("statusService")
-    private IStatusService statusService;
 
     @Override
     public void requestConfigUpdate(String vin) {

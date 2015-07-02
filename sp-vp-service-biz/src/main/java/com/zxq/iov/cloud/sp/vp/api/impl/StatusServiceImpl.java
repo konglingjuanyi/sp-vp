@@ -28,8 +28,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-6-29 9:15
- * @version 0.7, 2015-6-29
+ * modify date 2015-7-2 10:44
+ * @version 0.8, 2015-7-2
  */
 @Service
 @Qualifier("statusService")
@@ -55,23 +55,12 @@ public class StatusServiceImpl implements IStatusService {
                 vehiclePosDto, vehicleStatusDtos, vehicleAlertDtos);
     }
 
-    @Override
-    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId, VehiclePosDto vehiclePosDto) {
-        return updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto.getGpsTime(),
-                vehiclePosDto, null, null);
-    }
-
-    @Override
     public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
+                                    VehiclePosDto vehiclePosDto,
+                                    List<VehicleStatusDto> vehicleStatusDtos,
+                                    List<VehicleAlertDto> vehicleAlertDtos) {
         return updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto.getGpsTime(),
-                vehiclePosDto, vehicleStatusDtos, null);
-    }
-
-    @Override
-    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId, List<VehicleStatusDto> vehicleStatusDtos) {
-        return updateVehicleStatus(otaDto, sourceType, sourceId, otaDto.getEventCreateTime(), null,
-                vehicleStatusDtos, null);
+                vehiclePosDto, vehicleStatusDtos, vehicleAlertDtos);
     }
 
     private Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
@@ -117,7 +106,6 @@ public class StatusServiceImpl implements IStatusService {
         logVehicleAlert(otaDto, Constants.VEHICLE_INFO_SOURCE_STATUS, null, vehicleAlertDtos);
     }
 
-    @Override
     public void logVehicleAlert(OtaDto otaDto, Integer sourceType, Long sourceId, List<VehicleAlertDto> vehicleAlertDtos) {
         String vin = tboxDaoService.findVinById(otaDto.getTboxId());
         for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
@@ -131,6 +119,8 @@ public class StatusServiceImpl implements IStatusService {
             VehicleStatus vehicleStatus = new VehicleAlertDtoAssembler().fromDto(vehicleAlertDto);
             vehicleStatus.setVehicleInfo(vehicleInfo);
             vehicleStatusDaoService.createVehicleStatus(vehicleStatus);
+            // 缓存里写入最新状态
+
         }
     }
 }

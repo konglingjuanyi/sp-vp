@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IJourneyService;
-import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -23,8 +22,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-6-26 13:16
- * @version 0.6, 2015-6-26
+ * modify date 2015-7-2 11:02
+ * @version 0.7, 2015-7-2
  */
 @Service
 @Qualifier("journeyService")
@@ -35,8 +34,7 @@ public class JourneyServiceImpl implements IJourneyService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    @Qualifier("statusService")
-    private IStatusService statusService;
+    private StatusServiceImpl statusService;
 
     private static final Integer RUNNING_STATUS = 1;
     private static final Integer END_STATUS = 2;
@@ -73,7 +71,7 @@ public class JourneyServiceImpl implements IJourneyService {
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         vehicleStatusDtos.add(new VehicleStatusDto("instFuelConsumption", instFuelConsumption));
         statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
-                journey.getId(), vehiclePosDto, vehicleStatusDtos);
+                journey.getId(), vehiclePosDto, vehicleStatusDtos, null);
     }
 
     @Override
@@ -100,9 +98,9 @@ public class JourneyServiceImpl implements IJourneyService {
             journeyDaoService.updateJourney(journey);
         }
         journey.setStartVehicleInfoId(statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
-                journey.getId(), startVehiclePosDto));
+                journey.getId(), startVehiclePosDto, null, null));
         journey.setEndVehicleInfoId(statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_JOURNEY,
-                journey.getId(), endVehiclePosDto));
+                journey.getId(), endVehiclePosDto, null, null));
         journeyDaoService.updateJourney(journey);
     }
 

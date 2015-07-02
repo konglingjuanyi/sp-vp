@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
-import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -20,8 +19,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-6-29 10:09
- * @version 0.3, 2015-6-19
+ * modify date 2015-7-2 11:03
+ * @version 0.4, 2015-7-2
  */
 @Service
 @Qualifier("rvcService")
@@ -32,8 +31,7 @@ public class RvcServiceImpl implements IRvcService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    @Qualifier("statusService")
-    private IStatusService statusService;
+    private StatusServiceImpl statusService;
 
     private static final String RVC_STATUS_PENDING = "0";
     private static final String RVC_STATUS_COMPLETED = "2";
@@ -79,7 +77,7 @@ public class RvcServiceImpl implements IRvcService {
                 }
                 controlCommandDaoService.updateControlCommand(controlCommand);
                 statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_RVC,
-                        controlCommand.getId(), vehiclePosDto, vehicleStatusDtos);
+                        controlCommand.getId(), vehiclePosDto, vehicleStatusDtos, null);
             }
         }
 
