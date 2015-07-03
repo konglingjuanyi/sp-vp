@@ -21,8 +21,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-16 16:16
- * modify date 2015-6-29 9:28
- * @version 0.4, 2015-6-29
+ * modify date 2015-7-3 9:15
+ * @version 0.5, 2015-7-3
  */
 @Service
 @Qualifier("statusServiceProxy")
@@ -59,35 +59,10 @@ public class StatusServiceProxy implements IStatusService {
     }
 
     @Override
-    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                                    VehiclePosDto vehiclePosDto) {
-        return statusService.updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto);
-    }
-
-    @Override
-    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                                    VehiclePosDto vehiclePosDto,
-                                    List<VehicleStatusDto> vehicleStatusDtos) {
-        return statusService.updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto,
-                vehicleStatusDtos);
-    }
-
-    @Override
-    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
-                                    List<VehicleStatusDto> vehicleStatusDtos) {
-        return statusService.updateVehicleStatus(otaDto, sourceType, sourceId, vehicleStatusDtos);
-    }
-
-    @Override
     public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) {
         event.start(otaDto);
         statusService.logVehicleAlert(otaDto, vehicleAlertDtos);
         event.end(otaDto);
     }
 
-    @Override
-    public void logVehicleAlert(OtaDto otaDto, Integer sourceType, Long sourceId,
-                                List<VehicleAlertDto> vehicleAlertDtos) {
-        statusService.logVehicleAlert(otaDto, sourceType, sourceId, vehicleAlertDtos);
-    }
 }

@@ -74,7 +74,7 @@ public class RvcServiceProxy implements IRvcService {
         msg.put("command", command);
         msg.put("parameter", parameter);
         new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
-        event.end(otaDto, paramMap);
+        event.end(otaDto, paramMap, controlCommandId);
         return controlCommandId;
     }
 

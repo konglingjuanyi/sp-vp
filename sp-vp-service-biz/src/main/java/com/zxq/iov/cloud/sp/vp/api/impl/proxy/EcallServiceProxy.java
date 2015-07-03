@@ -40,7 +40,7 @@ public class EcallServiceProxy implements IEcallService {
         event.start(otaDto);
         EcallRecordDto ecallRecordDto = ecallService.startEcall(otaDto, vehiclePosDtos, ecallType,
                 tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, ecallRecordDto);
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
@@ -67,7 +67,7 @@ public class EcallServiceProxy implements IEcallService {
         event.start(otaDto);
         Long callId = ecallService.updateEcall(otaDto, vehiclePosDtos, ecallType, tboxBatteryStatus,
                 vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, callId);
         return callId;
     }
 

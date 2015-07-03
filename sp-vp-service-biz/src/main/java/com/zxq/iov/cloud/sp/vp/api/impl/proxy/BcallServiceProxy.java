@@ -40,7 +40,7 @@ public class BcallServiceProxy implements IBcallService {
         event.start(otaDto);
         BcallRecordDto bcallRecordDto = bcallService.startBcall(otaDto, vehiclePosDtos, bcallType,
                 tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, bcallRecordDto);
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
@@ -67,7 +67,7 @@ public class BcallServiceProxy implements IBcallService {
         event.start(otaDto);
         Long callId = bcallService.updateBcall(otaDto, vehiclePosDtos, bcallType, tboxBatteryStatus,
                 vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, callId);
         return callId;
     }
 

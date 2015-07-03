@@ -40,7 +40,7 @@ public class IcallServiceProxy implements IIcallService {
         event.start(otaDto);
         IcallRecordDto icallRecordDto = icallService.startIcall(otaDto, vehiclePosDtos, icallType,
                 tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, icallRecordDto);
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
@@ -67,7 +67,7 @@ public class IcallServiceProxy implements IIcallService {
         event.start(otaDto);
         Long callId = icallService.updateIcall(otaDto, vehiclePosDtos, icallType, tboxBatteryStatus,
                 vehicleBatteryStatus, vehicleAlertDtos);
-        event.end(otaDto);
+        event.end(otaDto, callId);
         return callId;
     }
 

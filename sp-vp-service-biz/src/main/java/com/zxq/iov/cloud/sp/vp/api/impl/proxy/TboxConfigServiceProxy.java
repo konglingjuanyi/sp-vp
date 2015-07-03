@@ -58,7 +58,7 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
         event.start(otaDto);
         TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, mcuVersion, mpuVersion,
                 vin, iccid, configVersion, configDelta);
-        event.end(otaDto);
+        event.end(otaDto, tboxConfigDto);
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
@@ -69,7 +69,7 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     public TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId) {
         event.start(otaDto);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
-        event.end(otaDto);
+        event.end(otaDto, tboxConfigPackageDto);
         otaDto.setMid(7);
         event.start(otaDto);
         event.end(otaDto);
@@ -108,7 +108,7 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     public KeyDto generateAsymmetricKey(OtaDto otaDto) {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.generateAsymmetricKey(otaDto);
-        event.end(otaDto);
+        event.end(otaDto, keyDto);
         otaDto.setMid(11);
         event.start(otaDto);
         event.end(otaDto);
@@ -119,7 +119,7 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     public KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc) {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.bindTboxWithSecretKey(otaDto, secretKeyWithEnc, tboxSnWithEnc);
-        event.end(otaDto);
+        event.end(otaDto, keyDto);
         otaDto.setMid(13);
         event.start(otaDto);
         event.end(otaDto);
