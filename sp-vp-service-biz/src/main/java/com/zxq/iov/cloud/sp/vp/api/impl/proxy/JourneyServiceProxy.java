@@ -17,12 +17,12 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-10 9:10
- * modify date 2015-6-11 17:28
- * @version 0.2, 2015-6-11
+ * modify date 2015-7-6 17:42
+ * @version 0.3, 2015-7-6
  */
 @Service
 @Qualifier("journeyServiceProxy")
-public class JourneyServiceProxy implements IJourneyService {
+public class JourneyServiceProxy extends BaseProxy implements IJourneyService {
 
     @Autowired
     @Qualifier("journeyService")
