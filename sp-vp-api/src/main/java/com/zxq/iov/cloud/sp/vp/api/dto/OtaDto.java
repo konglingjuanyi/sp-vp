@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,20 +8,18 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-6-25 14:10
- * @version 0.9, 2015-6-25
+ * modify date 2015-7-6 13:45
+ * @version 0.10, 2015-7-6
  */
-public class OtaDto {
+public class OtaDto implements Serializable {
 
     private String vin;
     private Integer tboxSn;
     private Long tboxId;
-    private Integer platform;
     private String aid;
     private Integer mid;
     private Date eventCreateTime;
     private Long eventId;
-    private Integer requestId;
 
     public OtaDto() {
     }
@@ -77,14 +76,6 @@ public class OtaDto {
         this.tboxId = tboxId;
     }
 
-    public Integer getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(Integer platform) {
-        this.platform = platform;
-    }
-
     public String getAid() {
         return aid;
     }
@@ -117,11 +108,4 @@ public class OtaDto {
         this.eventId = eventId;
     }
 
-    public Integer getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
-    }
 }
