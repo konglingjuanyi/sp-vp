@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.common;
 
+
 /**
  * 安防 队列工具类
  *

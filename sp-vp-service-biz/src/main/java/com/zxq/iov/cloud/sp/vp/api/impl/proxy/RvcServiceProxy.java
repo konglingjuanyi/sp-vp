@@ -6,11 +6,11 @@ import com.alibaba.dubbo.common.json.JSONObject;
 import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,12 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-6-29 10:50
- * @version 0.3, 2015-6-29
+ * modify date 2015-7-6 16:51
+ * @version 0.4, 2015-7-6
  */
 @Service
 @Qualifier("rvcServiceProxy")
-public class RvcServiceProxy implements IRvcService {
+public class RvcServiceProxy extends BaseProxy implements IRvcService {
 
     @Autowired
     @Qualifier("rvcService")
@@ -64,16 +64,10 @@ public class RvcServiceProxy implements IRvcService {
                 e.printStackTrace();
             }
         }
-        Long eventId = event.start(otaDto, paramMap);
+        event.start(otaDto, paramMap);
         Long controlCommandId = rvcService.requestControl(vin, command, parameter);
-        bindEventId(controlCommandId, eventId);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "control");
-        msg.put("command", command);
-        msg.put("parameter", parameter);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        bindEventId(controlCommandId, otaDto.getEventId());
+        sendQueue(otaDto, new RvcDto(command, parameter));
         event.end(otaDto, paramMap, controlCommandId);
         return controlCommandId;
     }
@@ -91,13 +85,7 @@ public class RvcServiceProxy implements IRvcService {
             paramMap.put("cancelFlag", 1);
             event.start(otaDto, paramMap);
             rvcService.cancelControl(vin, command);
-            JSONObject msg = new JSONObject();
-            msg.put("eventId", eventId);
-            msg.put("owner", vin);
-            msg.put("method", "control");
-            msg.put("command", command);
-            msg.put("parameter", "{'cancelFlag':1}");
-            new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+            sendQueue(otaDto, new RvcDto(command, "{'cancelFlag', 1}"));
             event.end(otaDto, paramMap);
         }
     }

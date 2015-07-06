@@ -1,14 +1,13 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusReqDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-16 16:16
- * modify date 2015-7-3 9:15
- * @version 0.5, 2015-7-3
+ * modify date 2015-7-6 17:01
+ * @version 0.6, 2015-7-6
  */
 @Service
 @Qualifier("statusServiceProxy")
-public class StatusServiceProxy implements IStatusService {
+public class StatusServiceProxy extends BaseProxy implements IStatusService {
 
     @Autowired
     @Qualifier("statusService")
@@ -37,14 +36,9 @@ public class StatusServiceProxy implements IStatusService {
     @Override
     public void requestVehicleStatus(String vin, Integer statusType) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_STATUS, 1);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         statusService.requestVehicleStatus(vin, statusType);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "vehicleStatus");
-        msg.put("statusType", statusType);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new VehicleStatusReqDto(statusType));
         event.end(otaDto);
     }
 

@@ -13,8 +13,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 15:45
- * modify date 2015-6-25 11:01
- * @version 0.11, 2015-6-25
+ * modify date 2015-7-6 15:11
+ * @version 0.12, 2015-7-6
  */
 @Service
 public class EventImpl implements IEvent {
@@ -25,12 +25,12 @@ public class EventImpl implements IEvent {
     private ITboxDaoService tboxDaoService;
 
     @Override
-    public Long start(OtaDto otaDto) {
-        return start(otaDto, null);
+    public void start(OtaDto otaDto) {
+        start(otaDto, null);
     }
 
     @Override
-    public Long start(OtaDto otaDto, Map<String, Object> paramMap) {
+    public void start(OtaDto otaDto, Map<String, Object> paramMap) {
         String code = otaDto.getAid().toString() + otaDto.getMid().toString();
         String owner = otaDto.getVin();
         if(null == owner) {
@@ -39,7 +39,7 @@ public class EventImpl implements IEvent {
         if(null == owner) {
             owner = tboxDaoService.findVinByTboxSn(otaDto.getTboxSn().toString());
         }
-        return eventDispatch.start(owner, otaDto.getEventId(), code, paramMap);
+        otaDto.setEventId(eventDispatch.start(owner, otaDto.getEventId(), code, paramMap));
     }
 
     @Override

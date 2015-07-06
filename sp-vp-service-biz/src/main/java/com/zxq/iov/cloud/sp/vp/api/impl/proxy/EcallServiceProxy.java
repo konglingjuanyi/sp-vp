@@ -1,6 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.IEcallService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
@@ -8,7 +7,6 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,12 +18,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 13:45
- * modify date 2015-6-26 10:17
- * @version 0.3, 2015-6-26
+ * modify date 2015-7-6 16:06
+ * @version 0.4, 2015-7-6
  */
 @Service
 @Qualifier("ecallServiceProxy")
-public class EcallServiceProxy implements IEcallService {
+public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Autowired
     @Qualifier("ecallService")
@@ -50,13 +48,9 @@ public class EcallServiceProxy implements IEcallService {
     @Override
     public void requestEcallStatus(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 3);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         ecallService.requestEcallStatus(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "ecallStatus");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
@@ -74,26 +68,18 @@ public class EcallServiceProxy implements IEcallService {
     @Override
     public void requestHangUp(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 5);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         ecallService.requestHangUp(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "hangUp");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
     @Override
     public void requestCallBack(String vin, String callNumber) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 7);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         ecallService.requestCallBack(vin, callNumber);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "callBack");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new EcallRecordDto(callNumber));
         event.end(otaDto);
     }
 
@@ -107,13 +93,9 @@ public class EcallServiceProxy implements IEcallService {
     @Override
     public void requestCloseEcall(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 6);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         ecallService.requestCloseEcall(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "closeEcall");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 

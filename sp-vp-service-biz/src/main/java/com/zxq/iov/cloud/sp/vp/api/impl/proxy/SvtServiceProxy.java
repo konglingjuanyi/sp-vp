@@ -1,14 +1,10 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.ISvtService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.svt.ProtectStrategySettingDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenAlarmDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.svt.TrackDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.svt.*;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,12 +17,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-6-26 11:10
- * @version 0.2, 2015-6-26
+ * modify date 2015-7-6 17:12
+ * @version 0.3, 2015-7-6
  */
 @Service
 @Qualifier("svtServiceProxy")
-public class SvtServiceProxy implements ISvtService {
+public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Autowired
     @Qualifier("svtService")
@@ -51,41 +47,27 @@ public class SvtServiceProxy implements ISvtService {
     @Override
     public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 3);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestTrackSetting(vin, trackInterval, tracks);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "trackSetting");
-        msg.put("trackInterval", trackInterval);
-        msg.put("tracks", tracks);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new TrackSettingReqDto(trackInterval, tracks));
         event.end(otaDto);
     }
 
     @Override
     public void requestSingleTrack(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 4);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestSingleTrack(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "singleTrack");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
     @Override
     public void requestCloseAlarm(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 5);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestCloseAlarm(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "closeAlarm");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
@@ -104,14 +86,9 @@ public class SvtServiceProxy implements ISvtService {
     @Override
     public void requestAuthKey(String vin, Integer keyId) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 7);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestAuthKey(vin, keyId);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "authKey");
-        msg.put("keyId", keyId);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new AuthKeyReqDto(keyId));
         event.end(otaDto);
     }
 
@@ -125,14 +102,9 @@ public class SvtServiceProxy implements ISvtService {
     @Override
     public void requestImmobilise(String vin, Integer immoStatus) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 9);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestImmobilise(vin, immoStatus);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "immobilise");
-        msg.put("immoStatus", immoStatus);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new ImmobiliseReqDto(immoStatus));
         event.end(otaDto);
     }
 
@@ -147,16 +119,9 @@ public class SvtServiceProxy implements ISvtService {
     public void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
                                              List<ProtectStrategySettingDto> protectStrategySettingDtos) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 11);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         svtService.requestUpdateProtectStrategy(vin, startTime, endTime, protectStrategySettingDtos);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "updateProtectStrategy");
-        msg.put("startTime", startTime);
-        msg.put("endTime", endTime);
-        msg.put("protectStrategySettingDtos", protectStrategySettingDtos);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new UpdateProtectStrategyReqDto(startTime, endTime, protectStrategySettingDtos));
         event.end(otaDto);
     }
 
@@ -170,6 +135,7 @@ public class SvtServiceProxy implements ISvtService {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 13);
         event.start(otaDto);
         svtService.requestAlarm(vin);
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 }

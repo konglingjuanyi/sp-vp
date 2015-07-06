@@ -10,25 +10,23 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-4-23 11:17
- * modify date 2015-6-18 12:08
- * @version 0.8, 2015-6-18
+ * modify date 2015-7-6 14:15
+ * @version 0.9, 2015-7-6
  */
 public interface IEvent {
 
     /**
      * 开始事件
      * @param otaDto        OTA传输对象
-     * @return              事件实例ID
      */
-    Long start(OtaDto otaDto);
+    void start(OtaDto otaDto);
 
     /**
      * 开始事件
      * @param otaDto        OTA传输对象
      * @param paramMap      参数MAP
-     * @return              结果对象
      */
-    Long start(OtaDto otaDto, Map<String, Object> paramMap);
+    void start(OtaDto otaDto, Map<String, Object> paramMap);
 
     /**
      * 结束事件

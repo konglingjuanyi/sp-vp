@@ -1,14 +1,13 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.ReadConfigReqDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,12 +17,12 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-19 15:19
- * modify date 2015-6-29 12:57
- * @version 0.3, 2015-6-29
+ * modify date 2015-7-6 17:14
+ * @version 0.4, 2015-7-6
  */
 @Service
 @Qualifier("tboxConfigServiceProxy")
-public class TboxConfigServiceProxy implements ITboxConfigService {
+public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigService {
 
     @Autowired
     @Qualifier("tboxConfigService")
@@ -35,13 +34,9 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     @Override
     public void requestConfigUpdate(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 3);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         tboxConfigService.requestConfigUpdate(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "checkConfigUpdate");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
@@ -87,13 +82,9 @@ public class TboxConfigServiceProxy implements ITboxConfigService {
     @Override
     public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 8);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "checkConfigUpdate");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new ReadConfigReqDto(tboxConfigsettingIds));
         event.end(otaDto);
     }
 

@@ -1,6 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.IBcallService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -8,7 +7,6 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,12 +18,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 15:10
- * modify date 2015-6-26 10:16
- * @version 0.5, 2015-6-26
+ * modify date 2015-7-6 16:02
+ * @version 0.6, 2015-7-6
  */
 @Service
 @Qualifier("bcallServiceProxy")
-public class BcallServiceProxy implements IBcallService {
+public class BcallServiceProxy extends BaseProxy implements IBcallService {
 
     @Autowired
     @Qualifier("bcallService")
@@ -50,13 +48,9 @@ public class BcallServiceProxy implements IBcallService {
     @Override
     public void requestBcallStatus(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 3);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         bcallService.requestBcallStatus(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "bcallStatus");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
@@ -74,26 +68,18 @@ public class BcallServiceProxy implements IBcallService {
     @Override
     public void requestHangUp(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 5);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         bcallService.requestHangUp(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "hangUp");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 
     @Override
     public void requestCallBack(String vin, String callNumber) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 7);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         bcallService.requestCallBack(vin, callNumber);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "callBack");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto, new BcallRecordDto(callNumber));
         event.end(otaDto);
     }
 
@@ -107,13 +93,9 @@ public class BcallServiceProxy implements IBcallService {
     @Override
     public void requestCloseBcall(String vin) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 6);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         bcallService.requestCloseBcall(vin);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "closeBcall");
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
         event.end(otaDto);
     }
 

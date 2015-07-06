@@ -1,13 +1,11 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSONObject;
 import com.zxq.iov.cloud.sp.vp.api.IDiagnosticService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEventCallback;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.QueueUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,12 +17,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-24 13:21
- * modify date 2015-6-30 15:26
- * @version 0.2, 2015-6-30
+ * modify date 2015-7-6 16:03
+ * @version 0.3, 2015-7-6
  */
 @Service
 @Qualifier("diagnosticServiceProxy")
-public class DiagnosticServiceProxy implements IDiagnosticService, IEventCallback {
+public class DiagnosticServiceProxy extends BaseProxy implements IDiagnosticService, IEventCallback {
 
     @Autowired
     @Qualifier("diagnosticService")
@@ -36,14 +34,9 @@ public class DiagnosticServiceProxy implements IDiagnosticService, IEventCallbac
     @Override
     public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) {
         OtaDto otaDto = new OtaDto(vin, Constants.AID_DIAGNOSTIC, 1);
-        Long eventId = event.start(otaDto);
+        event.start(otaDto);
         diagnosticService.requestDiagnostic(vin, diagnosticDtos);
-        JSONObject msg = new JSONObject();
-        msg.put("eventId", eventId);
-        msg.put("owner", vin);
-        msg.put("method", "diagnostic");
-        msg.put("command", diagnosticDtos);
-        new QueueUtil().send(Constants.QUEUE_NAME, msg.toString());
+        sendQueue(otaDto);
     }
 
     @Override
