@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 呼叫类
  * @author 叶荣杰
  * create date 2015-6-11 9:23
- * modify date 2015-6-25 13:24
- * @version 0.3, 2015-6-25
+ * modify date 2015-7-9 11:00
+ * @version 0.4, 2015-7-9
  */
 @Entity()
 @Table(name = "TB_CALL")
@@ -39,6 +39,9 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "CALL_TYPE", precision = 4, scale = 0)
     private Integer callType;
 
+    @Column(name = "CRASH_SEVERITY", precision = 4, scale = 0)
+    private Integer crashSeverity;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "START_TIME", nullable = false, length = 7)
     private Date startTime;
@@ -54,6 +57,16 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
         this.tboxId = tboxId;
         this.type = type;
         this.callType = callType;
+        this.startTime = startTime;
+        this.status = RUNNDING_STATUS;
+    }
+
+    public Call(String vin, Long tboxId, Integer type, Integer callType, Integer crashSeverity, Date startTime) {
+        this.vin = vin;
+        this.tboxId = tboxId;
+        this.type = type;
+        this.callType = callType;
+        this.crashSeverity = crashSeverity;
         this.startTime = startTime;
         this.status = RUNNDING_STATUS;
     }
@@ -96,6 +109,14 @@ public class Call extends MyBaseEntity<Long> implements Serializable {
 
     public void setCallType(Integer callType) {
         this.callType = callType;
+    }
+
+    public Integer getCrashSeverity() {
+        return crashSeverity;
+    }
+
+    public void setCrashSeverity(Integer crashSeverity) {
+        this.crashSeverity = crashSeverity;
     }
 
     public Date getStartTime() {

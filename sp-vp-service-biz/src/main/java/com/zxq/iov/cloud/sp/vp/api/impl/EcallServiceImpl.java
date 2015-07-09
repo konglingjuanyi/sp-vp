@@ -4,7 +4,6 @@ import com.zxq.iov.cloud.sp.vp.api.IEcallService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.ecall.EcallRecordDtoAssembler;
@@ -27,8 +26,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:26
- * modify date 2015-7-2 10:53
- * @version 0.5, 2015-7-2
+ * modify date 2015-7-9 11:27
+ * @version 0.6, 2015-7-9
  */
 @Service
 @Qualifier("ecallService")
@@ -49,9 +48,9 @@ public class EcallServiceImpl implements IEcallService {
 
     @Override
     public EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
-        Long callId = updateEcall(otaDto, vehiclePosDtos, ecallType, tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
+                                     Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
+        Long callId = updateEcall(otaDto, vehiclePosDtos, ecallType, crashSeverity, tboxBatteryStatus,
+                vehicleBatteryStatus);
         String callNumber = "4008888888"; // 此处默认的呼叫号码以什么形式获得还不确定
         return new EcallRecordDtoAssembler().toDto(callRecordDaoService.createCallRecord(
                 new CallRecord(callId, callNumber, otaDto.getEventCreateTime())));
@@ -64,8 +63,7 @@ public class EcallServiceImpl implements IEcallService {
 
     @Override
     public Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         Call call;
         List<Call> list = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
         if(list.size() > 0) {
@@ -73,7 +71,8 @@ public class EcallServiceImpl implements IEcallService {
         }
         else {
             call = callDaoService.createCall(new Call(tboxDaoService.findVinById(otaDto.getTboxId()),
-                    otaDto.getTboxId(), Constants.CALL_TYPE_ECALL, ecallType, otaDto.getEventCreateTime()));
+                    otaDto.getTboxId(), Constants.CALL_TYPE_ECALL, ecallType, crashSeverity,
+                    otaDto.getEventCreateTime()));
         }
         // 位置状态
         for(VehiclePosDto vehiclePosDto : vehiclePosDtos) {
@@ -85,7 +84,7 @@ public class EcallServiceImpl implements IEcallService {
         vehicleStatusDtos.add(new VehicleStatusDto("tboxBatteryStatus", tboxBatteryStatus));
         vehicleStatusDtos.add(new VehicleStatusDto("vehicleBatteryStatus", vehicleBatteryStatus));
         statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ECALL,
-                call.getId(), null, vehicleStatusDtos, vehicleAlertDtos);
+                call.getId(), null, vehicleStatusDtos, null);
         return call.getId();
     }
 

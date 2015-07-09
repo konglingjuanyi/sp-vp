@@ -2,7 +2,6 @@ package com.zxq.iov.cloud.sp.vp.api;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
  * 安防服务 eCall接口
  * @author 叶荣杰
  * create date 2015-6-12 11:03
- * modify date 2015-6-25 15:32
- * @version 0.2, 2015-6-25
+ * modify date 2015-7-9 10:53
+ * @version 0.3, 2015-7-9
  */
 public interface IEcallService {
 
@@ -22,14 +21,13 @@ public interface IEcallService {
      * @param otaDto                OTA传输对象
      * @param vehiclePosDtos        车辆GPS位置传输对象列表
      * @param ecallType             呼叫方式
+     * @param crashSeverity         严重程度
      * @param tboxBatteryStatus     TBOX电池状态
      * @param vehicleBatteryStatus  车辆电池状态
-     * @param vehicleAlertDtos      车辆报警传输对象列表
      * @return                      bCall通话传输对象
      */
     EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                              List<VehicleAlertDto> vehicleAlertDtos);
+                              Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus);
 
     /**
      * 请求eCall状态
@@ -42,14 +40,13 @@ public interface IEcallService {
      * @param otaDto                OTA传输对象
      * @param vehiclePosDtos        车辆GPS位置传输对象列表
      * @param ecallType             呼叫方式
+     * @param crashSeverity         严重程度
      * @param tboxBatteryStatus     TBOX电池状态
      * @param vehicleBatteryStatus  车辆电池状态
-     * @param vehicleAlertDtos      车辆报警传输对象列表
      * @return                      呼叫对象ID
      */
     Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                     List<VehicleAlertDto> vehicleAlertDtos);
+                     Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus);
 
     /**
      * 请求挂断通话

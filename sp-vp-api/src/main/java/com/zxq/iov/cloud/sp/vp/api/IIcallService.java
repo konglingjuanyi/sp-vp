@@ -2,7 +2,6 @@ package com.zxq.iov.cloud.sp.vp.api;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.icall.IcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
  * 安防服务 iCall接口
  * @author 叶荣杰
  * create date 2015-6-12 15:11
- * modify date 2015-6-25 15:36
- * @version 0.2, 2015-6-25
+ * modify date 2015-7-9 13:27
+ * @version 0.3, 2015-7-9
  */
 public interface IIcallService {
 
@@ -24,12 +23,10 @@ public interface IIcallService {
      * @param icallType             呼叫方式
      * @param tboxBatteryStatus     TBOX电池状态
      * @param vehicleBatteryStatus  车辆电池状态
-     * @param vehicleAlertDtos      车辆报警传输对象列表
      * @return                      bCall通话传输对象
      */
     IcallRecordDto startIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                              List<VehicleAlertDto> vehicleAlertDtos);
+                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus);
 
     /**
      * 请求iCall状态
@@ -44,12 +41,10 @@ public interface IIcallService {
      * @param icallType             呼叫方式
      * @param tboxBatteryStatus     TBOX电池状态
      * @param vehicleBatteryStatus  车辆电池状态
-     * @param vehicleAlertDtos      车辆报警传输对象列表
      * @return                      呼叫对象ID
      */
     Long updateIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                     List<VehicleAlertDto> vehicleAlertDtos);
+                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus);
 
     /**
      * 请求挂断通话

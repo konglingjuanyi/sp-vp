@@ -9,6 +9,7 @@
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
 		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
 		<result column="CALL_TYPE" jdbcType="DECIMAL" property="callType"/>
+		<result column="CRASH_SEVERITY" jdbcType="DECIMAL" property="crashSeverity"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>

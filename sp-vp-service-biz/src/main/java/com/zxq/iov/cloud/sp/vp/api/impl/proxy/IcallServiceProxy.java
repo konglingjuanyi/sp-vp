@@ -3,7 +3,6 @@ package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 import com.zxq.iov.cloud.sp.vp.api.IIcallService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.icall.IcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
@@ -18,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 16:11
- * modify date 2015-7-6 16:07
- * @version 0.4, 2015-7-6
+ * modify date 2015-7-9 13:30
+ * @version 0.5, 2015-7-9
  */
 @Service
 @Qualifier("icallServiceProxy")
@@ -33,11 +32,10 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public IcallRecordDto startIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
+                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         event.start(otaDto);
         IcallRecordDto icallRecordDto = icallService.startIcall(otaDto, vehiclePosDtos, icallType,
-                tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
+                tboxBatteryStatus, vehicleBatteryStatus);
         event.end(otaDto, icallRecordDto);
         otaDto.setMid(2);
         event.start(otaDto);
@@ -56,11 +54,10 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public Long updateIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         event.start(otaDto);
         Long callId = icallService.updateIcall(otaDto, vehiclePosDtos, icallType, tboxBatteryStatus,
-                vehicleBatteryStatus, vehicleAlertDtos);
+                vehicleBatteryStatus);
         event.end(otaDto, callId);
         return callId;
     }

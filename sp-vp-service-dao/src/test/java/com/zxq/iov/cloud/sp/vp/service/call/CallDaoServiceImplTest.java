@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 9:50
- * modify date 2015-6-25 13:50
- * @version 0.2, 2015-6-25
+ * modify date 2015-7-9 11:03
+ * @version 0.3, 2015-7-9
  */
 @Transactional
 public class CallDaoServiceImplTest extends BaseServiceTestCase {
@@ -33,7 +33,9 @@ public class CallDaoServiceImplTest extends BaseServiceTestCase {
         Long tboxId = 1L;
         Integer type = 1;
         Integer callType = 1;
-        Assert.assertNotNull(callDaoService.createCall(new Call(vin, tboxId, type, callType, new Date())));
+        Integer crashSeverity = 1;
+        Assert.assertNotNull(callDaoService.createCall(new Call(vin, tboxId, type, callType, crashSeverity,
+                new Date())));
     }
 
     @Test

@@ -4,7 +4,6 @@ import com.zxq.iov.cloud.sp.vp.api.IIcallService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.icall.IcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.icall.IcallRecordDtoAssembler;
@@ -27,8 +26,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 15:30
- * modify date 2015-7-2 10:55
- * @version 0.5, 2015-7-2
+ * modify date 2015-7-9 13:28
+ * @version 0.6, 2015-7-9
  */
 @Service
 @Qualifier("icallService")
@@ -49,9 +48,8 @@ public class IcallServiceImpl implements IIcallService {
 
     @Override
     public IcallRecordDto startIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
-        Long callId = updateIcall(otaDto, vehiclePosDtos, icallType, tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
+                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
+        Long callId = updateIcall(otaDto, vehiclePosDtos, icallType, tboxBatteryStatus, vehicleBatteryStatus);
         String callNumber = "4008888888"; // 此处默认的呼叫号码以什么形式获得还不确定
         return new IcallRecordDtoAssembler().toDto(callRecordDaoService.createCallRecord(
                 new CallRecord(callId, callNumber, otaDto.getEventCreateTime())));
@@ -64,8 +62,7 @@ public class IcallServiceImpl implements IIcallService {
 
     @Override
     public Long updateIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         Call call;
         List<Call> list = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
         if(list.size() > 0) {
@@ -85,7 +82,7 @@ public class IcallServiceImpl implements IIcallService {
         vehicleStatusDtos.add(new VehicleStatusDto("tboxBatteryStatus", tboxBatteryStatus));
         vehicleStatusDtos.add(new VehicleStatusDto("vehicleBatteryStatus", vehicleBatteryStatus));
         statusService.updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_ICALL,
-                call.getId(), null, vehicleStatusDtos, vehicleAlertDtos);
+                call.getId(), null, vehicleStatusDtos, null);
         return call.getId();
     }
 

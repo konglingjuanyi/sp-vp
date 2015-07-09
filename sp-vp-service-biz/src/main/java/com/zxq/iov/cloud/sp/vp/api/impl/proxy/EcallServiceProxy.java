@@ -3,7 +3,6 @@ package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 import com.zxq.iov.cloud.sp.vp.api.IEcallService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.ecall.EcallRecordDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
@@ -18,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 13:45
- * modify date 2015-7-6 16:06
- * @version 0.4, 2015-7-6
+ * modify date 2015-7-9 11:24
+ * @version 0.5, 2015-7-9
  */
 @Service
 @Qualifier("ecallServiceProxy")
@@ -33,11 +32,10 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
+                                     Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         event.start(otaDto);
-        EcallRecordDto ecallRecordDto = ecallService.startEcall(otaDto, vehiclePosDtos, ecallType,
-                tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
+        EcallRecordDto ecallRecordDto = ecallService.startEcall(otaDto, vehiclePosDtos, ecallType, crashSeverity,
+                tboxBatteryStatus, vehicleBatteryStatus);
         event.end(otaDto, ecallRecordDto);
         otaDto.setMid(2);
         event.start(otaDto);
@@ -56,11 +54,10 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
         event.start(otaDto);
-        Long callId = ecallService.updateEcall(otaDto, vehiclePosDtos, ecallType, tboxBatteryStatus,
-                vehicleBatteryStatus, vehicleAlertDtos);
+        Long callId = ecallService.updateEcall(otaDto, vehiclePosDtos, ecallType, crashSeverity, tboxBatteryStatus,
+                vehicleBatteryStatus);
         event.end(otaDto, callId);
         return callId;
     }
