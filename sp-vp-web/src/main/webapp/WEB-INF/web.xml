@@ -12,7 +12,7 @@
     </context-param>
 
     <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        <listener-class>com.saicmotor.telematics.framework.core.listener.SpringContextInitializeListener</listener-class>
     </listener>
 
 </web-app>

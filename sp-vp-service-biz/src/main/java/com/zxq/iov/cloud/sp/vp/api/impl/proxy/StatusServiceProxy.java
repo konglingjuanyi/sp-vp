@@ -53,6 +53,14 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     }
 
     @Override
+    public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos,
+                                    List<VehicleAlertDto> vehicleAlertDtos) {
+        return statusService.updateVehicleStatus(otaDto, sourceType, sourceId, vehiclePosDto,
+                vehicleStatusDtos, vehicleAlertDtos);
+    }
+
+    @Override
     public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) {
         event.start(otaDto);
         statusService.logVehicleAlert(otaDto, vehicleAlertDtos);

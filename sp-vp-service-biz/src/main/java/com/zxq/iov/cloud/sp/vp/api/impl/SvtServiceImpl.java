@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.ISvtService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -39,7 +40,8 @@ public class SvtServiceImpl implements ISvtService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    private StatusServiceImpl statusService;
+    @Qualifier("statusService")
+    private IStatusService statusService;
     @Autowired
     private IEvent event;
 

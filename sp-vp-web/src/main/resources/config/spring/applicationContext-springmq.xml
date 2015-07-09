@@ -17,16 +17,16 @@
         </rabbit:bindings>
     </rabbit:direct-exchange>
 
-    <bean id="avnActivateConvertor"  class="org.springframework.amqp.support.converter.JsonMessageConverter">
-        <property name="classMapper">
-            <bean class="org.springframework.amqp.support.converter.DefaultClassMapper">
-                 <property name="defaultType" value="com.zxq.iov.cloud.sp.vp.api.msg.AvnActivateMessage"/>
-            </bean>
-        </property>
-    </bean>
+    <!--<bean id="avnActivateConvertor"  class="org.springframework.amqp.support.converter.JsonMessageConverter">-->
+        <!--<property name="classMapper">-->
+            <!--<bean class="org.springframework.amqp.support.converter.DefaultClassMapper">-->
+                 <!--<property name="defaultType" value="com.zxq.iov.cloud.sp.vp.api.msg.AvnActivateMessage"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+    <!--</bean>-->
 
     <!-- spring template声明-->
-    <rabbit:template id="avnActivateTemplate" exchange="avnActivateExchange" routing-key="TemplateQueue.AvnActivate"
-          connection-factory="rabbitConnectionFactory"  message-converter="avnActivateConvertor"/>
+    <!--<rabbit:template id="avnActivateTemplate" exchange="avnActivateExchange" routing-key="TemplateQueue.AvnActivate"-->
+          <!--connection-factory="rabbitConnectionFactory"  message-converter="avnActivateConvertor"/>-->
 
 </beans>

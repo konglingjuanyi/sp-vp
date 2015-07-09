@@ -18,15 +18,15 @@
 
 	<!--  cache config start -->
     <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <bean id="vehiclePackageDtoRedisTemplate"
-          class="org.springframework.data.redis.core.RedisTemplate"
-          p:connectionFactory-ref="jedisConnFactory"
-          p:keySerializer-ref="stringSerializer"
-          p:hashKeySerializer-ref="stringSerializer"
-          p:hashValueSerializer-ref="vehiclePackageDtoSerializer" />
-    <bean id="vehiclePackageDtoSerializer" class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer">
-        <constructor-arg value="com.zxq.iov.cloud.sp.vp.api.dto.VehiclePackageDto"></constructor-arg>
-    </bean>
+    <!--<bean id="vehiclePackageDtoRedisTemplate"-->
+          <!--class="org.springframework.data.redis.core.RedisTemplate"-->
+          <!--p:connectionFactory-ref="jedisConnFactory"-->
+          <!--p:keySerializer-ref="stringSerializer"-->
+          <!--p:hashKeySerializer-ref="stringSerializer"-->
+          <!--p:hashValueSerializer-ref="vehiclePackageDtoSerializer" />-->
+    <!--<bean id="vehiclePackageDtoSerializer" class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer">-->
+        <!--<constructor-arg value="com.zxq.iov.cloud.sp.vp.api.dto.VehiclePackageDto"></constructor-arg>-->
+    <!--</bean>-->
     <!--  cache config end -->
     
 </beans>

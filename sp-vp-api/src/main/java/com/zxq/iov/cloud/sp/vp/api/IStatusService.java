@@ -37,6 +37,21 @@ public interface IStatusService {
                              List<VehicleAlertDto> vehicleAlertDtos);
 
     /**
+     * 更新车辆状态
+     * @param otaDto            OTA传输对象
+     * @param sourceType        来源类型
+     * @param sourceId          来源ID
+     * @param vehiclePosDto     车辆位置传输对象
+     * @param vehicleStatusDtos 车辆状态传输对象列表
+     * @param vehicleAlertDtos  车辆报警传输对象列表
+     * @return                  车辆状态信息ID
+     */
+    Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
+                             VehiclePosDto vehiclePosDto,
+                             List<VehicleStatusDto> vehicleStatusDtos,
+                             List<VehicleAlertDto> vehicleAlertDtos);
+
+    /**
      * 记录车辆警告信息
      * @param otaDto            OTA传输对象
      * @param vehicleAlertDtos  车辆报警信息传输对象列表

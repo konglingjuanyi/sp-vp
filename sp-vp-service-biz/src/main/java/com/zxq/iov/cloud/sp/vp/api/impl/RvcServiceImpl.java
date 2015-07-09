@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
+import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -31,7 +32,8 @@ public class RvcServiceImpl implements IRvcService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    private StatusServiceImpl statusService;
+    @Qualifier("statusService")
+    private IStatusService statusService;
 
     private static final String RVC_STATUS_PENDING = "0";
     private static final String RVC_STATUS_COMPLETED = "2";

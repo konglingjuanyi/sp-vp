@@ -28,8 +28,8 @@
     <!--<dubbo:service interface="com.zxq.iov.cloud.sp.vp.mgmt.api.IVehicleManager" ref="vehicleManager" version="1.1" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>-->
 
     <!-- Biz Service -->
-    <bean id="bcallServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.BcallServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IBcallService" ref="bcallServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="bcallService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.BcallServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IBcallService" ref="bcallService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
     <bean id="diagnosticServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.DiagnosticServiceProxy" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IDiagnosticService" ref="diagnosticServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>

@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IBcallService;
+import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
@@ -40,7 +41,8 @@ public class BcallServiceImpl implements IBcallService {
     @Autowired
     private ITboxDaoService tboxDaoService;
     @Autowired
-    private StatusServiceImpl statusService;
+    @Qualifier("statusService")
+    private IStatusService statusService;
 
     private static final Integer RUNNING_STATUS = 1;
     private static final Integer END_STATUS = 2;

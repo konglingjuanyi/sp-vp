@@ -55,6 +55,7 @@ public class StatusServiceImpl implements IStatusService {
                 vehiclePosDto, vehicleStatusDtos, vehicleAlertDtos);
     }
 
+    @Override
     public Long updateVehicleStatus(OtaDto otaDto, Integer sourceType, Long sourceId,
                                     VehiclePosDto vehiclePosDto,
                                     List<VehicleStatusDto> vehicleStatusDtos,

@@ -16,5 +16,9 @@
 	    <groupId>com.zxq.iov.cloud.sp</groupId>
 	    <artifactId>sp-vp-service-biz</artifactId>
 	</dependency>
+	<dependency>
+		<groupId>com.saicmotor.telematics.framework.core</groupId>
+		<artifactId>core-web</artifactId>
+	</dependency>
 </dependencies>
 </project>
