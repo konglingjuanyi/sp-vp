@@ -31,11 +31,11 @@
     <bean id="bcallService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.BcallServiceProxy" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IBcallService" ref="bcallService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="diagnosticServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.DiagnosticServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IDiagnosticService" ref="diagnosticServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="diagnosticService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.DiagnosticServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IDiagnosticService" ref="diagnosticService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="ecallServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.EcallServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IEcallService" ref="ecallServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="ecallService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.EcallServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IEcallService" ref="ecallService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
     <bean id="eventDefinitionService" class="com.zxq.iov.cloud.sp.vp.api.impl.EventDefinitionServiceImpl" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IEventDefinitionService" ref="eventDefinitionService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
@@ -43,25 +43,25 @@
     <bean id="eventService" class="com.zxq.iov.cloud.sp.vp.api.impl.EventServiceImpl" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IEventService" ref="eventService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="icallServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.IcallServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IIcallService" ref="icallServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="icallService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.IcallServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IIcallService" ref="icallService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="journeyServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.JourneyServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IJourneyService" ref="journeyServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="journeyService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.JourneyServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IJourneyService" ref="journeyService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="remoteKeyServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.RemoteKeyServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService" ref="remoteKeyServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="remoteKeyService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.RemoteKeyServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService" ref="remoteKeyService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="rvcServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.RvcServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IRvcService" ref="rvcServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="rvcService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.RvcServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IRvcService" ref="rvcService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="statusServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.StatusServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IStatusService" ref="statusServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="statusService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.StatusServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.IStatusService" ref="statusService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="svtServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.SvtServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.ISvtService" ref="svtServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="svtService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.SvtServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.ISvtService" ref="svtService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
-    <bean id="tboxConfigServiceProxy" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.TboxConfigServiceProxy" />
-    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.ITboxConfigService" ref="tboxConfigServiceProxy" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
+    <bean id="tboxConfigService" class="com.zxq.iov.cloud.sp.vp.api.impl.proxy.TboxConfigServiceProxy" />
+    <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.ITboxConfigService" ref="tboxConfigService" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
 </beans>
