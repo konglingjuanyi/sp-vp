@@ -2,6 +2,7 @@ package com.zxq.iov.cloud.sp.vp.api.dto.svt;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * modify date 2015-6-26 12:01
  * @version 0.3, 2015-6-26
  */
-public class StolenAlarmDto {
+public class StolenAlarmDto implements Serializable {
 
     private Integer alarmTypeId;
     private Boolean trigAlarmSts;

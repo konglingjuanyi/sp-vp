@@ -1,5 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.status;
 
+import java.io.Serializable;
+
 /**
  * 安防 车辆状态传输对象
  *
@@ -8,7 +10,7 @@ package com.zxq.iov.cloud.sp.vp.api.dto.status;
  * modify date 2015-6-24 16:54
  * @version 0.3, 2015-6-24
  */
-public class VehicleStatusDto {
+public class VehicleStatusDto implements Serializable {
 
     private String code;
     private Integer value;

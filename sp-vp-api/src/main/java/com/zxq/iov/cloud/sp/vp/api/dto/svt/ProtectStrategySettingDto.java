@@ -7,29 +7,34 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
  *
  * @author 叶荣杰
  * create date 2015-6-16 11:05
- * modify date
- * @version 0.1, 2015-6-16
+ * modify date 2015-7-10 11:22
+ * @version 0.2, 2015-7-10
  */
 public class ProtectStrategySettingDto extends OtaDto {
 
-    private Integer immoStatus;
-    private String failureReason;
+    private Integer alarmTypeId;
+    private Boolean alarmEnabled;
 
     public ProtectStrategySettingDto() {}
 
-    public Integer getImmoStatus() {
-        return immoStatus;
+    public ProtectStrategySettingDto(Integer alarmTypeId, Boolean alarmEnabled) {
+        this.alarmTypeId = alarmTypeId;
+        this.alarmEnabled = alarmEnabled;
     }
 
-    public void setImmoStatus(Integer immoStatus) {
-        this.immoStatus = immoStatus;
+    public Integer getAlarmTypeId() {
+        return alarmTypeId;
     }
 
-    public String getFailureReason() {
-        return failureReason;
+    public void setAlarmTypeId(Integer alarmTypeId) {
+        this.alarmTypeId = alarmTypeId;
     }
 
-    public void setFailureReason(String failureReason) {
-        this.failureReason = failureReason;
+    public Boolean isAlarmEnabled() {
+        return alarmEnabled;
+    }
+
+    public void setAlarmEnabled(Boolean alarmEnabled) {
+        this.alarmEnabled = alarmEnabled;
     }
 }

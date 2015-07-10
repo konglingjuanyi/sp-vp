@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.svt;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * modify date
  * @version 0.1, 2015-7-6
  */
-public class UpdateProtectStrategyReqDto {
+public class UpdateProtectStrategyReqDto implements Serializable {
 
     private Date startTime;
     private Date endTime;

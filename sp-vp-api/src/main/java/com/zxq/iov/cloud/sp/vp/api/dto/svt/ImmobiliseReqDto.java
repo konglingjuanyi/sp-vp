@@ -1,5 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.svt;
 
+import java.io.Serializable;
+
 /**
  * 安防 固定车辆请求传输对象
  *
@@ -8,7 +10,7 @@ package com.zxq.iov.cloud.sp.vp.api.dto.svt;
  * modify date
  * @version 0.1, 2015-7-6
  */
-public class ImmobiliseReqDto {
+public class ImmobiliseReqDto implements Serializable {
 
     private Integer immoStatus;
 

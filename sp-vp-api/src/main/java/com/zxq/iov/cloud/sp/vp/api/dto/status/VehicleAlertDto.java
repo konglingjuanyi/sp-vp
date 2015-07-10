@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.status;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * modify date 2015-6-24 15:24
  * @version 0.3, 2015-6-24
  */
-public class VehicleAlertDto {
+public class VehicleAlertDto implements Serializable {
 
     private Integer alertId;
     private Date alertTime;
