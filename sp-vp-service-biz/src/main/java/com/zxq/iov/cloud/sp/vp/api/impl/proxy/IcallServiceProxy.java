@@ -45,7 +45,7 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public void requestIcallStatus(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ICALL, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 3);
         event.start(otaDto);
         icallService.requestIcallStatus(vin);
         sendQueue(otaDto);
@@ -64,7 +64,7 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public void requestHangUp(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ICALL, 5);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 5);
         event.start(otaDto);
         icallService.requestHangUp(vin);
         sendQueue(otaDto);
@@ -73,7 +73,7 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public void requestCallBack(String vin, String callNumber) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ICALL, 7);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 7);
         event.start(otaDto);
         icallService.requestCallBack(vin, callNumber);
         sendQueue(otaDto, new IcallRecordDto(callNumber));
@@ -89,7 +89,7 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
 
     @Override
     public void requestCloseIcall(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ICALL, 6);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 6);
         event.start(otaDto);
         icallService.requestCloseIcall(vin);
         sendQueue(otaDto);

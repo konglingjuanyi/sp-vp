@@ -35,7 +35,7 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
 
     @Override
     public void requestVehicleStatus(String vin, Integer statusType) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_STATUS, 1);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_STATUS, 1);
         event.start(otaDto);
         statusService.requestVehicleStatus(vin, statusType);
         sendQueue(otaDto, new VehicleStatusReqDto(statusType));

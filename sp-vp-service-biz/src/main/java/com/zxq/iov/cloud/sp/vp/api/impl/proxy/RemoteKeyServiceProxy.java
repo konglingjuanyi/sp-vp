@@ -34,7 +34,7 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
     @Override
     public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_REMOTE_KEY, 1);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 1);
         event.start(otaDto);
         remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, keyValidityStartTime,
                 keyValidityEndTime);
@@ -51,7 +51,7 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
 
     @Override
     public void requestDeleteKey(String vin, Integer keyReference) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_REMOTE_KEY, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 3);
         event.start(otaDto);
         remoteKeyService.requestDeleteKey(vin, keyReference);
         sendQueue(otaDto, new DeleteKeyDto(keyReference));

@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 15:10
- * modify date 2015-7-6 16:02
- * @version 0.6, 2015-7-6
+ * modify date 2015-7-13 13:17
+ * @version 0.7, 2015-7-13
  */
 @Service
 @Qualifier("bcallServiceProxy")
@@ -47,7 +47,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
 
     @Override
     public void requestBcallStatus(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 3);
         event.start(otaDto);
         bcallService.requestBcallStatus(vin);
         sendQueue(otaDto);
@@ -67,7 +67,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
 
     @Override
     public void requestHangUp(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 5);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 5);
         event.start(otaDto);
         bcallService.requestHangUp(vin);
         sendQueue(otaDto);
@@ -76,7 +76,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
 
     @Override
     public void requestCallBack(String vin, String callNumber) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 7);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 7);
         event.start(otaDto);
         bcallService.requestCallBack(vin, callNumber);
         sendQueue(otaDto, new BcallRecordDto(callNumber));
@@ -92,7 +92,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
 
     @Override
     public void requestCloseBcall(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 6);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 6);
         event.start(otaDto);
         bcallService.requestCloseBcall(vin);
         sendQueue(otaDto);

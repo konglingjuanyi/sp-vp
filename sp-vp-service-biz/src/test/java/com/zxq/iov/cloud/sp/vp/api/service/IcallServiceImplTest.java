@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 15:50
- * modify date 2015-6-25 16:19
- * @version 0.2, 2015-6-25
+ * modify date 2015-7-10 14:05
+ * @version 0.3, 2015-7-10
  */
 @Transactional
 public class IcallServiceImplTest extends BaseServiceTestCase {
@@ -39,7 +39,7 @@ public class IcallServiceImplTest extends BaseServiceTestCase {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ICALL, 1);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
-        icallService.startIcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
+        icallService.startIcall(otaDto, vehiclePosDtos, 0, 50, 60);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class IcallServiceImplTest extends BaseServiceTestCase {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ICALL, 4);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
-        icallService.updateIcall(otaDto, vehiclePosDtos, 0, 50, 60, null);
+        icallService.updateIcall(otaDto, vehiclePosDtos, 0, 50, 60);
     }
 
     @Test

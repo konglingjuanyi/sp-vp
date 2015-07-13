@@ -8,8 +8,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-4 10:46
- * modify date 2015-7-6 13:45
- * @version 0.10, 2015-7-6
+ * modify date 2015-7-13 13:14
+ * @version 0.11, 2015-7-13
  */
 public class OtaDto implements Serializable {
 
@@ -46,6 +46,14 @@ public class OtaDto implements Serializable {
     }
 
     public OtaDto(String vin, String aid, Integer mid) {
+        this.vin = vin;
+        this.aid = aid;
+        this.mid = mid;
+        this.eventCreateTime = new Date();
+    }
+
+    public OtaDto(Long tboxId, String vin, String aid, Integer mid) {
+        this.tboxId = tboxId;
         this.vin = vin;
         this.aid = aid;
         this.mid = mid;

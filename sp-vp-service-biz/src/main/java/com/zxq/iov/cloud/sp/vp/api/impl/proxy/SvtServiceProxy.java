@@ -46,7 +46,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 3);
         event.start(otaDto);
         svtService.requestTrackSetting(vin, trackInterval, tracks);
         sendQueue(otaDto, new TrackSettingReqDto(trackInterval, tracks));
@@ -55,7 +55,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestSingleTrack(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 4);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 4);
         event.start(otaDto);
         svtService.requestSingleTrack(vin);
         sendQueue(otaDto);
@@ -64,7 +64,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestCloseAlarm(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 5);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 5);
         event.start(otaDto);
         svtService.requestCloseAlarm(vin);
         sendQueue(otaDto);
@@ -85,7 +85,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestAuthKey(String vin, Integer keyId) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 7);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 7);
         event.start(otaDto);
         svtService.requestAuthKey(vin, keyId);
         sendQueue(otaDto, new AuthKeyReqDto(keyId));
@@ -101,7 +101,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestImmobilise(String vin, Integer immoStatus) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 9);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 9);
         event.start(otaDto);
         svtService.requestImmobilise(vin, immoStatus);
         sendQueue(otaDto, new ImmobiliseReqDto(immoStatus));
@@ -118,7 +118,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
     @Override
     public void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
                                              List<ProtectStrategySettingDto> protectStrategySettingDtos) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 11);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 11);
         event.start(otaDto);
         svtService.requestUpdateProtectStrategy(vin, startTime, endTime, protectStrategySettingDtos);
         sendQueue(otaDto, new UpdateProtectStrategyReqDto(startTime, endTime, protectStrategySettingDtos));
@@ -132,7 +132,7 @@ public class SvtServiceProxy extends BaseProxy implements ISvtService {
 
     @Override
     public void requestAlarm(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_SVT, 13);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 13);
         event.start(otaDto);
         svtService.requestAlarm(vin);
         sendQueue(otaDto);

@@ -33,7 +33,7 @@ public class DiagnosticServiceProxy extends BaseProxy implements IDiagnosticServ
 
     @Override
     public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_DIAGNOSTIC, 1);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_DIAGNOSTIC, 1);
         event.start(otaDto);
         diagnosticService.requestDiagnostic(vin, diagnosticDtos);
         sendQueue(otaDto);

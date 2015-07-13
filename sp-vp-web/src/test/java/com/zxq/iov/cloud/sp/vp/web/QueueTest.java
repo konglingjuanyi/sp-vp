@@ -1,28 +1,28 @@
-package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
+package com.zxq.iov.cloud.sp.vp.web;
 
 import com.alibaba.dubbo.common.json.JSON;
+import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.ServiceMessage;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
+import org.junit.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
- * 安防 基础代理类
+ * 安防 队列测试类
  *
  * @author 叶荣杰
- * create date 2015-7-6 15:33
- * modify date 2015-7-13 11:32
- * @version 0.3, 2015-7-13
+ * create date 2015-7-13 11:29
+ * modify date
+ * @version 0.1, 2015-7-13
  */
-public class BaseProxy {
-
-    @Autowired
-    private ITboxDaoService tboxDaoService;
+@Transactional
+public class QueueTest extends BaseServiceTestCase {
 
     @Resource(name = "tboxAppServiceTemplate")
     private RabbitTemplate tboxAppServiceTemplate;
@@ -43,8 +43,12 @@ public class BaseProxy {
         }
     }
 
-    protected Long getTboxId(String vin) {
-        return tboxDaoService.findTboxIdByVin(vin);
+    @Test
+    @Rollback(false)
+    public void testRequestBcallStatus() {
+        String vin = "1";
+        OtaDto otaDto = new OtaDto(vin, Constants.AID_BCALL, 3);
+        sendQueue(otaDto);
     }
 
 }

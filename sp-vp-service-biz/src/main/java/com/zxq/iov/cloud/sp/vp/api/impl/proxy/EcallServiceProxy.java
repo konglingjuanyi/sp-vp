@@ -45,7 +45,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public void requestEcallStatus(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 3);
         event.start(otaDto);
         ecallService.requestEcallStatus(vin);
         sendQueue(otaDto);
@@ -64,7 +64,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public void requestHangUp(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 5);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 5);
         event.start(otaDto);
         ecallService.requestHangUp(vin);
         sendQueue(otaDto);
@@ -73,7 +73,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public void requestCallBack(String vin, String callNumber) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 7);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 7);
         event.start(otaDto);
         ecallService.requestCallBack(vin, callNumber);
         sendQueue(otaDto, new EcallRecordDto(callNumber));
@@ -89,7 +89,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public void requestCloseEcall(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_ECALL, 6);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 6);
         event.start(otaDto);
         ecallService.requestCloseEcall(vin);
         sendQueue(otaDto);

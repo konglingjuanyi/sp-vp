@@ -8,12 +8,12 @@ import java.util.TreeMap;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:31
- * modify date 2015-6-29 10:33
- * @version 0.9, 2015-6-29
+ * modify date 2015-7-13 11:31
+ * @version 0.10, 2015-7-13
  */
 public class Constants {
 
-	public static final String QUEUE_NAME = "";
+	public static final String QUEUE_ROUTING_KEY = "AppTBOXServiceQueue.AV1.0";
 
 	public static final Integer CALL_TYPE_BCALL = 1;
 	public static final Integer CALL_TYPE_ECALL = 2;

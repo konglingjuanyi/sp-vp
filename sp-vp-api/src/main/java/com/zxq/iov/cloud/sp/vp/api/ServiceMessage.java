@@ -14,6 +14,8 @@ public class ServiceMessage extends OtaDto {
 
     private String appData;
 
+    public ServiceMessage() {}
+
     public ServiceMessage(OtaDto otaDto) {
         setAid(otaDto.getAid());
         setMid(otaDto.getMid());

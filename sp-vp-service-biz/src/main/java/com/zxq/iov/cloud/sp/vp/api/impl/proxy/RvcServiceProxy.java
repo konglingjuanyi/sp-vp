@@ -46,7 +46,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
 
     @Override
     public Long requestControl(String vin, String command, String parameter) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_RVC, 1);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", command);
         paramMap.put("cancelFlag", 0);
@@ -77,7 +77,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
                 command, RUNNING_STATUS);
         if(list.size() > 0) {
-            OtaDto otaDto = new OtaDto(vin, Constants.AID_RVC, 1);
+            OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
             Long eventId = list.get(0).getEventId();
             otaDto.setEventId(eventId);
             Map<String, Object> paramMap = new HashMap<>();

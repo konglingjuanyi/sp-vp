@@ -33,7 +33,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
 
     @Override
     public void requestConfigUpdate(String vin) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 3);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 3);
         event.start(otaDto);
         tboxConfigService.requestConfigUpdate(vin);
         sendQueue(otaDto);
@@ -81,7 +81,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
 
     @Override
     public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
-        OtaDto otaDto = new OtaDto(vin, Constants.AID_CONFIGURATION, 8);
+        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 8);
         event.start(otaDto);
         tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
         sendQueue(otaDto, new ReadConfigReqDto(tboxConfigsettingIds));
