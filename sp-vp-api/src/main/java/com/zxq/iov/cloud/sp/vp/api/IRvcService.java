@@ -6,13 +6,14 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防服务 远程控制接口
  * @author 叶荣杰
  * create date 2015-6-17 11:18
- * modify date 2015-6-29 9:55
- * @version 0.3, 2015-6-29
+ * modify date 2015-7-14 14:21
+ * @version 0.4, 2015-7-14
  */
 public interface IRvcService {
 
@@ -20,10 +21,10 @@ public interface IRvcService {
      * 请求控制
      * @param vin               车辆唯一码
      * @param command           命令代码
-     * @param parameter         命令参数
+     * @param parameters        命令参数
      * @return                  控制命令ID
      */
-    Long requestControl(String vin, String command, String parameter);
+    Long requestControl(String vin, String command, List<Map<String, Object>> parameters);
 
     /**
      * 取消控制

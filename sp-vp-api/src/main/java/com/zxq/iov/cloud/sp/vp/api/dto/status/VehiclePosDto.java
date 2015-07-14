@@ -8,8 +8,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-5-13 14:22
- * modify date 2015-6-24 14:22
- * @version 0.3, 2015-6-24
+ * modify date 2015-7-14 13:11
+ * @version 0.4, 2015-7-14
  */
 public class VehiclePosDto implements Serializable {
 
@@ -24,6 +24,12 @@ public class VehiclePosDto implements Serializable {
     private Integer gpsStatus;
 
     public VehiclePosDto() {}
+
+    public VehiclePosDto(Integer latitude, Integer longitude, Integer altitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+    }
 
     public VehiclePosDto(Integer latitude, Integer longitude, Integer altitude, Integer heading,
                          Integer speed, Integer hdop, Integer satellites, Date gpsTime, Integer gpsStatus) {

@@ -1,24 +1,27 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.rvc;
 
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 安防 远程控制命令传输对象
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:43
- * modify date
- * @version 0.1, 2015-7-6
+ * modify date 2015-7-14 14:20
+ * @version 0.2, 2015-7-14
  */
 public class RvcDto {
 
     private String command;
-    private String parameter;
+    private List<Map<String, Object>> parameters;
 
     public RvcDto() {}
 
-    public RvcDto(String command, String parameter) {
+    public RvcDto(String command, List<Map<String, Object>> parameters) {
         this.command = command;
-        this.parameter = parameter;
+        this.parameters = parameters;
     }
 
     public String getCommand() {
@@ -29,11 +32,11 @@ public class RvcDto {
         this.command = command;
     }
 
-    public String getParameter() {
-        return parameter;
+    public List<Map<String, Object>> getParameters() {
+        return parameters;
     }
 
-    public void setParameter(String parameter) {
-        this.parameter = parameter;
+    public void setParameters(List<Map<String, Object>> parameters) {
+        this.parameters = parameters;
     }
 }

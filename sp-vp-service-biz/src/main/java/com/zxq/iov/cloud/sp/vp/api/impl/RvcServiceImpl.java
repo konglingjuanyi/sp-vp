@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.alibaba.dubbo.common.json.JSON;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -13,15 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防 远程控制服务实现类
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-7-2 11:03
- * @version 0.4, 2015-7-2
+ * modify date 2015-7-14 14:23
+ * @version 0.5, 2015-7-14
  */
 @Service
 @Qualifier("rvcService")
@@ -42,9 +45,14 @@ public class RvcServiceImpl implements IRvcService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public Long requestControl(String vin, String command, String parameter) {
-        ControlCommand controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
-                vin, Constants.RVC_CMD.get(command), command, parameter);
+    public Long requestControl(String vin, String command, List<Map<String, Object>> parameters) {
+        ControlCommand controlCommand = null;
+        try {
+            controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
+                    vin, Constants.RVC_CMD.get(command), command, JSON.json(parameters));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         controlCommand.setCommandStatus(RVC_STATUS_PENDING);
         controlCommand.setIsCancel(false);
         controlCommand.setStatus(RUNNING_STATUS);

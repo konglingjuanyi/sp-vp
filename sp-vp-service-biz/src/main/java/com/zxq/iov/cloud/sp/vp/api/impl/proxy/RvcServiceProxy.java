@@ -1,9 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSON;
-import com.alibaba.dubbo.common.json.JSONArray;
-import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -17,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +24,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-7-6 16:51
- * @version 0.4, 2015-7-6
+ * modify date 2015-7-14 14:34
+ * @version 0.5, 2015-7-14
  */
 @Service
 @Qualifier("rvcServiceProxy")
@@ -45,29 +42,22 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     private static final Integer RUNNING_STATUS = 1;
 
     @Override
-    public Long requestControl(String vin, String command, String parameter) {
+    public Long requestControl(String vin, String command, List<Map<String, Object>> parameters) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", command);
         paramMap.put("cancelFlag", 0);
-        if(null != parameter) {
-            try {
-                JSONArray params = (JSONArray)JSON.parse(parameter);
-                JSONObject param;
-                for(int i=0; i<params.length(); i++) {
-                    param = (JSONObject)params.get(i);
-                    if(param.get("id").toString().equals("4")) {
-                        paramMap.put("unlockSilentFlag", param.get("value"));
-                    }
+        if(null != parameters) {
+            for(Map<String, Object> param : parameters) {
+                if(param.get("paramid").toString().equals("4")) {
+                    paramMap.put("unlockSilentFlag", param.get("paramvalue"));
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
         event.start(otaDto, paramMap);
-        Long controlCommandId = rvcService.requestControl(vin, command, parameter);
+        Long controlCommandId = rvcService.requestControl(vin, command, parameters);
         bindEventId(controlCommandId, otaDto.getEventId());
-        sendQueue(otaDto, new RvcDto(command, parameter));
+        sendQueue(otaDto, new RvcDto(command, parameters));
         event.end(otaDto, paramMap, controlCommandId);
         return controlCommandId;
     }
@@ -85,7 +75,12 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
             paramMap.put("cancelFlag", 1);
             event.start(otaDto, paramMap);
             rvcService.cancelControl(vin, command);
-            sendQueue(otaDto, new RvcDto(command, "{'cancelFlag', 1}"));
+            List<Map<String, Object>> parameters = new ArrayList<>();
+            Map<String, Object> parameter = new HashMap<>();
+            parameter.put("paramid", 255);
+            parameter.put("paramvalue", 1);
+            parameters.add(parameter);
+            sendQueue(otaDto, new RvcDto(command, parameters));
             event.end(otaDto, paramMap);
         }
     }
