@@ -2,23 +2,22 @@ package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.ReadConfigReqDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.*;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 安防 远程配置代理服务实现类
  *
  * @author 叶荣杰
  * create date 2015-6-19 15:19
- * modify date 2015-7-6 17:14
- * @version 0.4, 2015-7-6
+ * modify date 2015-7-14 15:34
+ * @version 0.5, 2015-7-14
  */
 @Service
 @Qualifier("tboxConfigServiceProxy")
@@ -89,9 +88,9 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public void responseReadConfig(OtaDto otaDto, String tboxConfigSettings) {
+    public void responseReadConfig(OtaDto otaDto, List<TboxConfigSettingDto> tboxConfigSettingDtos) {
         event.start(otaDto);
-        tboxConfigService.responseReadConfig(otaDto, tboxConfigSettings);
+        tboxConfigService.responseReadConfig(otaDto, tboxConfigSettingDtos);
         event.end(otaDto);
     }
 

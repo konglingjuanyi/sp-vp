@@ -5,6 +5,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigSettingDto;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;
@@ -12,13 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 安防 远程配置服务实现类
  *
  * @author 叶荣杰
  * create date 2015-6-19 11:44
- * modify date 2015-6-29 12:05
- * @version 0.3, 2015-6-29
+ * modify date 2015-7-14 15:32
+ * @version 0.4, 2015-7-14
  */
 @Service
 @Qualifier("tboxConfigService")
@@ -70,7 +73,7 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public void responseReadConfig(OtaDto otaDto, String tboxConfigSettings) {
+    public void responseReadConfig(OtaDto otaDto, List<TboxConfigSettingDto> tboxConfigSettingDtos) {
         // 暂不知道做什么
     }
 
