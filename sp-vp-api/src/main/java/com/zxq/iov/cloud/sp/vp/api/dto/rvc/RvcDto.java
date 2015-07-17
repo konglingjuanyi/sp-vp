@@ -9,26 +9,26 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:43
- * modify date 2015-7-14 14:20
- * @version 0.2, 2015-7-14
+ * modify date 2015-7-17 17:49
+ * @version 0.3, 2015-7-17
  */
 public class RvcDto {
 
-    private String command;
+    private byte[] command;
     private List<Map<String, Object>> parameters;
 
     public RvcDto() {}
 
-    public RvcDto(String command, List<Map<String, Object>> parameters) {
+    public RvcDto(byte[] command, List<Map<String, Object>> parameters) {
         this.command = command;
         this.parameters = parameters;
     }
 
-    public String getCommand() {
+    public byte[] getCommand() {
         return command;
     }
 
-    public void setCommand(String command) {
+    public void setCommand(byte[] command) {
         this.command = command;
     }
 

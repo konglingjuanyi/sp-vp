@@ -8,20 +8,20 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
  *
  * @author 叶荣杰
  * create date 2015-6-23 11:55
- * modify date 2015-6-24 10:08
- * @version 0.1, 2015-6-24
+ * modify date 2015-7-17 17:16
+ * @version 0.3, 2015-7-17
  */
 public class DiagnosticDto extends OtaDto {
 
     private Long id;
-    private String canId;
-    private String serviceId;
-    private String parameter;
-    private String result;
+    private byte[] canId;
+    private byte[] serviceId;
+    private byte[] parameter;
+    private byte[] result;
 
     public DiagnosticDto() {}
 
-    public DiagnosticDto(String canId, String serviceId, String parameter) {
+    public DiagnosticDto(byte[] canId, byte[] serviceId, byte[] parameter) {
         this.canId = canId;
         this.serviceId = serviceId;
         this.parameter = parameter;
@@ -35,35 +35,35 @@ public class DiagnosticDto extends OtaDto {
         this.id = id;
     }
 
-    public String getCanId() {
+    public byte[] getCanId() {
         return canId;
     }
 
-    public void setCanId(String canId) {
+    public void setCanId(byte[] canId) {
         this.canId = canId;
     }
 
-    public String getServiceId() {
+    public byte[] getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(String serviceId) {
+    public void setServiceId(byte[] serviceId) {
         this.serviceId = serviceId;
     }
 
-    public String getParameter() {
+    public byte[] getParameter() {
         return parameter;
     }
 
-    public void setParameter(String parameter) {
+    public void setParameter(byte[] parameter) {
         this.parameter = parameter;
     }
 
-    public String getResult() {
+    public byte[] getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(byte[] result) {
         this.result = result;
     }
 }

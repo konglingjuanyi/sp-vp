@@ -41,8 +41,8 @@ public interface ITboxConfigService {
      * @param configDelta           TBOX上配置更新版本
      * @return                      配置信息
      */
-    TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
-                                   String iccid, String configVersion, Integer configDelta);
+    TboxConfigDto checkConfigDelta(OtaDto otaDto, byte[] mcuVersion, byte[] mpuVersion, String vin,
+                                   String iccid, byte[] configVersion, Integer configDelta);
 
     /**
      * 获得配置更新包
@@ -61,8 +61,8 @@ public interface ITboxConfigService {
      * @param configVersion         配置版本
      * @param configDelta           TBOX上配置更新版本
      */
-    void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
-                           String configVersion, Integer configDelta);
+    void closeConfigUpdate(OtaDto otaDto, Boolean result, byte[] mcuVersion, byte[] mpuVersion,
+                           byte[] configVersion, Integer configDelta);
 
     /**
      * 请求读取TBOX配置参数
@@ -92,6 +92,6 @@ public interface ITboxConfigService {
      * @param tboxSnWithEnc         加密过的TBOX序列号
      * @return                      密钥传输对象
      */
-    KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc);
+    KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc, byte[] tboxSnWithEnc);
 
 }

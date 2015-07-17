@@ -17,8 +17,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-10 9:10
- * modify date 2015-7-6 17:42
- * @version 0.3, 2015-7-6
+ * modify date 2015-7-17 17:24
+ * @version 0.4, 2015-7-17
  */
 @Service
 @Qualifier("journeyServiceProxy")
@@ -35,7 +35,7 @@ public class JourneyServiceProxy extends BaseProxy implements IJourneyService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId) {
+    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId) {
         // 这里存在tboxJourneyId唯一的特殊情况，当满足时跳过事务
         Journey journey = journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {

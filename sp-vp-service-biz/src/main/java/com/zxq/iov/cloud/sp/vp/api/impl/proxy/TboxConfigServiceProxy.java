@@ -47,8 +47,8 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
-                                          String iccid, String configVersion, Integer configDelta) {
+    public TboxConfigDto checkConfigDelta(OtaDto otaDto, byte[] mcuVersion, byte[] mpuVersion, String vin,
+                                          String iccid, byte[] configVersion, Integer configDelta) {
         event.start(otaDto);
         TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, mcuVersion, mpuVersion,
                 vin, iccid, configVersion, configDelta);
@@ -71,8 +71,8 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
-                                  String configVersion, Integer configDelta) {
+    public void closeConfigUpdate(OtaDto otaDto, Boolean result, byte[] mcuVersion, byte[] mpuVersion,
+                                  byte[] configVersion, Integer configDelta) {
         event.start(otaDto);
         tboxConfigService.closeConfigUpdate(otaDto, result, mcuVersion, mpuVersion, configVersion, configDelta);
         event.end(otaDto);
@@ -106,7 +106,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc) {
+    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc, byte[] tboxSnWithEnc) {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.bindTboxWithSecretKey(otaDto, secretKeyWithEnc, tboxSnWithEnc);
         event.end(otaDto, keyDto);

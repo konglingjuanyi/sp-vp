@@ -8,8 +8,8 @@ import java.util.Date;
  * 安防服务 电子钥匙接口
  * @author 叶荣杰
  * create date 2015-6-23 10:48
- * modify date 2015-6-29 15:48
- * @version 0.2, 2015-6-29
+ * modify date 2015-7-17 17:44
+ * @version 0.3, 2015-7-17
  */
 public interface IRemoteKeyService {
 
@@ -22,7 +22,7 @@ public interface IRemoteKeyService {
      * @param keyValidityStartTime  有效开始时间
      * @param keyValidityEndTime    有效结束时间
      */
-    void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+    void requestWriteKey(String vin, Integer keyType, byte[] keyValue, Integer keyReference,
                          Date keyValidityStartTime, Date keyValidityEndTime);
 
     /**

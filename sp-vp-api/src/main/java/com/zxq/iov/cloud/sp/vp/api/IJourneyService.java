@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 车辆行程接口
  * @author 叶荣杰
  * create date 2015-6-9 13:00
- * modify date 2015-6-26 12:40
- * @version 0.1, 2015-6-9
+ * modify date 2015-7-17 17:20
+ * @version 0.3, 2015-7-17
  */
 public interface IJourneyService {
 
@@ -22,7 +22,7 @@ public interface IJourneyService {
      * @param tboxJourneyId         TBOX行程ID
      * @param keyId                 钥匙ID
      */
-    void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId);
+    void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId);
 
     /**
      * 更新车辆行程状态

@@ -43,8 +43,8 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public TboxConfigDto checkConfigDelta(OtaDto otaDto, String mcuVersion, String mpuVersion, String vin,
-                                          String iccid, String configVersion, Integer configDelta) {
+    public TboxConfigDto checkConfigDelta(OtaDto otaDto, byte[] mcuVersion, byte[] mpuVersion, String vin,
+                                          String iccid, byte[] configVersion, Integer configDelta) {
         TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDaoService.findTboxPersonalConfigByTboxId(otaDto.getTboxId());
         TboxConfigDto tboxConfigDto = new TboxConfigDto();
         if(tboxPersonalConfig.getConfigDelta().intValue() > configDelta.intValue()) {
@@ -62,8 +62,8 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public void closeConfigUpdate(OtaDto otaDto, Boolean result, String mcuVersion, String mpuVersion,
-                                  String configVersion, Integer configDelta) {
+    public void closeConfigUpdate(OtaDto otaDto, Boolean result, byte[] mcuVersion, byte[] mpuVersion,
+                                  byte[] configVersion, Integer configDelta) {
         // 暂时不知道需要做啥
     }
 
@@ -96,7 +96,7 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, String secretKeyWithEnc, String tboxSnWithEnc) {
+    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc, byte[] tboxSnWithEnc) {
         Long tboxId = null;
         if(null != otaDto.getTboxSn()) {
             // 根据TBOX SN定位到TBOX对象

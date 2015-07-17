@@ -6,6 +6,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
@@ -24,8 +25,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-7-14 14:34
- * @version 0.5, 2015-7-14
+ * modify date 2015-7-17 17:55
+ * @version 0.6, 2015-7-17
  */
 @Service
 @Qualifier("rvcServiceProxy")
@@ -42,7 +43,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     private static final Integer RUNNING_STATUS = 1;
 
     @Override
-    public Long requestControl(String vin, String command, List<Map<String, Object>> parameters) {
+    public Long requestControl(String vin, byte[] command, List<Map<String, Object>> parameters) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", command);
@@ -63,9 +64,9 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     }
 
     @Override
-    public void cancelControl(String vin, String command) {
+    public void cancelControl(String vin, byte[] command) {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
-                command, RUNNING_STATUS);
+                BinaryAndHexUtil.bytesToHexString(command, false), RUNNING_STATUS);
         if(list.size() > 0) {
             OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
             Long eventId = list.get(0).getEventId();
@@ -86,7 +87,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     }
 
     @Override
-    public void updateControlStatus(OtaDto otaDto, String rvcStatus, Integer failureType,
+    public void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
                                     VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);

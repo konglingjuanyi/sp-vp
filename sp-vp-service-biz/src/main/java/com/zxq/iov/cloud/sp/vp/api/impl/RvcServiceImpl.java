@@ -6,6 +6,7 @@ import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
@@ -23,8 +24,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-7-14 14:23
- * @version 0.5, 2015-7-14
+ * modify date 2015-7-17 17:55
+ * @version 0.6, 2015-7-17
  */
 @Service
 @Qualifier("rvcService")
@@ -45,11 +46,13 @@ public class RvcServiceImpl implements IRvcService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public Long requestControl(String vin, String command, List<Map<String, Object>> parameters) {
+    public Long requestControl(String vin, byte[] command, List<Map<String, Object>> parameters) {
         ControlCommand controlCommand = null;
         try {
+            String commandCode = BinaryAndHexUtil.bytesToHexString(command, false);
             controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
-                    vin, Constants.RVC_CMD.get(command), command, JSON.json(parameters));
+                    vin, commandCode,
+                    commandCode, JSON.json(parameters));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,9 +64,9 @@ public class RvcServiceImpl implements IRvcService {
     }
 
     @Override
-    public void cancelControl(String vin, String command) {
+    public void cancelControl(String vin, byte[] command) {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
-                command, RUNNING_STATUS);
+                BinaryAndHexUtil.bytesToHexString(command, false), RUNNING_STATUS);
         if(list.size() > 0) {
             ControlCommand controlCommand = list.get(0);
             controlCommand.setIsCancel(true);
@@ -73,12 +76,12 @@ public class RvcServiceImpl implements IRvcService {
     }
 
     @Override
-    public void updateControlStatus(OtaDto otaDto, String rvcStatus, Integer failureType,
+    public void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
                                     VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
         if(null != otaDto.getEventId()) {
             ControlCommand controlCommand = controlCommandDaoService.findControlCommandByEventId(otaDto.getEventId());
             if(null != controlCommand) {
-                controlCommand.setCommandStatus(rvcStatus);
+                controlCommand.setCommandStatus(BinaryAndHexUtil.bytesToHexString(rvcStatus, false));
                 if(null != failureType) {
                     controlCommand.setFailureType(failureType);
                 }

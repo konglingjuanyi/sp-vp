@@ -2,6 +2,7 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
@@ -18,8 +19,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 13:47
- * modify date
- * @version 0.1, 2015-6-23
+ * modify date 2015-7-17 17:45
+ * @version 0.2, 2015-7-17
  */
 @Service
 @Qualifier("remoteKeyService")
@@ -31,10 +32,11 @@ public class RemoteKeyServiceImpl implements IRemoteKeyService {
     private ITboxDaoService tboxDaoService;
 
     @Override
-    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+    public void requestWriteKey(String vin, Integer keyType, byte[] keyValue, Integer keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) {
         Long tboxId = tboxDaoService.findTboxIdByVin(vin);
-        RemoteKey remoteKey = new RemoteKey(tboxId, keyType, keyValue, keyReference,
+        RemoteKey remoteKey = new RemoteKey(tboxId, keyType,
+                BinaryAndHexUtil.bytesToHexString(keyValue, false), keyReference,
                 keyValidityStartTime, keyValidityEndTime);
         remoteKeyDaoService.createRemoteKey(remoteKey);
     }

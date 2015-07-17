@@ -23,8 +23,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-7-2 11:02
- * @version 0.7, 2015-7-2
+ * modify date 2015-7-17 17:24
+ * @version 0.8, 2015-7-17
  */
 @Service
 @Qualifier("journeyService")
@@ -42,7 +42,7 @@ public class JourneyServiceImpl implements IJourneyService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, String keyId) {
+    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId) {
         Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
             Long ownerId = 1L; // 从主数据获得

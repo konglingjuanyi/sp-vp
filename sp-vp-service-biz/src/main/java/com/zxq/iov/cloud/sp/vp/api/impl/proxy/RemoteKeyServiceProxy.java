@@ -17,8 +17,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 14:46
- * modify date 2015-7-6 16:37
- * @version 0.3, 2015-7-6
+ * modify date 2015-7-17 17:46
+ * @version 0.4, 2015-7-17
  */
 @Service
 @Qualifier("remoteKeyServiceProxy")
@@ -32,7 +32,7 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
     private IEvent event;
 
     @Override
-    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+    public void requestWriteKey(String vin, Integer keyType, byte[] keyValue, Integer keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 1);
         event.start(otaDto);

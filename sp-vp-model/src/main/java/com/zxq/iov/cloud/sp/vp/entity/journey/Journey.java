@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 行程类
  * @author 叶荣杰
  * create date 2015-6-9 13:16
- * modify date 2015-6-26 13:19
- * @version 0.3, 2015-6-26
+ * modify date 2015-7-17 17:24
+ * @version 0.4, 2015-7-17
  */
 @Entity()
 @Table(name = "TB_JOURNEY")
@@ -39,7 +39,7 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
     private Long userId;
 
     @Column(name = "KEY_ID", length = 4)
-    private String keyId;
+    private Integer keyId;
 
     @Column(name = "VIN", length = 17)
     private String vin;
@@ -116,11 +116,11 @@ public class Journey extends MyBaseEntity<Long> implements Serializable {
         this.userId = userId;
     }
 
-    public String getKeyId() {
+    public Integer getKeyId() {
         return keyId;
     }
 
-    public void setKeyId(String keyId) {
+    public void setKeyId(Integer keyId) {
         this.keyId = keyId;
     }
 
