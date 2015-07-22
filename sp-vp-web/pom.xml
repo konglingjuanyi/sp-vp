@@ -17,8 +17,8 @@
 	    <artifactId>sp-vp-service-biz</artifactId>
 	</dependency>
 	<dependency>
-		<groupId>com.saicmotor.telematics.framework.core</groupId>
-		<artifactId>core-web</artifactId>
+		<groupId>com.saicmotor.telematics.framework.app</groupId>
+		<artifactId>app-web</artifactId>
 	</dependency>
 </dependencies>
 </project>

@@ -2,10 +2,7 @@ package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusReqDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.*;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-16 16:16
- * modify date 2015-7-6 17:01
- * @version 0.6, 2015-7-6
+ * modify date 2015-7-21 12:49
+ * @version 0.7, 2015-7-21
  */
 @Service
 @Qualifier("statusServiceProxy")
@@ -34,12 +31,16 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     private IEvent event;
 
     @Override
-    public void requestVehicleStatus(String vin, Integer statusType) {
+    public Long requestVehicleStatus(String vin, Integer statusType) {
+        if(null == statusType) {
+            statusType = Constants.VEHICLE_STATUS_BASIC;
+        }
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_STATUS, 1);
         event.start(otaDto);
         statusService.requestVehicleStatus(vin, statusType);
         sendQueue(otaDto, new VehicleStatusReqDto(statusType));
         event.end(otaDto);
+        return otaDto.getEventId();
     }
 
     @Override
@@ -50,6 +51,11 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
         statusService.responseVehicleStatus(otaDto, statusTime, vehiclePosDto, vehicleStatusDtos,
                 vehicleAlertDtos);
         event.end(otaDto);
+    }
+
+    @Override
+    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) {
+        return statusService.getVehicleStatus(vin, eventId);
     }
 
     @Override

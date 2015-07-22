@@ -19,6 +19,8 @@ public class Constants {
 	public static final Integer CALL_TYPE_ECALL = 2;
 	public static final Integer CALL_TYPE_ICALL = 3;
 
+	public static final Integer VEHICLE_STATUS_BASIC = 1;
+
 	public static final Integer VEHICLE_INFO_SOURCE_JOURNEY = 1;
 	public static final Integer VEHICLE_INFO_SOURCE_BCALL = 2;
 	public static final Integer VEHICLE_INFO_SOURCE_ECALL = 3;

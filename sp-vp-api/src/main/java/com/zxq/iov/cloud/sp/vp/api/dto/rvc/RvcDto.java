@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.rvc;
 
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,17 +8,17 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:43
- * modify date 2015-7-17 17:49
- * @version 0.3, 2015-7-17
+ * modify date 2015-7-21 16:04
+ * @version 0.4, 2015-7-21
  */
 public class RvcDto {
 
     private byte[] command;
-    private List<Map<String, Object>> parameters;
+    private Map<String, Object> parameters;
 
     public RvcDto() {}
 
-    public RvcDto(byte[] command, List<Map<String, Object>> parameters) {
+    public RvcDto(byte[] command, Map<String, Object> parameters) {
         this.command = command;
         this.parameters = parameters;
     }
@@ -32,11 +31,11 @@ public class RvcDto {
         this.command = command;
     }
 
-    public List<Map<String, Object>> getParameters() {
+    public Map<String, Object> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<Map<String, Object>> parameters) {
+    public void setParameters(Map<String, Object> parameters) {
         this.parameters = parameters;
     }
 }

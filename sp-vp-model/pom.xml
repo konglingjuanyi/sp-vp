@@ -12,8 +12,8 @@
 
 <dependencies>
     <dependency>
-        <groupId>com.zxq.iov.cloud.core</groupId>
-        <artifactId>core-dal</artifactId>
+        <groupId>com.saicmotor.telematics.framework.core</groupId>
+        <artifactId>core-dao</artifactId>
     </dependency>
 </dependencies>
 </project>

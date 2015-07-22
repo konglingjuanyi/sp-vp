@@ -6,6 +6,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigSettingDto;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;
@@ -91,7 +92,7 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
         String privateKey = "";
         tboxDaoService.updateAsymmetricKey(tboxId, publicKey, privateKey); // 绑定tbox写入缓存
         KeyDto asymmetricKeyDto = new KeyDto();
-        asymmetricKeyDto.setPublicKey(publicKey);
+        asymmetricKeyDto.setPublicKey(BinaryAndHexUtil.hexStringToByte(publicKey));
         return asymmetricKeyDto;
     }
 

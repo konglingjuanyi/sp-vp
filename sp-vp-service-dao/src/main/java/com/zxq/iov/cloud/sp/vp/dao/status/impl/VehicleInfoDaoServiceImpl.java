@@ -9,13 +9,17 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 安防 车辆信息持久化服务接口实现类
  *
  * @author 叶荣杰
  * create date 2015-5-13 11:32
- * modify date 2015-5-14 10:50
- * @version 0.2, 2015-5-14
+ * modify date 2015-7-21 15:15
+ * @version 0.3, 2015-7-21
  */
 @Service
 public class VehicleInfoDaoServiceImpl extends BaseServiceImpl<IVehicleInfoRepository, VehicleInfo, Long> implements IVehicleInfoDaoService {
@@ -60,5 +64,12 @@ public class VehicleInfoDaoServiceImpl extends BaseServiceImpl<IVehicleInfoRepos
 		VehicleInfo vehicleInfo = new VehicleInfo();
 		// 读取缓存
 		return vehicleInfo;
+	}
+
+	@Override
+	public List<VehicleInfo> listVehicleInfoByEventId(Long eventId) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("eventId", eventId);
+		return super.findListViaBatis(paramMap);
 	}
 }

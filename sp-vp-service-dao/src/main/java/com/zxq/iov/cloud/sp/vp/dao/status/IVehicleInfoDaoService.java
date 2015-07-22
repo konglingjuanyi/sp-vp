@@ -3,13 +3,15 @@ package com.zxq.iov.cloud.sp.vp.dao.status;
 import com.zxq.iov.cloud.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfo;
 
+import java.util.List;
+
 /**
  * 安防 车辆信息持久化服务接口
  *
  * @author 叶荣杰
  * create date 2015-5-13 10:55
- * modify date 2015-5-14 10:41
- * @version 0.2, 2015-5-14
+ * modify date 2015-7-21 15:14
+ * @version 0.3, 2015-7-21
  */
 public interface IVehicleInfoDaoService extends BaseService<VehicleInfo, Long> {
 
@@ -40,5 +42,12 @@ public interface IVehicleInfoDaoService extends BaseService<VehicleInfo, Long> {
 	 * @return         		车辆信息对象
 	 */
 	VehicleInfo findLatestVehicleInfo(String vin);
+
+	/**
+	 * 根据事件ID得到车辆状态快照列表
+	 * @param eventId    	事件ID
+	 * @return          	车辆状态快照列表
+	 */
+	List<VehicleInfo> listVehicleInfoByEventId(Long eventId);
 	
 }

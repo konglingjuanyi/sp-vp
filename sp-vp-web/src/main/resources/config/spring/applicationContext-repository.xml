@@ -20,7 +20,7 @@
         <property name="maxActive" value="${jdbc.pool.maxActive}" />
         <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
         <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}" />
-        <property name="testOnReturn" value="${jdbc.pool.testOnReturn}" />
+        <!--<property name="testOnReturn" value="${jdbc.pool.testOnReturn}" />-->
         <property name="testWhileIdle" value="${jdbc.pool.testWhileIdle}" />
         <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}" />
         <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}" />

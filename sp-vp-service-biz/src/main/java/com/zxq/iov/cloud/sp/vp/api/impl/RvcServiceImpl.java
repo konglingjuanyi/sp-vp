@@ -24,8 +24,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-7-17 17:55
- * @version 0.6, 2015-7-17
+ * modify date 2015-7-21 15:57
+ * @version 0.8, 2015-7-21
  */
 @Service
 @Qualifier("rvcService")
@@ -46,13 +46,13 @@ public class RvcServiceImpl implements IRvcService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public Long requestControl(String vin, byte[] command, List<Map<String, Object>> parameters) {
+    public Long requestControl(Long userId, String vin, String command,
+                               Map<String, Object> parameters) {
         ControlCommand controlCommand = null;
         try {
-            String commandCode = BinaryAndHexUtil.bytesToHexString(command, false);
             controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
-                    vin, commandCode,
-                    commandCode, JSON.json(parameters));
+                    vin, command,
+                    command, JSON.json(parameters));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,9 +64,9 @@ public class RvcServiceImpl implements IRvcService {
     }
 
     @Override
-    public void cancelControl(String vin, byte[] command) {
+    public void cancelControl(String vin, String command) {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
-                BinaryAndHexUtil.bytesToHexString(command, false), RUNNING_STATUS);
+                command, RUNNING_STATUS);
         if(list.size() > 0) {
             ControlCommand controlCommand = list.get(0);
             controlCommand.setIsCancel(true);

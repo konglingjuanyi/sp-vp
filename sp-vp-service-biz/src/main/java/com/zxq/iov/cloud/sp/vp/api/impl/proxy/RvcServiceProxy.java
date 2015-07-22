@@ -1,5 +1,9 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.JSONArray;
+import com.alibaba.dubbo.common.json.JSONObject;
+import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -43,30 +47,29 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     private static final Integer RUNNING_STATUS = 1;
 
     @Override
-    public Long requestControl(String vin, byte[] command, List<Map<String, Object>> parameters) {
+    public Long requestControl(Long userId, String vin, String command,
+                               Map<String, Object> parameters) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", command);
         paramMap.put("cancelFlag", 0);
-        if(null != parameters) {
-            for(Map<String, Object> param : parameters) {
-                if(param.get("paramid").toString().equals("4")) {
-                    paramMap.put("unlockSilentFlag", param.get("paramvalue"));
-                }
+        if(null != parameters && null != parameters.get("paramid")) {
+            if(parameters.get("paramid").toString().equals("4")) {
+                paramMap.put("unlockSilentFlag", parameters.get("paramvalue"));
             }
         }
         event.start(otaDto, paramMap);
-        Long controlCommandId = rvcService.requestControl(vin, command, parameters);
+        Long controlCommandId = rvcService.requestControl(userId, vin, command, parameters);
         bindEventId(controlCommandId, otaDto.getEventId());
-        sendQueue(otaDto, new RvcDto(command, parameters));
+        sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(command), parameters));
         event.end(otaDto, paramMap, controlCommandId);
         return controlCommandId;
     }
 
     @Override
-    public void cancelControl(String vin, byte[] command) {
+    public void cancelControl(String vin, String command) {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
-                BinaryAndHexUtil.bytesToHexString(command, false), RUNNING_STATUS);
+                command, RUNNING_STATUS);
         if(list.size() > 0) {
             OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
             Long eventId = list.get(0).getEventId();
@@ -76,12 +79,10 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
             paramMap.put("cancelFlag", 1);
             event.start(otaDto, paramMap);
             rvcService.cancelControl(vin, command);
-            List<Map<String, Object>> parameters = new ArrayList<>();
             Map<String, Object> parameter = new HashMap<>();
             parameter.put("paramid", 255);
             parameter.put("paramvalue", 1);
-            parameters.add(parameter);
-            sendQueue(otaDto, new RvcDto(command, parameters));
+            sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(command), parameter));
             event.end(otaDto, paramMap);
         }
     }

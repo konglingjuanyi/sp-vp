@@ -9,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 安防 车辆信息持久化服务测试类
  *
  * @author 叶荣杰
  * create date 2015-5-13 12:52
- * modify date 2015-5-15 10:46
- * @version 0.2, 2015-5-15
+ * modify date 2015-7-21 15:19
+ * @version 0.3, 2015-7-21
  */
 @Transactional
 public class VehicleInfoDaoServiceImplTest extends BaseServiceTestCase {
@@ -50,5 +52,13 @@ public class VehicleInfoDaoServiceImplTest extends BaseServiceTestCase {
         String vin = "001";
         VehicleInfo vehicleInfo = vehicleInfoDaoService.findLatestVehicleInfo(vin);
         Assert.assertNotNull(vehicleInfo);
+    }
+
+    @Test
+    @Rollback(true)
+    public void testListVehicleInfoByEventId(){
+        Long eventId = 1L;
+        List<VehicleInfo> list = vehicleInfoDaoService.listVehicleInfoByEventId(eventId);
+        Assert.assertTrue(list.size() > 0);
     }
 }

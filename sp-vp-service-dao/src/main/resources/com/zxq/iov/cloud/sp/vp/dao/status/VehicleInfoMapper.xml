@@ -47,6 +47,13 @@
         WHERE t.is_valid = 1
     </select>
 
+	<select id="selectList" parameterType="hashmap" resultMap="vehicleInfoResultMap">
+		<include refid="selectPageTemplate"/>
+		<if test="eventId != null">
+			AND EVENT_ID = #{eventId,jdbcType=DECIMAL}
+		</if>
+	</select>
+
 	<select id="selectOne" resultMap="vehicleInfoResultMap" parameterType="java.lang.String">
 		<include refid="selectPageTemplate"/>
 		AND ID = #{id, jdbcType=VARCHAR}

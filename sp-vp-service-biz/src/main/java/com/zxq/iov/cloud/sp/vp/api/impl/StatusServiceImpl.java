@@ -3,8 +3,10 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.api.exception.ParamsIsNullException;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleAlertDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
@@ -28,8 +30,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-7-2 10:44
- * @version 0.8, 2015-7-2
+ * modify date 2015-7-21 12:47
+ * @version 0.9, 2015-7-21
  */
 @Service
 @Qualifier("statusService")
@@ -45,14 +47,25 @@ public class StatusServiceImpl implements IStatusService {
     private IVehicleStatusDaoService vehicleStatusDaoService;
 
     @Override
-    public void requestVehicleStatus(String vin, Integer statusType) {
-         // 无业务操作，仅发送给TBOX
+    public Long requestVehicleStatus(String vin, Integer statusType) {
+        if(null == vin) {
+            throw new ParamsIsNullException("vin");
+        }
+        return null;
     }
 
     @Override
     public void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos, List<VehicleAlertDto> vehicleAlertDtos) {
         updateVehicleStatus(otaDto, Constants.VEHICLE_INFO_SOURCE_STATUS, null, statusTime,
                 vehiclePosDto, vehicleStatusDtos, vehicleAlertDtos);
+    }
+
+    @Override
+    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) {
+        if(null == vin) {
+            throw new ParamsIsNullException("vin");
+        }
+        return null;
     }
 
     @Override
