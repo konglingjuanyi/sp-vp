@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.event.impl;
 
-import com.zxq.iov.cloud.core.log.LoggerFactory;
-import com.zxq.iov.cloud.core.service.BaseServiceImpl;
+import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventInstanceDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.repo.IEventInstanceRepository;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventInstance;

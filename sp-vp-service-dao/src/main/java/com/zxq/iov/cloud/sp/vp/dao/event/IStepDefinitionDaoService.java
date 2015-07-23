@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.event;
 
-import com.zxq.iov.cloud.core.dal.repo.mybatis.PageResult;
-import com.zxq.iov.cloud.core.service.BaseService;
+import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
+import com.saicmotor.telematics.framework.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepDefinition;
 
 import java.util.List;

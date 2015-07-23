@@ -8,13 +8,14 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-7-21 13:54
- * modify date
+ * modify date 2015-7-21 9:46
  * @version 0.1, 2015-7-21
  */
 public class VehicleInfoDto implements Serializable {
 
     private VehiclePosDto vehiclePosDto;
     private List<VehicleStatusDto> vehicleStatusDtos;
+    private List<VehicleAlertDto> vehicleAlertDtos;
 
     public VehicleInfoDto() {}
 
@@ -32,5 +33,13 @@ public class VehicleInfoDto implements Serializable {
 
     public void setVehicleStatusDtos(List<VehicleStatusDto> vehicleStatusDtos) {
         this.vehicleStatusDtos = vehicleStatusDtos;
+    }
+
+    public List<VehicleAlertDto> getVehicleAlertDtos() {
+        return vehicleAlertDtos;
+    }
+
+    public void setVehicleAlertDtos(List<VehicleAlertDto> vehicleAlertDtos) {
+        this.vehicleAlertDtos = vehicleAlertDtos;
     }
 }

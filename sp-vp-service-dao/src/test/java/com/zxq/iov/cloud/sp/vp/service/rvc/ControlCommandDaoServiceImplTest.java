@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.rvc;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;

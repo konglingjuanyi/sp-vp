@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.dao.status;
 
-import com.zxq.iov.cloud.core.service.BaseService;
+import com.saicmotor.telematics.framework.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
 
 /**

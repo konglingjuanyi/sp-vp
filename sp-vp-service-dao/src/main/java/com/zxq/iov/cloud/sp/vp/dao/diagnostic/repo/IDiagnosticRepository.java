@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.dao.diagnostic.repo;
 
-import com.zxq.iov.cloud.core.dal.repo.datajpa.BaseRepository;
+import com.saicmotor.telematics.framework.core.dal.repo.datajpa.BaseRepository;
 import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
 
 /**

@@ -5,6 +5,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.DeleteKeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.WriteKeyDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,8 +18,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 14:46
- * modify date 2015-7-17 17:46
- * @version 0.4, 2015-7-17
+ * modify date 2015-7-22 18:00
+ * @version 0.5, 2015-7-22
  */
 @Service
 @Qualifier("remoteKeyServiceProxy")
@@ -32,13 +33,14 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
     private IEvent event;
 
     @Override
-    public void requestWriteKey(String vin, Integer keyType, byte[] keyValue, Integer keyReference,
+    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 1);
         event.start(otaDto);
         remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, keyValidityStartTime,
                 keyValidityEndTime);
-        sendQueue(otaDto, new WriteKeyDto(keyType, keyValue, keyReference, keyValidityStartTime, keyValidityEndTime));
+        sendQueue(otaDto, new WriteKeyDto(keyType, BinaryAndHexUtil.hexStringToByte(keyValue),
+                keyReference, keyValidityStartTime, keyValidityEndTime));
         event.end(otaDto);
     }
 

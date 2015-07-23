@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IEventService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.api.impl.IcallServiceImpl;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

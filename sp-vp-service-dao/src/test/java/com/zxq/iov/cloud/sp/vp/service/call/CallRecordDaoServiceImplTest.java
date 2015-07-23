@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.call;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallRecordDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 import junit.framework.Assert;

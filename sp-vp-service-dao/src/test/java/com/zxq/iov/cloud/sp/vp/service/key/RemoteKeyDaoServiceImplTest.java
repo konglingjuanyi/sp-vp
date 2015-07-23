@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.key;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.key.IRemoteKeyDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 import junit.framework.Assert;

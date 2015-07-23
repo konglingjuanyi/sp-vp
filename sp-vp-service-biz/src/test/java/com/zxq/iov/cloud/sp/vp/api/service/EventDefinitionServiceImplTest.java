@@ -1,9 +1,8 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IEventDefinitionService;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
-import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.StepDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.TaskDefinitionDto;
 import junit.framework.Assert;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IDiagnosticService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
@@ -37,7 +37,7 @@ public class DiagnosticServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testRequestDiagnostic() {
         List<DiagnosticDto> diagnosticDtos = new ArrayList<>();
-        diagnosticDtos.add(new DiagnosticDto("1", "1", "1"));
+//        diagnosticDtos.add(new DiagnosticDto("1", "1", "1")); 这里一段需求不确定
         diagnosticService.requestDiagnostic(vin, diagnosticDtos);
     }
 
@@ -46,7 +46,7 @@ public class DiagnosticServiceImplTest extends BaseServiceTestCase {
     public void testResponseDiagnostic() {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_DIAGNOSTIC, 2);
         List<DiagnosticDto> diagnosticDtos = new ArrayList<>();
-        diagnosticDtos.add(new DiagnosticDto("1", "1", "1"));
+//        diagnosticDtos.add(new DiagnosticDto("1", "1", "1"));
         diagnosticService.responseDiagnostic(otaDto, diagnosticDtos);
     }
 

@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.svt;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.svt.IStolenAlarmDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
 import junit.framework.Assert;

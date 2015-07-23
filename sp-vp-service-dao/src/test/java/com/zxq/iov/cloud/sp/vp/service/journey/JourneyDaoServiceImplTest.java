@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.journey;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.journey.IJourneyDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
 import junit.framework.Assert;

@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
-import com.zxq.iov.cloud.core.dal.repo.mybatis.PageResult;
+import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
 import com.zxq.iov.cloud.sp.vp.api.IEventDefinitionService;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventDefinitionDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.event.EventRuleDto;

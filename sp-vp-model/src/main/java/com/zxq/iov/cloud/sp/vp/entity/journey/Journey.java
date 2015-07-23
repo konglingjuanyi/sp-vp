@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.entity.journey;
 
-import com.zxq.iov.cloud.core.dal.entity.MyBaseEntity;
+
+import com.saicmotor.telematics.framework.core.dal.entity.MyBaseEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

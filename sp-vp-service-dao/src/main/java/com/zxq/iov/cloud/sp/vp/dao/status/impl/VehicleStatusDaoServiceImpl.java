@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.status.impl;
 
-import com.zxq.iov.cloud.core.log.LoggerFactory;
-import com.zxq.iov.cloud.core.service.BaseServiceImpl;
+import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleStatusDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.status.repo.IVehicleStatusRepository;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;

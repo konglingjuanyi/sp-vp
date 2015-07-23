@@ -1,10 +1,11 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -22,8 +23,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-17 14:25
- * modify date 2015-6-29 11:01
- * @version 0.4, 2015-6-29
+ * modify date 2015-7-22 18:02
+ * @version 0.5, 2015-7-22
  */
 @Transactional
 public class RvcServiceImplTest extends BaseServiceTestCase {
@@ -38,8 +39,9 @@ public class RvcServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRequestControl() {
+        Long userId = 1L;
         String command = "5";
-        Long controlCommandId =  rvcService.requestControl(vin, command, null);
+        Long controlCommandId =  rvcService.requestControl(userId, vin, command, null);
         Assert.assertNotNull(controlCommandId);
     }
 
@@ -60,7 +62,8 @@ public class RvcServiceImplTest extends BaseServiceTestCase {
         VehiclePosDto vehiclePosDto =  new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         vehicleStatusDtos.add(new VehicleStatusDto("status", 1));
-        rvcService.updateControlStatus(otaDto, rvcStatus, null, vehiclePosDto, vehicleStatusDtos);
+        rvcService.updateControlStatus(otaDto, BinaryAndHexUtil.hexStringToByte(rvcStatus),
+                null, vehiclePosDto, vehicleStatusDtos);
     }
 
 }

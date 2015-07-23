@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.config;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;
 import junit.framework.Assert;

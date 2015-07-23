@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.diagnostic;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.diagnostic.IDiagnosticDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
 import junit.framework.Assert;

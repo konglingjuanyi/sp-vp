@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.call.impl;
 
-import com.zxq.iov.cloud.core.log.LoggerFactory;
-import com.zxq.iov.cloud.core.service.BaseServiceImpl;
+import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallRecordDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.call.repo.ICallRecordRepository;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;

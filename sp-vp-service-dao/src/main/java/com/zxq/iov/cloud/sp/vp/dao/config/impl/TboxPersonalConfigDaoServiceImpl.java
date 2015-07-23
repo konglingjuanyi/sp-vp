@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.config.impl;
 
-import com.zxq.iov.cloud.core.log.LoggerFactory;
-import com.zxq.iov.cloud.core.service.BaseServiceImpl;
+import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.repo.ITboxPersonalConfigRepository;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;

@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service.event;
 
-import com.zxq.iov.cloud.core.dal.repo.mybatis.PageResult;
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventDefinitionDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.ITaskDefinitionDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.TaskDefinition;

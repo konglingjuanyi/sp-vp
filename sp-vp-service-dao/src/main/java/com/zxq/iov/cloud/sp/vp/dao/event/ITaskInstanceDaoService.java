@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.dao.event;
 
-import com.zxq.iov.cloud.core.service.BaseService;
+import com.saicmotor.telematics.framework.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.event.TaskInstance;
 
 import java.util.List;

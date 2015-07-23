@@ -47,7 +47,15 @@
         <artifactId>aspectjweaver</artifactId>
         <scope>test</scope>
     </dependency>
-
+    <dependency>
+        <groupId>com.saicmotor.telematics.framework.core</groupId>
+        <artifactId>core-dao</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.saicmotor.telematics.framework.core</groupId>
+        <artifactId>core-test</artifactId>
+        <scope>test</scope>
+    </dependency>
 </dependencies>
 <build>
 </build>

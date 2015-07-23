@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.service;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.IJourneyService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
@@ -35,7 +35,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
     public void testStartJourney() {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_JOURNEY, 1);
         Integer tboxJourneyId = 10;
-        String keyId = "1";
+        Integer keyId = 1;
         journeyService.startJourney(otaDto, new Date(), tboxJourneyId, keyId);
     }
 

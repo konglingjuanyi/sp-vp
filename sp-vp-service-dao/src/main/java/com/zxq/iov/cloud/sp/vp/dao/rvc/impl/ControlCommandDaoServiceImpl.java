@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.dao.rvc.impl;
 
-import com.zxq.iov.cloud.core.log.LoggerFactory;
-import com.zxq.iov.cloud.core.service.BaseServiceImpl;
+import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.repo.IControlCommandRepository;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;

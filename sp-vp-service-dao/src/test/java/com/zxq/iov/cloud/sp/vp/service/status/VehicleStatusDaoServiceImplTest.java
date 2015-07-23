@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.status;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleInfoDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleStatusDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;

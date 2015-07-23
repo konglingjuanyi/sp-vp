@@ -1,6 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.event;
 
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;
 import junit.framework.Assert;
