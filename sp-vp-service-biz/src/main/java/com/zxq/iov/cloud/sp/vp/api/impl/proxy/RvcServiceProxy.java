@@ -1,9 +1,5 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
-import com.alibaba.dubbo.common.json.JSON;
-import com.alibaba.dubbo.common.json.JSONArray;
-import com.alibaba.dubbo.common.json.JSONObject;
-import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +46,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
                                Map<String, Object> parameters) {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("command", command);
+        paramMap.put("command", Constants.RVC_CMD_CODE.get(command));
         paramMap.put("cancelFlag", 0);
         if(null != parameters && null != parameters.get("paramid")) {
             if(parameters.get("paramid").toString().equals("4")) {
@@ -61,7 +56,8 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
         event.start(otaDto, paramMap);
         Long controlCommandId = rvcService.requestControl(userId, vin, command, parameters);
         bindEventId(controlCommandId, otaDto.getEventId());
-        sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(command), parameters));
+        sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
+                parameters));
         event.end(otaDto, paramMap, controlCommandId);
         return controlCommandId;
     }

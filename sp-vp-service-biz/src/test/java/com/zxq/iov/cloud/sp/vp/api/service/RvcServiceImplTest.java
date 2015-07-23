@@ -40,7 +40,7 @@ public class RvcServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testRequestControl() {
         Long userId = 1L;
-        String command = "5";
+        String command = "find_my_car";
         Long controlCommandId =  rvcService.requestControl(userId, vin, command, null);
         Assert.assertNotNull(controlCommandId);
     }

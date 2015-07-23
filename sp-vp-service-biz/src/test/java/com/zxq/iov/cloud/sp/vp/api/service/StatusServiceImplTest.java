@@ -48,7 +48,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testResponseVehicleStatus() {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_STATUS, 2);
-        otaDto.setEventId(140L);
+        otaDto.setEventId(141L);
         VehiclePosDto vehiclePosDto = new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         vehicleStatusDtos.add(new VehicleStatusDto("status", 1));

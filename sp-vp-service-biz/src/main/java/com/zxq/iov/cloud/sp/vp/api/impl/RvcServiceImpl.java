@@ -24,8 +24,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-7-21 15:57
- * @version 0.8, 2015-7-21
+ * modify date 2015-7-23 16:44
+ * @version 0.9, 2015-7-23
  */
 @Service
 @Qualifier("rvcService")
@@ -51,8 +51,8 @@ public class RvcServiceImpl implements IRvcService {
         ControlCommand controlCommand = null;
         try {
             controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
-                    vin, command,
-                    command, JSON.json(parameters));
+                    vin, Constants.RVC_CMD.get(command), Constants.RVC_CMD_CODE.get(command),
+                    JSON.json(parameters));
         } catch (IOException e) {
             e.printStackTrace();
         }
