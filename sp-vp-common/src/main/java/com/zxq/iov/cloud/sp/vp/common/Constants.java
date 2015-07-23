@@ -8,8 +8,8 @@ import java.util.TreeMap;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:31
- * modify date 2015-7-13 11:31
- * @version 0.10, 2015-7-13
+ * modify date 2015-7-23 14:45
+ * @version 0.11, 2015-7-23
  */
 public class Constants {
 
@@ -20,6 +20,7 @@ public class Constants {
 	public static final Integer CALL_TYPE_ICALL = 3;
 
 	public static final Integer VEHICLE_STATUS_BASIC = 1;
+	public static final Integer VEHICLE_STATUS_ALERT = 2;
 
 	public static final Integer VEHICLE_INFO_SOURCE_JOURNEY = 1;
 	public static final Integer VEHICLE_INFO_SOURCE_BCALL = 2;

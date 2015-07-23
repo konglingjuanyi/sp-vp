@@ -8,6 +8,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.exception.ParamsIsNullException;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleAlertDtoAssembler;
+import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleInfoDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
@@ -65,6 +66,18 @@ public class StatusServiceImpl implements IStatusService {
         if(null == vin) {
             throw new ParamsIsNullException("vin");
         }
+        List<VehicleInfo> vehicleInfos = vehicleInfoDaoService.listVehicleInfoByEventId(eventId);
+        if(vehicleInfos.size() > 0) {
+            VehicleInfo vehicleInfo = vehicleInfos.get(0);
+            VehicleInfoDto vehicleInfoDto = new VehicleInfoDtoAssembler().toDto(vehicleInfo);
+            vehicleInfoDto.setVehiclePosDto(new VehiclePosDtoAssembler().toDto(
+                    vehiclePosDaoService.findVehiclePosByVehicleInfoId(vehicleInfo.getId())));
+            vehicleInfoDto.setVehicleStatusDtos(new VehicleStatusDtoAssembler().toDtoList(
+                    vehicleStatusDaoService.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_BASIC)));
+            vehicleInfoDto.setVehicleAlertDtos(new VehicleAlertDtoAssembler().toDtoList(
+                    vehicleStatusDaoService.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_ALERT)));
+            return vehicleInfoDto;
+        }
         return null;
     }
 
@@ -84,6 +97,9 @@ public class StatusServiceImpl implements IStatusService {
         VehicleInfo vehicleInfo = new VehicleInfo(otaDto.getTboxId(), tboxDaoService.findVinById(otaDto.getTboxId()),
                 sourceType, sourceId);
         vehicleInfo.setOwnerId(1L); // 此处应根据TBOXID查询主数据获得车主的USERID
+        if(null != otaDto.getEventId()) {
+            vehicleInfo.setEventId(otaDto.getEventId());
+        }
         if(null == vehicleInfo.getStatusTime()) {
             vehicleInfo.setStatusTime(otaDto.getEventCreateTime());
         }

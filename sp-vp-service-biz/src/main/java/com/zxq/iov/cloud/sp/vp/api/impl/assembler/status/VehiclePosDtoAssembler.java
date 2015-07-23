@@ -8,8 +8,8 @@ import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
  *
  * @author 叶荣杰
  * create date 2015-5-14 11:37
- * modify date 2015-5-25 10:58
- * @version 0.2, 2015-5-25
+ * modify date 2015-7-23 14:36
+ * @version 0.3, 2015-7-23
  */
 public class VehiclePosDtoAssembler {
 
@@ -18,6 +18,13 @@ public class VehiclePosDtoAssembler {
                 vehiclePosDto.getAltitude(), vehiclePosDto.getHeading(), vehiclePosDto.getSpeed(),
                 vehiclePosDto.getHdop(), vehiclePosDto.getSatellites(), vehiclePosDto.getGpsTime(),
                 vehiclePosDto.getGpsStatus());
+    }
+
+    public VehiclePosDto toDto(final VehiclePos vehiclePos) {
+        return new VehiclePosDto(vehiclePos.getLongitude(), vehiclePos.getLatitude(),
+                vehiclePos.getAltitude(), vehiclePos.getHeading(), vehiclePos.getSpeed(),
+                vehiclePos.getHdop(), vehiclePos.getSatellites(), vehiclePos.getGpsTime(),
+                vehiclePos.getGpsStatus());
     }
 
 }

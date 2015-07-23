@@ -47,7 +47,7 @@ public interface IVehicleStatusDaoService extends BaseService<VehicleStatus, Lon
 	/**
 	 * 根据车辆信息ID得到车辆位置信息列表
 	 * @param vehicleInfoId  	车辆信息ID
-	 * @param type            	状态类型
+	 * @param type            	状态类型，0状态信息，1报警信息
 	 * @return                  车辆状态信息列表
 	 */
 	List<VehicleStatus> findVehicleStatusByVehicleInfoId(Long vehicleInfoId, Integer type);
