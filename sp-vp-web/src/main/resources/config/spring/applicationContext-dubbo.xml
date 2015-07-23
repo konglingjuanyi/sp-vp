@@ -9,8 +9,8 @@
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <aop:aspectj-autoproxy proxy-target-class="false"/>
-    <bean id="cacheAspect" class="com.zxq.iov.cloud.core.aop.RedisCacheAspect"/>
-    <bean id="exceptionAspect" class="com.zxq.iov.cloud.core.aop.RpcExceptionAspect"/>
+    <bean id="cacheAspect" class="com.saicmotor.telematics.framework.core.aspect.RedisCacheAspect"/>
+    <bean id="exceptionAspect" class="com.saicmotor.telematics.framework.core.aspect.RpcExceptionAspect"/>
 
     <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" server="${dubbo.protocol.server}" />
 

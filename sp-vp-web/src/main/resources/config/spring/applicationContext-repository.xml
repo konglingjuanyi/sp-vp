@@ -50,7 +50,7 @@
         <constructor-arg index="0" ref="sqlSessionFactory" />
     </bean>
 
-    <bean class="com.zxq.iov.cloud.core.dal.repo.mybatis.BaseMyBatisDaoImpl" />
+    <bean class="com.saicmotor.telematics.framework.core.dal.repo.mybatis.BaseMyBatisDaoImpl" />
     <!--mybatis config end-->
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

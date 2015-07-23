@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.web;
 
 import com.alibaba.dubbo.common.json.JSON;
-import com.zxq.iov.cloud.core.test.BaseServiceTestCase;
+import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.ServiceMessage;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
