@@ -26,12 +26,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:26
- * modify date 2015-7-9 11:27
- * @version 0.6, 2015-7-9
+ * modify date 2015-7-24 13:03
+ * @version 0.7, 2015-7-24
  */
 @Service
 @Qualifier("ecallService")
-public class EcallServiceImpl implements IEcallService {
+public class EcallServiceImpl extends BaseService implements IEcallService {
 
     @Autowired
     private ICallDaoService callDaoService;
@@ -57,7 +57,8 @@ public class EcallServiceImpl implements IEcallService {
     }
 
     @Override
-    public void requestEcallStatus(String vin) {
+    public void requestEcallStatus(String vin) throws Exception {
+        AssertRequired("vin", vin);
         // 暂无业务处理
     }
 
@@ -89,7 +90,8 @@ public class EcallServiceImpl implements IEcallService {
     }
 
     @Override
-    public void requestHangUp(String vin) {
+    public void requestHangUp(String vin) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(calls.size() > 0) {
             List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(calls.get(0).getId(), RUNNING_STATUS);
@@ -103,7 +105,8 @@ public class EcallServiceImpl implements IEcallService {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) {
+    public void requestCallBack(String vin, String callNumber) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> list = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(list.size() > 0) {
             if(null == callNumber) {
@@ -130,7 +133,8 @@ public class EcallServiceImpl implements IEcallService {
     }
 
     @Override
-    public void requestCloseEcall(String vin) {
+    public void requestCloseEcall(String vin) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(calls.size() > 0) {
             Call call = calls.get(0);

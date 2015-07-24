@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-6-29 17:07
- * modify date 2015-6-30 16:32
- * @version 0.2, 2015-6-30
+ * modify date 2015-7-24 10:46
+ * @version 0.3, 2015-7-24
  */
 @Service
 public class EventServiceImpl implements IEventService {
@@ -25,7 +25,7 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public void dispatchAck(Long stepInstanceId) {
+    public void dispatchAck(Long stepInstanceId) throws Exception {
         eventDispatcher.end(null, stepInstanceId);
     }
 

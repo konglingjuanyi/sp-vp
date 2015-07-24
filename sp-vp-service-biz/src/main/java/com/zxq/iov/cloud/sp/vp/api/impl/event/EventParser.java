@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
-import com.zxq.iov.cloud.sp.vp.api.exception.StartCodeNotMatchException;
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventInstanceDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDaoService;
@@ -17,8 +18,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 16:11
- * modify date 2015-6-30 17:39
- * @version 0.5, 2015-6-30
+ * modify date 2015-7-24 13:33
+ * @version 0.6, 2015-7-24
  */
 @Service
 public class EventParser {
@@ -37,7 +38,8 @@ public class EventParser {
      * @param eventInstanceId   事件实例ID
      * @return                  步骤定义对象
      */
-    public StepDefinition findStepDefiniton(String code, Map<String, Object> paramMap, Long eventInstanceId) {
+    public StepDefinition findStepDefiniton(String code, Map<String, Object> paramMap, Long eventInstanceId)
+            throws ServLayerException {
         Long eventDefinitionId = null;
         if(null != eventInstanceId) {
             eventDefinitionId = eventInstanceDaoService.findEventInstanceById(eventInstanceId).getEventDefinitionId();
@@ -60,7 +62,7 @@ public class EventParser {
                 }
             }
         }
-        throw new StartCodeNotMatchException();
+        throw new ServLayerException(ExceptionConstants.START_CODE_NOT_MATCH);
     }
 
     /**

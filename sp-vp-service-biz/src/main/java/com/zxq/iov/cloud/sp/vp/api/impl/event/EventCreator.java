@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
-import com.zxq.iov.cloud.sp.vp.api.exception.CycleLimitException;
-import com.zxq.iov.cloud.sp.vp.api.exception.PreNotFindException;
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.*;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-8 11:09
- * modify date 2015-6-24 13:42
- * @version 0.4, 2015-6-24
+ * modify date 2015-7-24 13:32
+ * @version 0.5, 2015-7-24
  */
 @Service
 public class EventCreator {
@@ -40,7 +40,8 @@ public class EventCreator {
      * @param owner                 拥有者
      * @return                      步骤实例对象
      */
-    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, String owner) {
+    public StepInstance createStepInstance(Long taskInstanceId, Long stepDefinitionId, String owner)
+            throws ServLayerException {
         validateStep(taskInstanceId, stepDefinitionId);
         StepInstance stepInstance = new StepInstance();
         stepInstance.setTaskInstanceId(taskInstanceId);
@@ -70,7 +71,8 @@ public class EventCreator {
      * @param owner                 拥有者
      * @return                      任务实例对象
      */
-    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, String owner) {
+    public TaskInstance createTaskInstance(Long eventInstanceId, Long taskDefinitionId, String owner)
+            throws ServLayerException {
         validateTask(eventInstanceId, taskDefinitionId);
         TaskInstance taskInstance = new TaskInstance();
         taskInstance.setEventInstanceId(eventInstanceId);
@@ -107,7 +109,7 @@ public class EventCreator {
      * @param taskInstanceId        任务实例ID
      * @param stepDefinitionId      步骤定义ID
      */
-    private void validateStep(Long taskInstanceId, Long stepDefinitionId) {
+    private void validateStep(Long taskInstanceId, Long stepDefinitionId) throws ServLayerException{
         StepDefinition stepDefinition = stepDefinitionDaoService.findStepDefinitionById(stepDefinitionId);
         if(null != stepDefinition.getPreStepDefinitionId()) {
             boolean preNotFind = true;
@@ -118,7 +120,7 @@ public class EventCreator {
                 }
             }
             if(preNotFind) {
-                throw new PreNotFindException();
+                throw new ServLayerException(ExceptionConstants.PRE_NOT_FIND);
             }
         }
     }
@@ -128,7 +130,7 @@ public class EventCreator {
      * @param eventIntanceId        事件实例ID
      * @param taskDefinitionId      任务定义ID
      */
-    private void validateTask(Long eventIntanceId, Long taskDefinitionId) {
+    private void validateTask(Long eventIntanceId, Long taskDefinitionId) throws ServLayerException{
         TaskDefinition taskDefinition = taskDefinitionDaoService.findTaskDefinitionById(taskDefinitionId);
         if(null != taskDefinition.getPreTaskDefinitionId()) {
             boolean preNotFind = true;
@@ -138,13 +140,13 @@ public class EventCreator {
                 }
             }
             if(preNotFind) {
-                throw new PreNotFindException();
+                throw new ServLayerException(ExceptionConstants.PRE_NOT_FIND);
             }
         }
         if(taskDefinition.getCycleLimit() > 0) {
             if(taskInstanceDaoService.listTaskInstanceByEventInstanceId(eventIntanceId, taskDefinitionId, null).size()
                     >= taskDefinition.getCycleLimit().intValue()) {
-                throw new CycleLimitException();
+                throw new ServLayerException(ExceptionConstants.CYCLE_LIMIT);
             }
         }
 

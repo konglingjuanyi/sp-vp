@@ -38,7 +38,7 @@ public class RvcServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestControl() {
+    public void testRequestControl() throws Exception {
         Long userId = 1L;
         String command = "find_my_car";
         Long controlCommandId =  rvcService.requestControl(userId, vin, command, null);
@@ -47,14 +47,14 @@ public class RvcServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testCancelControl() {
+    public void testCancelControl() throws Exception {
         String command = "5";
         rvcService.cancelControl(vin, command);
     }
 
     @Test
     @Rollback(false)
-    public void testUpdateControlStatus() {
+    public void testUpdateControlStatus() throws Exception {
         Integer mid = 2;
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_RVC, mid);
         otaDto.setEventId(128L);

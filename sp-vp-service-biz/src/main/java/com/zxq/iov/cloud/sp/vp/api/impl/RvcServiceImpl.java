@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Service
 @Qualifier("rvcService")
-public class RvcServiceImpl implements IRvcService {
+public class RvcServiceImpl extends BaseService implements IRvcService {
 
     @Autowired
     private IControlCommandDaoService controlCommandDaoService;
@@ -47,15 +47,11 @@ public class RvcServiceImpl implements IRvcService {
 
     @Override
     public Long requestControl(Long userId, String vin, String command,
-                               Map<String, Object> parameters) {
-        ControlCommand controlCommand = null;
-        try {
-            controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
+                               Map<String, Object> parameters) throws Exception {
+        AssertRequired("userId,vin,command", userId, vin, command);
+        ControlCommand controlCommand = new ControlCommand(tboxDaoService.findTboxIdByVin(vin),
                     vin, Constants.RVC_CMD.get(command), Constants.RVC_CMD_CODE.get(command),
                     JSON.json(parameters));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         controlCommand.setCommandStatus(RVC_STATUS_PENDING);
         controlCommand.setIsCancel(false);
         controlCommand.setStatus(RUNNING_STATUS);

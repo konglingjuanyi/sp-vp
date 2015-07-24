@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.event;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class EventDispatcher {
      * @param paramMap          参数MAP
      * @return                  事件实例ID
      */
-    public Long start(String owner, Long eventId, String code, Map<String, Object> paramMap) {
+    public Long start(String owner, Long eventId, String code, Map<String, Object> paramMap)
+            throws ServLayerException{
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         Long eventInstanceId = null;
         Long taskInstanceId = null;
@@ -112,7 +114,8 @@ public class EventDispatcher {
      * @param paramMap          参数MAP
      * @param result            结果对象
      */
-    public void end(String owner, Long eventId, String code, Map<String, Object> paramMap, Object result) {
+    public void end(String owner, Long eventId, String code, Map<String, Object> paramMap, Object result)
+            throws ServLayerException {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), null);
         if(null != result) {
@@ -132,7 +135,7 @@ public class EventDispatcher {
      * @param owner             事件拥有者
      * @param stepId            步骤实例ID
      */
-    public void end(String owner, Long stepId) {
+    public void end(String owner, Long stepId) throws ServLayerException {
         StepInstance stepInstance = eventConvert.finishRunningStepInstance(stepId, null);
         if(stepInstance.getStepDefinition().isLast()) {
             eventConvert.finishRunningTaskInstance(stepInstance.getTaskInstanceId(), null);
@@ -150,7 +153,8 @@ public class EventDispatcher {
      * @param paramMap          参数MAP
      * @param errorCode         错误代码
      */
-    public void error(Long eventId, String code, Map<String, Object> paramMap, Integer errorCode) {
+    public void error(Long eventId, String code, Map<String, Object> paramMap, Integer errorCode)
+            throws ServLayerException {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
         eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), errorCode);
         eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), errorCode);
@@ -174,7 +178,7 @@ public class EventDispatcher {
      * @param code              代码
      * @return                  步骤实例
      */
-    public StepInstance findInstance(String owner, String code) {
+    public StepInstance findInstance(String owner, String code) throws ServLayerException {
         StepDefinition stepDefinition = eventParse.findStepDefiniton(code, null, null);
         return eventConvert.findOwnerRunningStepInstance(owner, stepDefinition.getId());
     }

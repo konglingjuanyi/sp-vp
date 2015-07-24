@@ -35,7 +35,7 @@ public class DiagnosticServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestDiagnostic() {
+    public void testRequestDiagnostic() throws Exception {
         List<DiagnosticDto> diagnosticDtos = new ArrayList<>();
 //        diagnosticDtos.add(new DiagnosticDto("1", "1", "1")); 这里一段需求不确定
         diagnosticService.requestDiagnostic(vin, diagnosticDtos);
@@ -43,7 +43,7 @@ public class DiagnosticServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testResponseDiagnostic() {
+    public void testResponseDiagnostic() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_DIAGNOSTIC, 2);
         List<DiagnosticDto> diagnosticDtos = new ArrayList<>();
 //        diagnosticDtos.add(new DiagnosticDto("1", "1", "1"));

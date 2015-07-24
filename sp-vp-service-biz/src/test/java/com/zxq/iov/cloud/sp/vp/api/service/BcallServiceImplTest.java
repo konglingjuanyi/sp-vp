@@ -35,7 +35,7 @@ public class BcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testStartBcall() {
+    public void testStartBcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 1);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
@@ -44,13 +44,13 @@ public class BcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestBcallStatus() {
+    public void testRequestBcallStatus() throws Exception {
         bcallService.requestBcallStatus(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testUpdateBcall() {
+    public void testUpdateBcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 4);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
@@ -59,33 +59,33 @@ public class BcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestHangUp() {
+    public void testRequestHangUp() throws Exception {
         bcallService.requestHangUp(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestCallBack() {
+    public void testRequestCallBack() throws Exception {
         String callNumber = "4008208888";
         bcallService.requestCallBack(vin, callNumber);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseCallBack() {
+    public void testResponseCallBack() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 8);
         bcallService.responseCallBack(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestCloseBcall() {
+    public void testRequestCloseBcall() throws Exception {
         bcallService.requestCloseBcall(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testCloseBcall() {
+    public void testCloseBcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_BCALL, 9);
         bcallService.closeBcall(otaDto);
     }

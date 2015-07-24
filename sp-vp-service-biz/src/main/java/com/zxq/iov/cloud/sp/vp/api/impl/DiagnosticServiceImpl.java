@@ -19,12 +19,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-24 10:06
- * modify date 2015-7-17 17:40
- * @version 0.3, 2015-7-17
+ * modify date 2015-7-24 13:02
+ * @version 0.4, 2015-7-24
  */
 @Service
 @Qualifier("diagnosticService")
-public class DiagnosticServiceImpl implements IDiagnosticService {
+public class DiagnosticServiceImpl extends BaseService implements IDiagnosticService {
 
     @Autowired
     private IDiagnosticDaoService diagnosticDaoService;
@@ -32,7 +32,8 @@ public class DiagnosticServiceImpl implements IDiagnosticService {
     private ITboxDaoService tboxDaoService;
 
     @Override
-    public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) {
+    public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) throws Exception {
+        AssertRequired("vin", vin);
         DiagnosticDtoAssembler diagnosticDtoAssembler = new DiagnosticDtoAssembler();
         Long tboxId = tboxDaoService.findTboxIdByVin(vin);
         Diagnostic diagnostic;

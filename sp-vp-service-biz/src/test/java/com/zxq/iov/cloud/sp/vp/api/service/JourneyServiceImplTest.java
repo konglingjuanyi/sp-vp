@@ -32,7 +32,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testStartJourney() {
+    public void testStartJourney() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_JOURNEY, 1);
         Integer tboxJourneyId = 10;
         Integer keyId = 1;
@@ -41,7 +41,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testUpdateJourney() {
+    public void testUpdateJourney() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_JOURNEY, 2);
         Integer tboxJourneyId = 10;
         Integer instFuelConsumption = 1;
@@ -51,7 +51,7 @@ public class JourneyServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testEndJourney() {
+    public void testEndJourney() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_JOURNEY, 3);
         VehiclePosDto startVehiclePosDto = new VehiclePosDto(1, 1, 1, 1,1, 1, 1, new Date(), 1);
         VehiclePosDto endVehiclePosDto = new VehiclePosDto(1, 1, 1, 1,1, 1, 1, new Date(), 1);

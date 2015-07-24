@@ -39,14 +39,14 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestVehicleStatus() {
+    public void testRequestVehicleStatus() throws Exception {
         Integer statusType = 1;
         statusService.requestVehicleStatus(vin, statusType);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseVehicleStatus() {
+    public void testResponseVehicleStatus() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_STATUS, 2);
         otaDto.setEventId(141L);
         VehiclePosDto vehiclePosDto = new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
@@ -61,7 +61,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testgetVehicleStatus() {
+    public void testgetVehicleStatus() throws Exception {
         Long eventId = 140L;
         VehicleInfoDto vehicleInfoDto = statusService.getVehicleStatus(vin, eventId);
         Assert.assertNotNull(vehicleInfoDto);
@@ -69,7 +69,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testLogVehicleAlert() {
+    public void testLogVehicleAlert() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_STATUS, 3);
         List<VehicleAlertDto> vehicleAlertDtos = new ArrayList<>();
         vehicleAlertDtos.add(new VehicleAlertDto(1, new Date(),

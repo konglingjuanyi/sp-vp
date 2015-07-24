@@ -95,14 +95,14 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testRemoveEventDefinition() {
+    public void testRemoveEventDefinition() throws Exception {
         Long eventDefinitionId = 14L;
         eventDefinitionService.removeEventDefinition(eventDefinitionId);
     }
 
     @Test
     @Rollback(true)
-    public void testRemoveTaskDefinition() {
+    public void testRemoveTaskDefinition() throws Exception {
         Long taskDefinitionId = 25L;
         eventDefinitionService.removeTaskDefinition(taskDefinitionId);
     }
@@ -116,7 +116,7 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testUpdateEventDefinition() {
+    public void testUpdateEventDefinition() throws Exception {
         Long eventDefinitionId = 8L;
         EventDefinitionDto eventDefinitionDto = eventDefinitionService.findEventDefinitionById(eventDefinitionId);
         eventDefinitionDto.setType(1);
@@ -126,7 +126,7 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(true)
-    public void testUpdateTaskDefinition() {
+    public void testUpdateTaskDefinition() throws Exception {
         Long taskDefinitionId = 13L;
         TaskDefinitionDto taskDefinitionDto = eventDefinitionService.findTaskDefinitionById(taskDefinitionId);
         taskDefinitionDto.setLifecycle(600);
@@ -135,7 +135,7 @@ public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testUpdateStepDefinition() {
+    public void testUpdateStepDefinition() throws Exception {
         Long stepDefinitionId = 9L;
         StepDefinitionDto stepDefinitionDto = eventDefinitionService.findStepDefinitionById(stepDefinitionId);
         stepDefinitionDto.setLifecycle(600);

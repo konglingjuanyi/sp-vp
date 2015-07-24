@@ -14,8 +14,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-2 16:50
- * modify date 2015-6-18 10:43
- * @version 0.2, 2015-6-18
+ * modify date 2015-7-24 10:43
+ * @version 0.3, 2015-7-24
  */
 public interface IEventDefinitionService {
 
@@ -49,21 +49,21 @@ public interface IEventDefinitionService {
      * @param eventDefinitionId     事件定义主键
      * @return                      事件定义DTO
      */
-    EventDefinitionDto findEventDefinitionById(Long eventDefinitionId);
+    EventDefinitionDto findEventDefinitionById(Long eventDefinitionId) throws Exception;
 
     /**
      * 根据主键得到任务定义DTO
      * @param taskDefinitionId      任务定义主键
      * @return                      任务定义DTO
      */
-    TaskDefinitionDto findTaskDefinitionById(Long taskDefinitionId);
+    TaskDefinitionDto findTaskDefinitionById(Long taskDefinitionId) throws Exception;
 
     /**
      * 根据主键得到步骤定义DTO
      * @param stepDefinitionId      步骤定义主键
      * @return                      步骤定义DTO
      */
-    StepDefinitionDto findStepDefinitionById(Long stepDefinitionId);
+    StepDefinitionDto findStepDefinitionById(Long stepDefinitionId) throws Exception;
 
     /**
      * 列出事件定义下的所有任务定义
@@ -89,13 +89,13 @@ public interface IEventDefinitionService {
      * 删除事件定义
      * @param eventDefinitionId     事件定义主键
      */
-    void removeEventDefinition(Long eventDefinitionId);
+    void removeEventDefinition(Long eventDefinitionId) throws Exception;
 
     /**
      * 删除任务定义
      * @param taskDefinitionId      任务定义主键
      */
-    void removeTaskDefinition(Long taskDefinitionId);
+    void removeTaskDefinition(Long taskDefinitionId) throws Exception;
 
     /**
      * 删除步骤定义

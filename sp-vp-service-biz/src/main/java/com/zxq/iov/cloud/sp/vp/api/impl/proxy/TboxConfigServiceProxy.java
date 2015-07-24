@@ -16,8 +16,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-19 15:19
- * modify date 2015-7-14 15:34
- * @version 0.5, 2015-7-14
+ * modify date 2015-7-24 11:07
+ * @version 0.6, 2015-7-24
  */
 @Service
 @Qualifier("tboxConfigServiceProxy")
@@ -31,7 +31,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     private IEvent event;
 
     @Override
-    public void requestConfigUpdate(String vin) {
+    public void requestConfigUpdate(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 3);
         event.start(otaDto);
         tboxConfigService.requestConfigUpdate(vin);
@@ -40,7 +40,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted) {
+    public void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted) throws Exception {
         event.start(otaDto);
         tboxConfigService.responseConfigUpdate(otaDto, isAccepted);
         event.end(otaDto);
@@ -48,7 +48,8 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
 
     @Override
     public TboxConfigDto checkConfigDelta(OtaDto otaDto, byte[] mcuVersion, byte[] mpuVersion, String vin,
-                                          String iccid, byte[] configVersion, Integer configDelta) {
+                                          String iccid, byte[] configVersion,
+                                          Integer configDelta) throws Exception {
         event.start(otaDto);
         TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, mcuVersion, mpuVersion,
                 vin, iccid, configVersion, configDelta);
@@ -60,7 +61,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId) {
+    public TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId) throws Exception {
         event.start(otaDto);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
         event.end(otaDto, tboxConfigPackageDto);
@@ -72,14 +73,14 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
 
     @Override
     public void closeConfigUpdate(OtaDto otaDto, Boolean result, byte[] mcuVersion, byte[] mpuVersion,
-                                  byte[] configVersion, Integer configDelta) {
+                                  byte[] configVersion, Integer configDelta) throws Exception {
         event.start(otaDto);
         tboxConfigService.closeConfigUpdate(otaDto, result, mcuVersion, mpuVersion, configVersion, configDelta);
         event.end(otaDto);
     }
 
     @Override
-    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
+    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 8);
         event.start(otaDto);
         tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
@@ -88,14 +89,15 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public void responseReadConfig(OtaDto otaDto, List<TboxConfigSettingDto> tboxConfigSettingDtos) {
+    public void responseReadConfig(OtaDto otaDto, List<TboxConfigSettingDto> tboxConfigSettingDtos)
+            throws Exception {
         event.start(otaDto);
         tboxConfigService.responseReadConfig(otaDto, tboxConfigSettingDtos);
         event.end(otaDto);
     }
 
     @Override
-    public KeyDto generateAsymmetricKey(OtaDto otaDto) {
+    public KeyDto generateAsymmetricKey(OtaDto otaDto) throws Exception {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.generateAsymmetricKey(otaDto);
         event.end(otaDto, keyDto);
@@ -106,7 +108,8 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
     }
 
     @Override
-    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc, byte[] tboxSnWithEnc) {
+    public KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc,
+                                        byte[] tboxSnWithEnc) throws Exception {
         event.start(otaDto);
         KeyDto keyDto = tboxConfigService.bindTboxWithSecretKey(otaDto, secretKeyWithEnc, tboxSnWithEnc);
         event.end(otaDto, keyDto);

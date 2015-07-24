@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 15:10
- * modify date 2015-7-13 13:17
- * @version 0.7, 2015-7-13
+ * modify date 2015-7-24 11:10
+ * @version 0.8, 2015-7-24
  */
 @Service
 @Qualifier("bcallServiceProxy")
@@ -34,7 +34,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     @Override
     public BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
+                                     List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         event.start(otaDto);
         BcallRecordDto bcallRecordDto = bcallService.startBcall(otaDto, vehiclePosDtos, bcallType,
                 tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
@@ -46,7 +46,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     }
 
     @Override
-    public void requestBcallStatus(String vin) {
+    public void requestBcallStatus(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 3);
         event.start(otaDto);
         bcallService.requestBcallStatus(vin);
@@ -57,7 +57,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     @Override
     public Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                             Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         event.start(otaDto);
         Long callId = bcallService.updateBcall(otaDto, vehiclePosDtos, bcallType, tboxBatteryStatus,
                 vehicleBatteryStatus, vehicleAlertDtos);
@@ -66,7 +66,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     }
 
     @Override
-    public void requestHangUp(String vin) {
+    public void requestHangUp(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 5);
         event.start(otaDto);
         bcallService.requestHangUp(vin);
@@ -75,7 +75,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) {
+    public void requestCallBack(String vin, String callNumber) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 7);
         event.start(otaDto);
         bcallService.requestCallBack(vin, callNumber);
@@ -84,14 +84,15 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     }
 
     @Override
-    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) {
+    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted,
+                                 Integer rejectReason) throws Exception {
         event.start(otaDto);
         bcallService.responseCallBack(otaDto, callbackAccepted, rejectReason);
         event.end(otaDto);
     }
 
     @Override
-    public void requestCloseBcall(String vin) {
+    public void requestCloseBcall(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 6);
         event.start(otaDto);
         bcallService.requestCloseBcall(vin);
@@ -100,7 +101,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
     }
 
     @Override
-    public void closeBcall(OtaDto otaDto) {
+    public void closeBcall(OtaDto otaDto) throws Exception {
         event.start(otaDto);
         bcallService.closeBcall(otaDto);
         event.end(otaDto);

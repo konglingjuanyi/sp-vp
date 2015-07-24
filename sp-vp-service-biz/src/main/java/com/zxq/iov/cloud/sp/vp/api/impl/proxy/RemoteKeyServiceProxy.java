@@ -18,8 +18,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 14:46
- * modify date 2015-7-22 18:00
- * @version 0.5, 2015-7-22
+ * modify date 2015-7-24 11:17
+ * @version 0.6, 2015-7-24
  */
 @Service
 @Qualifier("remoteKeyServiceProxy")
@@ -34,7 +34,7 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
 
     @Override
     public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                                Date keyValidityStartTime, Date keyValidityEndTime) {
+                                Date keyValidityStartTime, Date keyValidityEndTime) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 1);
         event.start(otaDto);
         remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, keyValidityStartTime,
@@ -45,14 +45,15 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
     }
 
     @Override
-    public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason) {
+    public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess,
+                                 Integer writeFailureReason) throws Exception {
         event.start(otaDto);
         remoteKeyService.responseWriteKey(otaDto, writeSuccess, writeFailureReason);
         event.end(otaDto);
     }
 
     @Override
-    public void requestDeleteKey(String vin, Integer keyReference) {
+    public void requestDeleteKey(String vin, Integer keyReference) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 3);
         event.start(otaDto);
         remoteKeyService.requestDeleteKey(vin, keyReference);
@@ -61,14 +62,15 @@ public class RemoteKeyServiceProxy extends BaseProxy implements IRemoteKeyServic
     }
 
     @Override
-    public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess, Integer deleteFailureReason) {
+    public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess,
+                                  Integer deleteFailureReason) throws Exception {
         event.start(otaDto);
         remoteKeyService.responseDeleteKey(otaDto, deleteSuccess, deleteFailureReason);
         event.end(otaDto);
     }
 
     @Override
-    public void keyAlarm(OtaDto otaDto) {
+    public void keyAlarm(OtaDto otaDto) throws Exception {
         event.start(otaDto);
         remoteKeyService.keyAlarm(otaDto);
         event.end(otaDto);

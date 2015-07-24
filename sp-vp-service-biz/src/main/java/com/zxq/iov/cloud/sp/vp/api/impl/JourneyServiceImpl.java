@@ -1,11 +1,11 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IJourneyService;
 import com.zxq.iov.cloud.sp.vp.api.IStatusService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
-import com.zxq.iov.cloud.sp.vp.api.exception.TboxJourneyIdNotFindException;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.journey.IJourneyDaoService;
@@ -23,12 +23,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-7-17 17:24
- * @version 0.8, 2015-7-17
+ * modify date 2015-7-24 11:15
+ * @version 0.9, 2015-7-24
  */
 @Service
 @Qualifier("journeyService")
-public class JourneyServiceImpl implements IJourneyService {
+public class JourneyServiceImpl extends BaseService implements IJourneyService {
 
     @Autowired
     private IJourneyDaoService journeyDaoService;
@@ -42,7 +42,8 @@ public class JourneyServiceImpl implements IJourneyService {
     private static final Integer END_STATUS = 2;
 
     @Override
-    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId) {
+    public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId)
+            throws Exception {
         Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
             Long ownerId = 1L; // 从主数据获得
@@ -61,7 +62,8 @@ public class JourneyServiceImpl implements IJourneyService {
     }
 
     @Override
-    public void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption, VehiclePosDto vehiclePosDto) {
+    public void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption,
+                              VehiclePosDto vehiclePosDto) throws Exception {
         Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
             Long ownerId = 1L; // 从主数据获得
@@ -79,7 +81,8 @@ public class JourneyServiceImpl implements IJourneyService {
     @Override
     public void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
                            Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
-                           Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange) {
+                           Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
+            throws Exception {
         Journey journey = findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, otaDto.getTboxId());
         if(null == journey) {
             Long ownerId = 1L; // 从主数据获得
@@ -111,10 +114,9 @@ public class JourneyServiceImpl implements IJourneyService {
      * @param tboxJourneyId
      * @return
      */
-    private Journey findJourneyByTboxJourneyIdAndTboxId(Integer tboxJourneyId, Long tboxId) {
-        if(null == tboxJourneyId) {
-            throw new TboxJourneyIdNotFindException();
-        }
+    private Journey findJourneyByTboxJourneyIdAndTboxId(Integer tboxJourneyId, Long tboxId)
+            throws ServLayerException {
+        AssertRequired("tboxJourneyId", tboxJourneyId);
         return journeyDaoService.findJourneyByTboxJourneyIdAndTboxId(tboxJourneyId, tboxId);
     }
 }

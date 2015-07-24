@@ -35,7 +35,7 @@ public class EcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testStartEcall() {
+    public void testStartEcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 1);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
@@ -44,13 +44,13 @@ public class EcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestEcallStatus() {
+    public void testRequestEcallStatus() throws Exception {
         ecallService.requestEcallStatus(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testUpdateEcall() {
+    public void testUpdateEcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 4);
         List<VehiclePosDto> vehiclePosDtos = new ArrayList<>();
         vehiclePosDtos.add(new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1));
@@ -59,33 +59,33 @@ public class EcallServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestHangUp() {
+    public void testRequestHangUp() throws Exception {
         ecallService.requestHangUp(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestCallBack() {
+    public void testRequestCallBack() throws Exception {
         String callNumber = "4008208888";
         ecallService.requestCallBack(vin, callNumber);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseCallBack() {
+    public void testResponseCallBack() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 8);
         ecallService.responseCallBack(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestCloseEcall() {
+    public void testRequestCloseEcall() throws Exception {
         ecallService.requestCloseEcall(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testCloseEcall() {
+    public void testCloseEcall() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_ECALL, 9);
         ecallService.closeEcall(otaDto);
     }

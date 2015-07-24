@@ -12,8 +12,8 @@ import java.util.Map;
  * 安防服务 远程控制接口
  * @author 叶荣杰
  * create date 2015-6-17 11:18
- * modify date 2015-7-21 15:55
- * @version 0.7, 2015-7-21
+ * modify date 2015-7-24 10:51
+ * @version 0.8, 2015-7-24
  */
 public interface IRvcService {
 
@@ -26,14 +26,14 @@ public interface IRvcService {
      * @return                  控制命令ID
      */
     Long requestControl(Long userId, String vin, String command,
-                        Map<String, Object> parameters);
+                        Map<String, Object> parameters) throws Exception;
 
     /**
      * 取消控制
      * @param vin               车辆唯一码
      * @param command           命令代码
      */
-    void cancelControl(String vin, String command);
+    void cancelControl(String vin, String command) throws Exception;
 
     /**
      * 更新控制请求状态
@@ -44,6 +44,7 @@ public interface IRvcService {
      * @param vehicleStatusDtos 车辆状态传输对象列表
      */
     void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
-                             VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos);
+                             VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos)
+            throws Exception;
 
 }

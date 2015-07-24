@@ -28,12 +28,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-15 13:03
- * modify date 2015-7-2 11:04
- * @version 0.5, 2015-7-2
+ * modify date 2015-7-24 10:58
+ * @version 0.6, 2015-7-24
  */
 @Service
 @Qualifier("svtService")
-public class SvtServiceImpl implements ISvtService {
+public class SvtServiceImpl extends BaseService implements ISvtService {
 
     @Autowired
     private IStolenAlarmDaoService stolenAlarmDaoService;
@@ -46,7 +46,7 @@ public class SvtServiceImpl implements ISvtService {
     private IEvent event;
 
     @Override
-    public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) {
+    public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws Exception {
         StolenAlarm stolenAlarm;
         StolenAlarmDtoAssembler stolenAlarmDtoAssembler = new StolenAlarmDtoAssembler();
         StepInstance stepInstance = event.findInstance(tboxDaoService.findVinById(otaDto.getTboxId()),
@@ -62,7 +62,7 @@ public class SvtServiceImpl implements ISvtService {
     }
 
     @Override
-    public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) {
+    public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws Exception {
         StepInstance stepInstance = event.findInstance(tboxDaoService.findVinById(otaDto.getTboxId()),
                 otaDto.getAid() + otaDto.getMid());
         Long eventId = stepInstance.getTaskInstance().getEventInstanceId();
@@ -89,17 +89,20 @@ public class SvtServiceImpl implements ISvtService {
     }
 
     @Override
-    public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) {
+    public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws Exception {
+        AssertRequired("vin", vin);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void requestSingleTrack(String vin) {
+    public void requestSingleTrack(String vin) throws Exception {
+        AssertRequired("vin", vin);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
     @Override
-    public void requestCloseAlarm(String vin) {
+    public void requestCloseAlarm(String vin) throws Exception {
+        AssertRequired("vin", vin);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
@@ -109,7 +112,8 @@ public class SvtServiceImpl implements ISvtService {
     }
 
     @Override
-    public void requestAuthKey(String vin, Integer keyId) {
+    public void requestAuthKey(String vin, Integer keyId) throws Exception {
+        AssertRequired("vin,keyId", vin, keyId);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
@@ -119,7 +123,8 @@ public class SvtServiceImpl implements ISvtService {
     }
 
     @Override
-    public void requestImmobilise(String vin, Integer immoStatus) {
+    public void requestImmobilise(String vin, Integer immoStatus) throws Exception {
+        AssertRequired("vin,immoStatus", vin, immoStatus);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
@@ -132,7 +137,9 @@ public class SvtServiceImpl implements ISvtService {
 
     @Override
     public void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
-                                             List<ProtectStrategySettingDto> protectStrategySettingDtos) {
+                                             List<ProtectStrategySettingDto> protectStrategySettingDtos)
+            throws Exception{
+        AssertRequired("vin", vin);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 
@@ -142,7 +149,8 @@ public class SvtServiceImpl implements ISvtService {
     }
 
     @Override
-    public void requestAlarm(String vin) {
+    public void requestAlarm(String vin) throws Exception {
+        AssertRequired("vin", vin);
         // 此处没有业务，仅仅将指令发给TBOX
     }
 }

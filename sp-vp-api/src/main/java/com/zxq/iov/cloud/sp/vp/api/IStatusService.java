@@ -13,8 +13,8 @@ import java.util.List;
  * 安防服务 车辆状态接口
  * @author 叶荣杰
  * create date 2015-5-13 13:48
- * modify date 2015-7-21 12:47
- * @version 0.7, 2015-7-21
+ * modify date 2015-7-24 10:37
+ * @version 0.8, 2015-7-24
  */
 public interface IStatusService {
 
@@ -24,7 +24,7 @@ public interface IStatusService {
      * @param statusType        请求车辆状态类别
      * @return                  事件ID
      */
-    Long requestVehicleStatus(String vin, Integer statusType);
+    Long requestVehicleStatus(String vin, Integer statusType) throws Exception;
 
     /**
      * TBOX响应车辆状态请求
@@ -36,7 +36,7 @@ public interface IStatusService {
      */
     void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto,
                              List<VehicleStatusDto> vehicleStatusDtos,
-                             List<VehicleAlertDto> vehicleAlertDtos);
+                             List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
 
     /**
      * 得到车辆状态信息快照
@@ -45,7 +45,7 @@ public interface IStatusService {
      * @param eventId           事件ID
      * @return                  车辆状态快照传输对象
      */
-    VehicleInfoDto getVehicleStatus(String vin, Long eventId);
+    VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws Exception;
 
     /**
      * 更新车辆状态
@@ -67,6 +67,6 @@ public interface IStatusService {
      * @param otaDto            OTA传输对象
      * @param vehicleAlertDtos  车辆报警信息传输对象列表
      */
-    void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos);
+    void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
 
 }

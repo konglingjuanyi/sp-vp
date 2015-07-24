@@ -13,8 +13,8 @@ import java.util.List;
  * 安防服务 被盗追踪接口
  * @author 叶荣杰
  * create date 2015-6-15 11:47
- * modify date 2015-6-26 9:23
- * @version 0.4, 2015-6-26
+ * modify date 2015-7-24 10:57
+ * @version 0.5, 2015-7-24
  */
 public interface ISvtService {
 
@@ -23,14 +23,14 @@ public interface ISvtService {
      * @param otaDto                        OTA传输对象
      * @param stolenAlarmDtos               被盗警报传输对象列表
      */
-    void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos);
+    void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws Exception;
 
     /**
      * 更新追踪点
      * @param otaDto                        OTA传输对象
      * @param trackDtos                     追踪点传输对象列表
      */
-    void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos);
+    void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws Exception;
 
     /**
      * 请求手动修改追踪设置
@@ -38,19 +38,19 @@ public interface ISvtService {
      * @param trackInterval                 追踪点间隔时间（秒）
      * @param tracks                        追踪点数量
      */
-    void requestTrackSetting(String vin, Integer trackInterval, Integer tracks);
+    void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws Exception;
 
     /**
      * 请求单次跟踪
      * @param vin                           车辆唯一码
      */
-    void requestSingleTrack(String vin);
+    void requestSingleTrack(String vin) throws Exception;
 
     /**
      * 请求关闭警报
      * @param vin                           车辆唯一码
      */
-    void requestCloseAlarm(String vin);
+    void requestCloseAlarm(String vin) throws Exception;
 
     /**
      * 响应警报关闭状态请求
@@ -58,14 +58,15 @@ public interface ISvtService {
      * @param allAlarmClosed                所有警报是否关闭
      * @param stolenAlarmDtos               被盗警报传输对象列表
      */
-    void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed, List<StolenAlarmDto> stolenAlarmDtos);
+    void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed,
+                            List<StolenAlarmDto> stolenAlarmDtos) throws Exception;
 
     /**
      * 请求验证钥匙
      * @param vin                           车辆唯一码
      * @param keyId                         钥匙ID
      */
-    void requestAuthKey(String vin, Integer keyId);
+    void requestAuthKey(String vin, Integer keyId) throws Exception;
 
     /**
      * 响应钥匙验证请求
@@ -73,14 +74,15 @@ public interface ISvtService {
      * @param keyIsAccepted                 钥匙是否接受
      * @param failureReason                 失败原因
      */
-    void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted, Integer failureReason);
+    void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted,
+                         Integer failureReason) throws Exception;
 
     /**
      * 请求更改车辆固定状态
      * @param vin                           车辆唯一码
      * @param immoStatus                    固定状态
      */
-    void requestImmobilise(String vin, Integer immoStatus);
+    void requestImmobilise(String vin, Integer immoStatus) throws Exception;
 
     /**
      * 响应更改车辆固定状态请求
@@ -88,7 +90,8 @@ public interface ISvtService {
      * @param immoStatus                    固定状态
      * @param failureReason                 失败原因
      */
-    void responseImmobilise(OtaDto otaDto, Integer immoStatus, Integer failureReason);
+    void responseImmobilise(OtaDto otaDto, Integer immoStatus,
+                            Integer failureReason) throws Exception;
 
     /**
      * 请求修改保护策略
@@ -98,16 +101,17 @@ public interface ISvtService {
      * @param protectStrategySettingDtos    策略配置列表
      */
     void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
-                                      List<ProtectStrategySettingDto> protectStrategySettingDtos);
+                                      List<ProtectStrategySettingDto> protectStrategySettingDtos)
+            throws Exception;
 
     /**
      * 响应修改保护策略请求
      */
-    void responseUpdateProtectStrategy();
+    void responseUpdateProtectStrategy() throws Exception;
 
     /**
      * 请求触发报警
      * @param vin                   车辆唯一码
      */
-    void requestAlarm(String vin);
+    void requestAlarm(String vin) throws Exception;
 }

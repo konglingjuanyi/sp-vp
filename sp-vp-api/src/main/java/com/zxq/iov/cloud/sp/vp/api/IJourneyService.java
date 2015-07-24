@@ -10,8 +10,8 @@ import java.util.Date;
  * 安防服务 车辆行程接口
  * @author 叶荣杰
  * create date 2015-6-9 13:00
- * modify date 2015-7-17 17:20
- * @version 0.3, 2015-7-17
+ * modify date 2015-7-24 11:15
+ * @version 0.4, 2015-7-24
  */
 public interface IJourneyService {
 
@@ -22,7 +22,8 @@ public interface IJourneyService {
      * @param tboxJourneyId         TBOX行程ID
      * @param keyId                 钥匙ID
      */
-    void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId);
+    void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId)
+            throws Exception;
 
     /**
      * 更新车辆行程状态
@@ -31,7 +32,8 @@ public interface IJourneyService {
      * @param instFuelConsumption   瞬时油耗
      * @param vehiclePosDto         车辆位置传输对象
      */
-    void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption, VehiclePosDto vehiclePosDto);
+    void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption,
+                       VehiclePosDto vehiclePosDto) throws Exception;
 
     /**
      * 结束车辆行程
@@ -49,6 +51,7 @@ public interface IJourneyService {
      */
     void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
                     Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
-                    Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange);
+                    Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
+            throws Exception;
 
 }

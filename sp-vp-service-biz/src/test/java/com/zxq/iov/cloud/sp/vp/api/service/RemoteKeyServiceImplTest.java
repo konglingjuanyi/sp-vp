@@ -32,7 +32,7 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestWriteKey() {
+    public void testRequestWriteKey() throws Exception {
         Integer keyType = 1;
         String keyValue = "1";
         Integer keyReference = 1;
@@ -41,27 +41,27 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testResponseWriteKey() {
+    public void testResponseWriteKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 2);
         remoteKeyService.responseWriteKey(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestDeleteKey() {
+    public void testRequestDeleteKey() throws Exception {
         remoteKeyService.requestDeleteKey(vin, 1);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseDeleteKey() {
+    public void testResponseDeleteKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 4);
         remoteKeyService.responseDeleteKey(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testKeyAlarm() {
+    public void testKeyAlarm() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 5);
         remoteKeyService.keyAlarm(otaDto);
     }

@@ -12,8 +12,8 @@ import java.util.List;
  * 安防服务 bCall接口
  * @author 叶荣杰
  * create date 2015-6-10 16:47
- * modify date 2015-6-25 9:54
- * @version 0.4, 2015-6-25
+ * modify date 2015-7-24 11:06
+ * @version 0.5, 2015-7-24
  */
 public interface IBcallService {
 
@@ -29,13 +29,13 @@ public interface IBcallService {
      */
     BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                               Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                              List<VehicleAlertDto> vehicleAlertDtos);
+                              List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
 
     /**
      * 请求bCall状态
      * @param vin                   车辆唯一码
      */
-    void requestBcallStatus(String vin);
+    void requestBcallStatus(String vin) throws Exception;
 
     /**
      * 更新bCall状态
@@ -49,20 +49,20 @@ public interface IBcallService {
      */
     Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                     List<VehicleAlertDto> vehicleAlertDtos);
+                     List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
 
     /**
      * 请求挂断通话
      * @param vin                   车辆唯一码
      */
-    void requestHangUp(String vin);
+    void requestHangUp(String vin) throws Exception;
 
     /**
      * 请求车辆回拨
      * @param vin                   车辆唯一码
      * @param callNumber            呼叫号码
      */
-    void requestCallBack(String vin, String callNumber);
+    void requestCallBack(String vin, String callNumber) throws Exception;
 
     /**
      * 响应车辆回拨请求
@@ -70,17 +70,18 @@ public interface IBcallService {
      * @param callbackAccepted      是否接受回拨
      * @param rejectReason          拒绝理由
      */
-    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason);
+    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted,
+                          Integer rejectReason) throws Exception;
 
     /**
      * 请求结束bCall
      * @param vin                   车辆唯一码
      */
-    void requestCloseBcall(String vin);
+    void requestCloseBcall(String vin) throws Exception;
 
     /**
      * 结束bCall
      * @param otaDto                OTA传输对象
      */
-    void closeBcall(OtaDto otaDto);
+    void closeBcall(OtaDto otaDto) throws Exception;
 }

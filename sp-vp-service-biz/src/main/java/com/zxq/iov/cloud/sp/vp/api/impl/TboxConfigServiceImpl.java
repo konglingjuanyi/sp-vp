@@ -21,12 +21,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-19 11:44
- * modify date 2015-7-14 15:32
- * @version 0.4, 2015-7-14
+ * modify date 2015-7-24 13:18
+ * @version 0.5, 2015-7-24
  */
 @Service
 @Qualifier("tboxConfigService")
-public class TboxConfigServiceImpl implements ITboxConfigService {
+public class TboxConfigServiceImpl extends BaseService implements ITboxConfigService {
 
     @Autowired
     private ITboxPersonalConfigDaoService tboxPersonalConfigDaoService;
@@ -34,7 +34,8 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     private ITboxDaoService tboxDaoService;
 
     @Override
-    public void requestConfigUpdate(String vin) {
+    public void requestConfigUpdate(String vin) throws Exception {
+        AssertRequired("vin", vin);
         // 无业务操作
     }
 
@@ -69,7 +70,8 @@ public class TboxConfigServiceImpl implements ITboxConfigService {
     }
 
     @Override
-    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) {
+    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) throws Exception {
+        AssertRequired("vin", vin);
         // 无业务操作
     }
 

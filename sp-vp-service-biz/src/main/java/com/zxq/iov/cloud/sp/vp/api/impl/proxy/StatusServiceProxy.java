@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-16 16:16
- * modify date 2015-7-21 12:49
- * @version 0.7, 2015-7-21
+ * modify date 2015-7-24 10:40
+ * @version 0.8, 2015-7-24
  */
 @Service
 @Qualifier("statusServiceProxy")
@@ -31,7 +31,7 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     private IEvent event;
 
     @Override
-    public Long requestVehicleStatus(String vin, Integer statusType) {
+    public Long requestVehicleStatus(String vin, Integer statusType) throws Exception {
         if(null == statusType) {
             statusType = Constants.VEHICLE_STATUS_BASIC;
         }
@@ -46,7 +46,7 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     @Override
     public void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto,
                                       List<VehicleStatusDto> vehicleStatusDtos,
-                                      List<VehicleAlertDto> vehicleAlertDtos) {
+                                      List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         event.start(otaDto);
         statusService.responseVehicleStatus(otaDto, statusTime, vehiclePosDto, vehicleStatusDtos,
                 vehicleAlertDtos);
@@ -54,7 +54,7 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     }
 
     @Override
-    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) {
+    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws Exception {
         return statusService.getVehicleStatus(vin, eventId);
     }
 
@@ -67,7 +67,7 @@ public class StatusServiceProxy extends BaseProxy implements IStatusService {
     }
 
     @Override
-    public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) {
+    public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         event.start(otaDto);
         statusService.logVehicleAlert(otaDto, vehicleAlertDtos);
         event.end(otaDto);

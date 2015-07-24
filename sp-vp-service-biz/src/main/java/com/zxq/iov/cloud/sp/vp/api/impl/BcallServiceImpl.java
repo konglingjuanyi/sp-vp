@@ -27,12 +27,12 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 10:42
- * modify date 2015-7-2 10:29
- * @version 0.6, 2015-7-2
+ * modify date 2015-7-24 11:06
+ * @version 0.7, 2015-7-24
  */
 @Service
 @Qualifier("bcallService")
-public class BcallServiceImpl implements IBcallService {
+public class BcallServiceImpl extends BaseService implements IBcallService {
 
     @Autowired
     private ICallDaoService callDaoService;
@@ -50,7 +50,7 @@ public class BcallServiceImpl implements IBcallService {
     @Override
     public BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) {
+                                     List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         Long callId = updateBcall(otaDto, vehiclePosDtos, bcallType, tboxBatteryStatus, vehicleBatteryStatus, vehicleAlertDtos);
         String callNumber = "4008888888"; // 此处默认的呼叫号码以什么形式获得还不确定
         return new BcallRecordDtoAssembler().toDto(callRecordDaoService.createCallRecord(
@@ -65,7 +65,7 @@ public class BcallServiceImpl implements IBcallService {
     @Override
     public Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                             Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) {
+                            List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
         Call call;
         List<Call> list = callDaoService.listCallByTboxId(otaDto.getTboxId(), RUNNING_STATUS);
         if(list.size() > 0) {
@@ -91,7 +91,8 @@ public class BcallServiceImpl implements IBcallService {
     }
 
     @Override
-    public void requestHangUp(String vin) {
+    public void requestHangUp(String vin) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(calls.size() > 0) {
             List<CallRecord> callRecords = callRecordDaoService.listCallRecordByCallId(calls.get(0).getId(), RUNNING_STATUS);
@@ -105,7 +106,8 @@ public class BcallServiceImpl implements IBcallService {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) {
+    public void requestCallBack(String vin, String callNumber) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> list = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(list.size() > 0) {
             if(null == callNumber) {
@@ -132,7 +134,8 @@ public class BcallServiceImpl implements IBcallService {
     }
 
     @Override
-    public void requestCloseBcall(String vin) {
+    public void requestCloseBcall(String vin) throws Exception {
+        AssertRequired("vin", vin);
         List<Call> calls = callDaoService.listCallByVin(vin, RUNNING_STATUS);
         if(calls.size() > 0) {
             Call call = calls.get(0);

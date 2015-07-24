@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 13:45
- * modify date 2015-7-9 11:24
- * @version 0.5, 2015-7-9
+ * modify date 2015-7-24 11:03
+ * @version 0.6, 2015-7-24
  */
 @Service
 @Qualifier("ecallServiceProxy")
@@ -32,7 +32,8 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                                     Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
+                                     Integer crashSeverity, Integer tboxBatteryStatus,
+                                     Integer vehicleBatteryStatus) throws Exception {
         event.start(otaDto);
         EcallRecordDto ecallRecordDto = ecallService.startEcall(otaDto, vehiclePosDtos, ecallType, crashSeverity,
                 tboxBatteryStatus, vehicleBatteryStatus);
@@ -44,7 +45,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
     }
 
     @Override
-    public void requestEcallStatus(String vin) {
+    public void requestEcallStatus(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 3);
         event.start(otaDto);
         ecallService.requestEcallStatus(vin);
@@ -54,7 +55,8 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
 
     @Override
     public Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
-                            Integer crashSeverity, Integer tboxBatteryStatus, Integer vehicleBatteryStatus) {
+                            Integer crashSeverity, Integer tboxBatteryStatus,
+                            Integer vehicleBatteryStatus) throws Exception {
         event.start(otaDto);
         Long callId = ecallService.updateEcall(otaDto, vehiclePosDtos, ecallType, crashSeverity, tboxBatteryStatus,
                 vehicleBatteryStatus);
@@ -63,7 +65,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
     }
 
     @Override
-    public void requestHangUp(String vin) {
+    public void requestHangUp(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 5);
         event.start(otaDto);
         ecallService.requestHangUp(vin);
@@ -72,7 +74,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) {
+    public void requestCallBack(String vin, String callNumber) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 7);
         event.start(otaDto);
         ecallService.requestCallBack(vin, callNumber);
@@ -81,14 +83,15 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
     }
 
     @Override
-    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) {
+    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted,
+                                 Integer rejectReason) throws Exception {
         event.start(otaDto);
         ecallService.responseCallBack(otaDto, callbackAccepted, rejectReason);
         event.end(otaDto);
     }
 
     @Override
-    public void requestCloseEcall(String vin) {
+    public void requestCloseEcall(String vin) throws Exception {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 6);
         event.start(otaDto);
         ecallService.requestCloseEcall(vin);
@@ -97,7 +100,7 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
     }
 
     @Override
-    public void closeEcall(OtaDto otaDto) {
+    public void closeEcall(OtaDto otaDto) throws Exception {
         event.start(otaDto);
         ecallService.closeEcall(otaDto);
         event.end(otaDto);

@@ -38,7 +38,7 @@ public class SvtServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testAlarm() {
+    public void testAlarm() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_SVT, 1);
         List<StolenAlarmDto> stolenAlarmDtos = new ArrayList<>();
         StolenAlarmDto stolenAlarmDto = new StolenAlarmDto(1, true, true,
@@ -49,7 +49,7 @@ public class SvtServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testUpdateTrack() {
+    public void testUpdateTrack() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_SVT, 2);
         List<TrackDto> trackDtos = new ArrayList<>();
         trackDtos.add(new TrackDto(new Date(), new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1),
@@ -59,7 +59,7 @@ public class SvtServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestTrackSetting() {
+    public void testRequestTrackSetting() throws Exception {
         Integer trackInterval = 5;
         Integer tracks = 10;
         svtService.requestTrackSetting(vin, trackInterval, tracks);
@@ -67,47 +67,47 @@ public class SvtServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestSingleTrack() {
+    public void testRequestSingleTrack() throws Exception {
         svtService.requestSingleTrack(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestCloseAlarm() {
+    public void testRequestCloseAlarm() throws Exception {
         svtService.requestCloseAlarm(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseCloseAlarm() {
+    public void testResponseCloseAlarm() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_SVT, 6);
         svtService.responseCloseAlarm(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestAuthKey() {
+    public void testRequestAuthKey() throws Exception {
         Integer keyId = 1;
         svtService.requestAuthKey(vin, keyId);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseAuthKey() {
+    public void testResponseAuthKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_SVT, 8);
         svtService.responseAuthKey(otaDto, true, null);
     }
 
     @Test
     @Rollback(false)
-    public void testRequestImmobilise() {
+    public void testRequestImmobilise() throws Exception {
         Integer immoStatus = 1;
         svtService.requestImmobilise(vin, immoStatus);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseImmobilise() {
+    public void testResponseImmobilise() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_SVT, 10);
         Integer immoStatus = 1;
         svtService.responseImmobilise(otaDto, immoStatus, null);
@@ -115,20 +115,20 @@ public class SvtServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestUpdateProtectStrategy() {
+    public void testRequestUpdateProtectStrategy() throws Exception {
         List<ProtectStrategySettingDto> protectStrategySettingDtos = new ArrayList<>();
         svtService.requestUpdateProtectStrategy(vin, new Date(), new Date(), protectStrategySettingDtos);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseUpdateProtectStrategy() {
+    public void testResponseUpdateProtectStrategy() throws Exception {
         svtService.responseUpdateProtectStrategy();
     }
 
     @Test
     @Rollback(false)
-    public void testRequestAlarm() {
+    public void testRequestAlarm() throws Exception {
         svtService.requestAlarm(vin);
     }
 }

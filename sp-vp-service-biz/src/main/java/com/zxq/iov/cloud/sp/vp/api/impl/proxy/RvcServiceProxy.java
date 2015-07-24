@@ -1,5 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api.impl.proxy;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -8,6 +10,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.event.IEvent;
 import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDaoService;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-16 10:45
- * modify date 2015-7-17 17:55
- * @version 0.6, 2015-7-17
+ * modify date 2015-7-24 10:51
+ * @version 0.7, 2015-7-24
  */
 @Service
 @Qualifier("rvcServiceProxy")
@@ -43,7 +46,10 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
 
     @Override
     public Long requestControl(Long userId, String vin, String command,
-                               Map<String, Object> parameters) {
+                               Map<String, Object> parameters) throws Exception {
+        if(StringUtils.isBlank(command) || null == Constants.RVC_CMD_CODE.get(command)) {
+            throw new ServLayerException(ExceptionConstants.WRONG_CONTROL_CMD);
+        }
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", Constants.RVC_CMD_CODE.get(command));
@@ -63,7 +69,7 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
     }
 
     @Override
-    public void cancelControl(String vin, String command) {
+    public void cancelControl(String vin, String command) throws Exception {
         List<ControlCommand> list = controlCommandDaoService.listControlCommandByVinAndCommand(vin,
                 command, RUNNING_STATUS);
         if(list.size() > 0) {
@@ -85,7 +91,8 @@ public class RvcServiceProxy extends BaseProxy implements IRvcService {
 
     @Override
     public void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
-                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos) {
+                                    VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos)
+            throws Exception {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);
         event.start(otaDto, paramMap);

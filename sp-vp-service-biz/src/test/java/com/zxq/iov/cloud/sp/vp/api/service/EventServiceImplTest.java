@@ -23,7 +23,7 @@ public class EventServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testDispatchAck() {
+    public void testDispatchAck() throws Exception {
         Long stepId = 289L;
         eventService.dispatchAck(stepId);
     }

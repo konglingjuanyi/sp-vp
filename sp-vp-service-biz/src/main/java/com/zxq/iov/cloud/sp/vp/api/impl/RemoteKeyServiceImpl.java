@@ -18,12 +18,12 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 13:47
- * modify date 2015-7-22 17:59
- * @version 0.3, 2015-7-22
+ * modify date 2015-7-24 13:14
+ * @version 0.4, 2015-7-24
  */
 @Service
 @Qualifier("remoteKeyService")
-public class RemoteKeyServiceImpl implements IRemoteKeyService {
+public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyService {
 
     @Autowired
     private IRemoteKeyDaoService remoteKeyDaoService;
@@ -32,7 +32,8 @@ public class RemoteKeyServiceImpl implements IRemoteKeyService {
 
     @Override
     public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                                Date keyValidityStartTime, Date keyValidityEndTime) {
+                                Date keyValidityStartTime, Date keyValidityEndTime) throws Exception {
+        AssertRequired("vin,keyType,keyValue", vin, keyType, keyValue);
         Long tboxId = tboxDaoService.findTboxIdByVin(vin);
         RemoteKey remoteKey = new RemoteKey(tboxId, keyType, keyValue, keyReference,
                 keyValidityStartTime, keyValidityEndTime);
@@ -51,8 +52,8 @@ public class RemoteKeyServiceImpl implements IRemoteKeyService {
     }
 
     @Override
-    public void requestDeleteKey(String vin, Integer keyReference) {
-
+    public void requestDeleteKey(String vin, Integer keyReference) throws Exception {
+        AssertRequired("vin,keyReference", vin, keyReference);
     }
 
     @Override

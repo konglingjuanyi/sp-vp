@@ -37,20 +37,20 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestConfigUpdate() {
+    public void testRequestConfigUpdate() throws Exception {
         tboxConfigService.requestConfigUpdate(vin);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseConfigUpdate() {
+    public void testResponseConfigUpdate() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 4);
         tboxConfigService.responseConfigUpdate(otaDto, true);
     }
 
     @Test
     @Rollback(false)
-    public void testCheckConfigDelta() {
+    public void testCheckConfigDelta() throws Exception {
         String mcuVersion = "1";
         String mpuVersion = "1";
         String configVersion = "1";
@@ -65,7 +65,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testGetConfigPackage() {
+    public void testGetConfigPackage() throws Exception {
         Integer packageId = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 6);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
@@ -74,7 +74,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testCloseConfigUpdate() {
+    public void testCloseConfigUpdate() throws Exception {
         Boolean result = true;
         String mcuVersion = "1";
         String mpuVersion = "1";
@@ -88,14 +88,14 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testRequestReadConfig() {
+    public void testRequestReadConfig() throws Exception {
         Long[] tboxConfigsettingIds = {1L, 2L};
         tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
     }
 
     @Test
     @Rollback(false)
-    public void testResponseReadConfig() {
+    public void testResponseReadConfig() throws Exception {
         List<TboxConfigSettingDto> tboxConfigSettingDtos = new ArrayList<>();
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 9);
         tboxConfigService.responseReadConfig(otaDto, tboxConfigSettingDtos);
@@ -103,14 +103,14 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Test
     @Rollback(false)
-    public void testGenerateAsymmetricKey() {
+    public void testGenerateAsymmetricKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 10);
         tboxConfigService.generateAsymmetricKey(otaDto);
     }
 
     @Test
     @Rollback(false)
-    public void testBindTboxWithSecretKey() {
+    public void testBindTboxWithSecretKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 12);
         String secretKeyWithEnc = "1";
         String tboxSnWithEnc = "1";
