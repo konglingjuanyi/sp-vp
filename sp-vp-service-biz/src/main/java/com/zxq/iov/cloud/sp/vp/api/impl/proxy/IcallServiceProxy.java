@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 16:11
- * modify date 2015-7-24 10:54
- * @version 0.6, 2015-7-24
+ * modify date 2015-7-27 17:22
+ * @version 0.7, 2015-7-27
  */
 @Service
 @Qualifier("icallServiceProxy")
@@ -40,6 +40,7 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        icallRecordDto.setMid(otaDto.getMid());
         return icallRecordDto;
     }
 

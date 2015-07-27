@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 15:10
- * modify date 2015-7-24 11:10
- * @version 0.8, 2015-7-24
+ * modify date 2015-7-27 17:21
+ * @version 0.9, 2015-7-27
  */
 @Service
 @Qualifier("bcallServiceProxy")
@@ -42,6 +42,7 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        bcallRecordDto.setMid(otaDto.getMid());
         return bcallRecordDto;
     }
 

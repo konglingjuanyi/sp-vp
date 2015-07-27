@@ -1,13 +1,15 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.config;
 
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+
 /**
- * 安防服务 bCall接口
+ * 安防服务 TBOX配置传输对象
  * @author 叶荣杰
  * create date 2015-4-22 13:48
- * modify date 2015-6-19 10:23
- * @version 0.2, 2015-6-19
+ * modify date 2015-7-27 17:25
+ * @version 0.3, 2015-7-27
  */
-public class TboxConfigDto {
+public class TboxConfigDto extends OtaDto {
 
     private Integer packageCount;
     private Integer configDelta;

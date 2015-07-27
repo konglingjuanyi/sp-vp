@@ -1,16 +1,17 @@
 package com.zxq.iov.cloud.sp.vp.api.dto.config;
 
-import java.io.Serializable;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+
 import java.util.List;
 
 /**
  * 安防服务 配置包传输对象
  * @author 叶荣杰
  * create date 2015-4-22 13:24
- * modify date
- * @version 0.1, 2015-4-22
+ * modify date 2015-7-27 17:29
+ * @version 0.2, 2015-7-27
  */
-public class TboxConfigPackageDto implements Serializable {
+public class TboxConfigPackageDto extends OtaDto {
 
     private List<TboxConfigSettingDto> tboxConfigSettingDtos;
     private Integer packageId;

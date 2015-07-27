@@ -57,6 +57,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        tboxConfigDto.setMid(otaDto.getMid());
         return tboxConfigDto;
     }
 
@@ -68,6 +69,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
         otaDto.setMid(7);
         event.start(otaDto);
         event.end(otaDto);
+        tboxConfigPackageDto.setMid(otaDto.getMid());
         return tboxConfigPackageDto;
     }
 
@@ -104,6 +106,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
         otaDto.setMid(11);
         event.start(otaDto);
         event.end(otaDto);
+        keyDto.setMid(otaDto.getMid());
         return keyDto;
     }
 
@@ -116,6 +119,7 @@ public class TboxConfigServiceProxy extends BaseProxy implements ITboxConfigServ
         otaDto.setMid(13);
         event.start(otaDto);
         event.end(otaDto);
+        keyDto.setMid(otaDto.getMid());
         return keyDto;
     }
 }
