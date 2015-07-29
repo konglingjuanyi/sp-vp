@@ -14,11 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author 叶荣杰
  * create date 2015-6-19 13:24
- * modify date
- * @version 0.1, 2015-6-19
+ * modify date 2015-7-29 11:07
+ * @version 0.2, 2015-7-29
  */
 @Transactional
 public class TboxPersonalConfigDaoServiceImplTest extends BaseServiceTestCase {
+
+    private Long tboxId = 1L;
+    private Long userId = 1L;
+    private String vin = "11111111111111111";
 
     @Autowired
     private ITboxPersonalConfigDaoService tboxPersonalConfigDaoService;
@@ -26,10 +30,7 @@ public class TboxPersonalConfigDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateTboxPersonalConfig(){
-        Long tboxId = 1L;
-        TboxPersonalConfig tboxPersonalConfig = new TboxPersonalConfig();
-        tboxPersonalConfig.setTboxId(tboxId);
-        tboxPersonalConfig.setConfigDelta(1);
+        TboxPersonalConfig tboxPersonalConfig = new TboxPersonalConfig(tboxId, userId, vin);
         tboxPersonalConfig = tboxPersonalConfigDaoService.createTboxPersonalConfig(tboxPersonalConfig);
         Assert.assertNotNull(tboxPersonalConfig);
     }

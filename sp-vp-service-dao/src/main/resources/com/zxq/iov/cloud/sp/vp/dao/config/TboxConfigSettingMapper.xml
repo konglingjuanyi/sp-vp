@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfigMapper">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.config.TboxConfigSettingMapper">
 
-	<resultMap id="tboxPersonalConfigResultMap" type="TboxPersonalConfig">
+	<resultMap id="tboxConfigSettingResultMap" type="TboxConfigSetting">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="TBOX_CONFIG_ID" jdbcType="DECIMAL" property="tboxConfigId"/>
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
-		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
-		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
+		<result column="KEY_ID" jdbcType="DECIMAL" property="keyId"/>
+		<result column="VALUE" jdbcType="VARCHAR" property="value"/>
 		<result column="CONFIG_DELTA" jdbcType="DECIMAL" property="configDelta"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
 		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
@@ -22,7 +23,7 @@
 	<!-- 分页查询 -->
 	<sql id="selectPageTemplate">
 		SELECT t.*
-		FROM TB_TBOX_PERSONAL_CONFIG t
+		FROM TB_TBOX_CONFIG_SETTING t
 		WHERE IFNULL(t.is_valid, 1) = 1
 	</sql>	
 	<select id="selectPageCount" parameterType="hashmap" resultType="long">
@@ -31,26 +32,35 @@
 		) a
 	</select>
 	
-	<select id="selectPage" parameterType="hashmap" resultMap="tboxPersonalConfigResultMap">
+	<select id="selectPage" parameterType="hashmap" resultMap="tboxConfigSettingResultMap">
         <include refid="selectPageTemplate"/>
+		<if test="tboxId != null">
+			AND TBOX_ID = #{tboxId,jdbcType=DECIMAL}
+		</if>
+		<if test="tboxConfigId != null">
+			AND TBOX_CONFIG_ID = #{tboxConfigId,jdbcType=DECIMAL}
+		</if>
         limit #{pageResult.offset}, #{pageResult.pageSize}
     </select>
 	<!-- 分页查询 -->
 
 	<!-- 业务查询 -->
-    <select id="selectSample" parameterType="TboxPersonalConfig" resultMap="tboxPersonalConfigResultMap">
-        SELECT * FROM TB_TBOX_PERSONAL_CONFIG t
+    <select id="selectSample" parameterType="TboxPersonalConfig" resultMap="tboxConfigSettingResultMap">
+        SELECT * FROM TB_TBOX_CONFIG_SETTING t
         WHERE t.is_valid = 1
     </select>
 
-	<select id="selectList" parameterType="hashmap" resultMap="tboxPersonalConfigResultMap">
+	<select id="selectList" parameterType="hashmap" resultMap="tboxConfigSettingResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="tboxId != null">
 			AND TBOX_ID = #{tboxId,jdbcType=DECIMAL}
 		</if>
+		<if test="tboxConfigId != null">
+			AND TBOX_CONFIG_ID = #{tboxConfigId,jdbcType=DECIMAL}
+		</if>
 	</select>
 
-	<select id="selectOne" resultMap="tboxPersonalConfigResultMap" parameterType="java.lang.Long">
+	<select id="selectOne" resultMap="tboxConfigSettingResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
 		AND ID = #{id, jdbcType=DECIMAL}
 	</select>

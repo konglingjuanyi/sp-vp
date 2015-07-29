@@ -3,6 +3,7 @@ package com.zxq.iov.cloud.sp.vp.api.service;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigSettingDto;
 import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
@@ -29,7 +30,7 @@ import java.util.List;
 public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Autowired
-    @Qualifier("tboxConfigServiceProxy")
+    @Qualifier("tboxConfigService")
     private ITboxConfigService tboxConfigService;
 
     private String vin = "1";
@@ -51,16 +52,18 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCheckConfigDelta() throws Exception {
-        String mcuVersion = "1";
-        String mpuVersion = "1";
-        String configVersion = "1";
+        String mcuVersion = "01";
+        String mpuVersion = "01";
+        String configVersion = "01";
         Integer configDelta = 1;
         String iccid = "1";
         Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
-        tboxConfigService.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),
+        otaDto.setEventId(1L);
+        TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),
                 BinaryAndHexUtil.hexStringToByte(mpuVersion), vin, iccid,
                 BinaryAndHexUtil.hexStringToByte(configVersion), configDelta);
+        System.out.print(tboxConfigDto.getPackageCount());
     }
 
     @Test
@@ -68,6 +71,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     public void testGetConfigPackage() throws Exception {
         Integer packageId = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 6);
+        otaDto.setEventId(1L);
         TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
         Assert.assertNotNull(tboxConfigPackageDto);
     }
