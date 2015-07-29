@@ -8,8 +8,8 @@ import com.zxq.iov.cloud.sp.vp.entity.config.TboxPersonalConfig;
  *
  * @author 叶荣杰
  * create date 2015-6-19 13:16
- * modify date
- * @version 0.1, 2015-6-19
+ * modify date 2015-7-29 14:12
+ * @version 0.2, 2015-7-29
  */
 public interface ITboxPersonalConfigDaoService extends BaseService<TboxPersonalConfig, Long> {
 
@@ -46,5 +46,12 @@ public interface ITboxPersonalConfigDaoService extends BaseService<TboxPersonalC
 	 * @return                     	TBOX个性化配置对象
 	 */
 	TboxPersonalConfig findTboxPersonalConfigByTboxId(Long tboxId);
+
+	/**
+	 * 根据车辆唯一码得到TBOX个性化配置对象
+	 * @param vin            		车辆唯一码
+	 * @return                     	TBOX个性化配置对象
+	 */
+	TboxPersonalConfig findTboxPersonalConfigByVin(String vin);
 	
 }

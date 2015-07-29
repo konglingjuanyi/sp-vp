@@ -33,7 +33,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Qualifier("tboxConfigService")
     private ITboxConfigService tboxConfigService;
 
-    private String vin = "1";
+    private String vin = "11111111111111111";
     private Long tboxId = 1L;
 
     @Test
@@ -57,7 +57,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         String configVersion = "01";
         Integer configDelta = 1;
         String iccid = "1";
-        Long tboxId = 1L;
+        Long tboxId = 2L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
         otaDto.setEventId(1L);
         TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),

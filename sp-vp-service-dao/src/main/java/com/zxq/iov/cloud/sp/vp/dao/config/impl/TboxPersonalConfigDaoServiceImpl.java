@@ -73,4 +73,12 @@ public class TboxPersonalConfigDaoServiceImpl extends BaseServiceImpl<ITboxPerso
 		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
 		return (list.size()>0)?list.get(0):null;
 	}
+
+	@Override
+	public TboxPersonalConfig findTboxPersonalConfigByVin(String vin) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("vin", vin);
+		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
+		return (list.size()>0)?list.get(0):null;
+	}
 }

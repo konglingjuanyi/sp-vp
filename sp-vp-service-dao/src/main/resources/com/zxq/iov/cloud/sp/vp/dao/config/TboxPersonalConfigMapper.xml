@@ -48,6 +48,9 @@
 		<if test="tboxId != null">
 			AND TBOX_ID = #{tboxId,jdbcType=DECIMAL}
 		</if>
+		<if test="vin != null and vin != ''">
+			AND VIN = #{vin,jdbcType=VARCHAR}
+		</if>
 	</select>
 
 	<select id="selectOne" resultMap="tboxPersonalConfigResultMap" parameterType="java.lang.Long">

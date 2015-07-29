@@ -60,4 +60,11 @@ public class TboxPersonalConfigDaoServiceImplTest extends BaseServiceTestCase {
         Assert.assertNotNull(tboxPersonalConfig);
     }
 
+    @Test
+    @Rollback(false)
+    public void testFindTboxPersonalConfigByVin(){
+        TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDaoService.findTboxPersonalConfigByVin(vin);
+        Assert.assertNotNull(tboxPersonalConfig);
+    }
+
 }

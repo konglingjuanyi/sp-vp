@@ -4,6 +4,7 @@ import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.JSONArray;
 import com.alibaba.dubbo.common.json.JSONObject;
 import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -11,6 +12,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigPackageDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.TboxConfigSettingDto;
 import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxConfigSettingDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDaoService;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDaoService;
@@ -60,7 +62,13 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
             throws Exception {
         AssertRequired("mcuVersion,mpuVersion,vin,iccid,configVersion,configDelta,eventId", mcuVersion,
                 mpuVersion, vin, iccid, configVersion, configDelta, otaDto.getEventId());
-        TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDaoService.findTboxPersonalConfigByTboxId(otaDto.getTboxId());
+        TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDaoService.findTboxPersonalConfigByVin(vin);
+        if(null == tboxPersonalConfig) {
+            throw new ServLayerException(ExceptionConstants.PERSONAL_CONFIG_NOT_FIND);
+        }
+        if(tboxPersonalConfig.getTboxId().intValue() != otaDto.getTboxId()) {
+            throw new ServLayerException(ExceptionConstants.TBOX_NOT_MATCH_VIN);
+        }
         TboxConfigDto tboxConfigDto = new TboxConfigDto();
         if(tboxPersonalConfig.getConfigDelta().intValue() > configDelta.intValue()) {
             int packageSize = 10;
