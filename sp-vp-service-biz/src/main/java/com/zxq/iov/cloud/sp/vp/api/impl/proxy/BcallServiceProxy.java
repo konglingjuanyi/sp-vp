@@ -42,6 +42,8 @@ public class BcallServiceProxy extends BaseProxy implements IBcallService {
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        bcallRecordDto.setEventId(otaDto.getEventId());
+        bcallRecordDto.setAid(otaDto.getAid());
         bcallRecordDto.setMid(otaDto.getMid());
         return bcallRecordDto;
     }

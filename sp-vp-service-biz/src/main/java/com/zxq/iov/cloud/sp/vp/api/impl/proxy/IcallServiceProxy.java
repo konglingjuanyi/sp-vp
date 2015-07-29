@@ -40,6 +40,8 @@ public class IcallServiceProxy extends BaseProxy implements IIcallService {
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        icallRecordDto.setEventId(otaDto.getEventId());
+        icallRecordDto.setAid(otaDto.getAid());
         icallRecordDto.setMid(otaDto.getMid());
         return icallRecordDto;
     }

@@ -41,6 +41,8 @@ public class EcallServiceProxy extends BaseProxy implements IEcallService {
         otaDto.setMid(2);
         event.start(otaDto);
         event.end(otaDto);
+        ecallRecordDto.setEventId(otaDto.getEventId());
+        ecallRecordDto.setAid(otaDto.getAid());
         ecallRecordDto.setMid(otaDto.getMid());
         return ecallRecordDto;
     }
