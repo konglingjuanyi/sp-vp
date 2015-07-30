@@ -30,7 +30,7 @@ import java.util.List;
 public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
     @Autowired
-    @Qualifier("tboxConfigService")
+    @Qualifier("tboxConfigServiceProxy")
     private ITboxConfigService tboxConfigService;
 
     private String vin = "11111111111111111";
@@ -57,9 +57,9 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         String configVersion = "01";
         Integer configDelta = 1;
         String iccid = "1";
-        Long tboxId = 2L;
+        Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
-        otaDto.setEventId(1L);
+        //otaDto.setEventId(1L);
         TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),
                 BinaryAndHexUtil.hexStringToByte(mpuVersion), vin, iccid,
                 BinaryAndHexUtil.hexStringToByte(configVersion), configDelta);

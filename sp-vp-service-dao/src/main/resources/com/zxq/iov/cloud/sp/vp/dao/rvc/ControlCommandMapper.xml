@@ -6,7 +6,10 @@
 	<resultMap id="controlCommandResultMap" type="ControlCommand">
 		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
 		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="EVENT_ID" jdbcType="DECIMAL" property="eventId"/>
+		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
+		<result column="REQUEST_CLIENT" jdbcType="VARCHAR" property="requestClient"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
 		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="PARAMETER" jdbcType="VARCHAR" property="parameter"/>

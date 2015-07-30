@@ -10,8 +10,8 @@ import java.io.Serializable;
  * 安防服务 控制命令类
  * @author 叶荣杰
  * create date 2015-6-17 11:24
- * modify date 2015-6-29 10:13
- * @version 0.3, 2015-6-29
+ * modify date 2015-7-29 17:40
+ * @version 0.4, 2015-7-29
  */
 @Entity()
 @Table(name = "TB_CONTROL_COMMAND")
@@ -35,6 +35,12 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "EVENT_ID", precision = 20, scale = 0)
     private Long eventId;
 
+    @Column(name = "USER_ID", precision = 20, scale = 0)
+    private Long userId;
+
+    @Column(name = "REQUEST_CLIENT", length = 20)
+    private String requestClient;
+
     @Column(name = "NAME", length = 50)
     private String name;
 
@@ -55,12 +61,16 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
 
     public ControlCommand(){}
 
-    public ControlCommand(Long tboxId, String vin, String name, String code, String parameter) {
+    public ControlCommand(Long tboxId, String vin, String requestClient, String name, String code,
+                          String parameter) {
         this.tboxId = tboxId;
         this.vin = vin;
+        this.requestClient = requestClient;
         this.name = name;
         this.code = code;
         this.parameter = parameter;
+        this.commandStatus = "00";
+        this.isCancel = false;
     }
 
     public Long getId() {
@@ -93,6 +103,22 @@ public class ControlCommand extends MyBaseEntity<Long> implements Serializable {
 
     public void setEventId(Long eventId) {
         this.eventId = eventId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getRequestClient() {
+        return requestClient;
+    }
+
+    public void setRequestClient(String requestClient) {
+        this.requestClient = requestClient;
     }
 
     public String getName() {

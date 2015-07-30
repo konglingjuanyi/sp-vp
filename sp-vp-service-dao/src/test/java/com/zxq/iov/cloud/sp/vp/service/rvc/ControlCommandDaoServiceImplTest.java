@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author 叶荣杰
  * create date 2015-6-17 11:52
- * modify date
- * @version 0.1, 2015-6-17
+ * modify date 2015-7-29 17:48
+ * @version 0.2, 2015-7-29
  */
 @Transactional
 public class ControlCommandDaoServiceImplTest extends BaseServiceTestCase {
+
+    private Long tboxId = 1L;
+    private String vin = "11111111111111111";
 
     @Autowired
     private IControlCommandDaoService controlCommandDaoService;
@@ -27,13 +30,11 @@ public class ControlCommandDaoServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testCreateControlCommand(){
-        Long tboxId = 1L;
         Long eventId = 1L;
-        ControlCommand controlCommand = new ControlCommand();
-        controlCommand.setTboxId(tboxId);
+        String requestClient = "mobile";
+        ControlCommand controlCommand = new ControlCommand(tboxId, vin, requestClient,
+                Constants.RVC_CMD.get("find_my_car"), Constants.RVC_CMD_CODE.get("find_my_car"), null);
         controlCommand.setEventId(eventId);
-        controlCommand.setCode("0");
-        controlCommand.setName(Constants.RVC_CMD.get(0));
         controlCommand = controlCommandDaoService.createControlCommand(controlCommand);
         Assert.assertNotNull(controlCommand);
     }

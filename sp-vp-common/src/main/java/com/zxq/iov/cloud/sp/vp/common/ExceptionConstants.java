@@ -5,8 +5,8 @@ package com.zxq.iov.cloud.sp.vp.common;
  *
  * @author 叶荣杰
  * create date 2015-7-24 12:48
- * modify date 2015-7-29 14:20
- * @version 0.2, 2015-7-29
+ * modify date 2015-7-30 10:34
+ * @version 0.3, 2015-7-30
  */
 public class ExceptionConstants {
 
@@ -21,4 +21,5 @@ public class ExceptionConstants {
 	public static final String WRONG_VEHICLE_STATUS = "15101"; // 错误的车辆状态类型
 	public static final String TBOX_NOT_MATCH_VIN = "15102"; // TBOX无法匹配车辆
 	public static final String PERSONAL_CONFIG_NOT_FIND = "15103"; // 没有找到指定车辆的个性化配置
+	public static final String NO_PRIVILEGE_TO_VEHICLE = "15104"; // 对该车辆无权限
 }
