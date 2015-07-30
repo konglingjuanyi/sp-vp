@@ -103,10 +103,13 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
     public RvcStatusDto getControlStatus(Long controlCommandId, String vin, Long userId) throws Exception {
         AssertRequired("controlCommandId,vin", controlCommandId, vin);
         ControlCommand controlCommand = controlCommandDaoService.findControlCommandById(controlCommandId);
-        if(!controlCommand.getVin().equals(vin)) {
-            throw new ServLayerException(ExceptionConstants.NO_PRIVILEGE_TO_VEHICLE);
+        if(null != controlCommand) {
+            if(!controlCommand.getVin().equals(vin)) {
+                throw new ServLayerException(ExceptionConstants.NO_PRIVILEGE_TO_VEHICLE);
+            }
+            return new RvcStatusDtoAssembler().toDto(controlCommand);
         }
-        return new RvcStatusDtoAssembler().toDto(controlCommand);
+        throw new ServLayerException(ExceptionConstants.CONTROL_CMD_NOT_EXIST);
     }
 
     /**

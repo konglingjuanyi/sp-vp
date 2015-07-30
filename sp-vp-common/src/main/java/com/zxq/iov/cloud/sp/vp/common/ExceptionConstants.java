@@ -22,4 +22,5 @@ public class ExceptionConstants {
 	public static final String TBOX_NOT_MATCH_VIN = "15102"; // TBOX无法匹配车辆
 	public static final String PERSONAL_CONFIG_NOT_FIND = "15103"; // 没有找到指定车辆的个性化配置
 	public static final String NO_PRIVILEGE_TO_VEHICLE = "15104"; // 对该车辆无权限
+	public static final String CONTROL_CMD_NOT_EXIST = "15105"; // 控制命令不存在
 }
