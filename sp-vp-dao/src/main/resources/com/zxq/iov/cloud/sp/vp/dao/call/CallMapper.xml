@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxq.iov.cloud.sp.vp.entity.call.CallMapper">
+
+	<resultMap id="callResultMap" type="Call">
+		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
+		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
+		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
+		<result column="CALL_TYPE" jdbcType="DECIMAL" property="callType"/>
+		<result column="CRASH_SEVERITY" jdbcType="DECIMAL" property="crashSeverity"/>
+		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
+		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
+		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<sql id="selectPageTemplate">
+		SELECT t.*
+		FROM TB_CALL t
+		WHERE IFNULL(t.is_valid, 1) = 1
+	</sql>	
+	<select id="selectPageCount" parameterType="hashmap" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="selectPageTemplate"/>
+		) a
+	</select>
+	
+	<select id="selectPage" parameterType="hashmap" resultMap="callResultMap">
+        <include refid="selectPageTemplate"/>
+        limit #{pageResult.offset}, #{pageResult.pageSize}
+    </select>
+	<!-- 分页查询 -->
+
+	<!-- 业务查询 -->
+    <select id="selectSample" parameterType="Call" resultMap="callResultMap">
+        SELECT * FROM TB_CALL t
+        WHERE t.is_valid = 1
+    </select>
+
+	<select id="selectList" parameterType="hashmap" resultMap="callResultMap">
+		<include refid="selectPageTemplate"/>
+		<if test="vin != null and vin != ''">
+			AND VIN = #{vin, jdbcType=VARCHAR}
+		</if>
+		<if test="type != null">
+			AND TYPE = #{type, jdbcType=DECIMAL}
+		</if>
+		<if test="tboxId != null">
+			AND TBOX_ID = #{tboxId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			AND STATUS = #{status,jdbcType=DECIMAL}
+		</if>
+	</select>
+
+	<select id="selectOne" resultMap="callResultMap" parameterType="java.lang.Long">
+		<include refid="selectPageTemplate"/>
+		AND ID = #{id, jdbcType=DECIMAL}
+	</select>
+
+</mapper>

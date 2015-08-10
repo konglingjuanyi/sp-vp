@@ -2,17 +2,18 @@ package com.zxq.iov.cloud.sp.vp.entity.status;
 
 
 import com.saicmotor.telematics.framework.core.dal.entity.MyBaseEntity;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 安防服务 车辆信息类
+ * 安防服务 车辆信息快照类
  * @author 叶荣杰
  * create time 2015-5-13 9:54
- * modify time 2015-6-26 15:23
- * @version 0.7, 2015-6-26
+ * modify time 2015-8-4 11:01
+ * @version 0.8, 2015-8-4
  */
 @Entity()
 @Table(name = "TB_VEHICLE_INFO")
@@ -57,8 +58,10 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
     public VehicleInfo(Long tboxId, String vin, Integer sourceType, Long sourceId) {
         this.tboxId = tboxId;
         this.vin = vin;
-        this.sourceType = sourceType;
-        this.sourceId = sourceId;
+        this.sourceType = (null==sourceType)?Constants.VEHICLE_INFO_SOURCE_STATUS:sourceType;
+        if(null != sourceId) {
+            this.sourceId = sourceId;
+        }
     }
 
     public Long getId() {

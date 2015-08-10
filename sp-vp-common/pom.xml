@@ -11,9 +11,6 @@
 <packaging>jar</packaging>
 
 <dependencies>
-    <dependency>
-        <groupId>com.zxq.iov.cloud.sp</groupId>
-        <artifactId>sp-vp-model</artifactId>
-    </dependency>
+
 </dependencies>
 </project>

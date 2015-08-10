@@ -25,7 +25,12 @@
             </dependency>
             <dependency>
                 <groupId>com.zxq.iov.cloud.sp</groupId>
-                <artifactId>sp-vp-service-dao</artifactId>
+                <artifactId>sp-vp-dao</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zxq.iov.cloud.sp</groupId>
+                <artifactId>sp-vp-service</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -40,7 +45,7 @@
             </dependency>
             <dependency>
                 <groupId>com.zxq.iov.cloud.sp</groupId>
-                <artifactId>sp-vp-service-biz</artifactId>
+                <artifactId>sp-vp-api-impl</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -70,10 +75,11 @@
   <modules>
     <module>sp-vp-model</module>
     <module>sp-vp-common</module>
-    <module>sp-vp-service-dao</module>
+    <module>sp-vp-service</module>
     <module>sp-vp-api</module>
     <module>sp-vp-api-mgmt</module>
-    <module>sp-vp-service-biz</module>
+    <module>sp-vp-api-impl</module>
+    <module>sp-vp-dao</module>
     <module>sp-vp-web</module>
   </modules>
 </project>

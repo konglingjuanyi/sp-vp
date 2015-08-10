@@ -8,17 +8,17 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:43
- * modify date 2015-7-21 16:04
- * @version 0.4, 2015-7-21
+ * modify date 2015-7-30 17:46
+ * @version 0.5, 2015-7-30
  */
 public class RvcDto {
 
     private byte[] command;
-    private Map<String, Object> parameters;
+    private Map<Integer, byte[]> parameters;
 
     public RvcDto() {}
 
-    public RvcDto(byte[] command, Map<String, Object> parameters) {
+    public RvcDto(byte[] command, Map<Integer, byte[]> parameters) {
         this.command = command;
         this.parameters = parameters;
     }
@@ -31,11 +31,11 @@ public class RvcDto {
         this.command = command;
     }
 
-    public Map<String, Object> getParameters() {
+    public Map<Integer, byte[]> getParameters() {
         return parameters;
     }
 
-    public void setParameters(Map<String, Object> parameters) {
+    public void setParameters(Map<Integer, byte[]> parameters) {
         this.parameters = parameters;
     }
 }

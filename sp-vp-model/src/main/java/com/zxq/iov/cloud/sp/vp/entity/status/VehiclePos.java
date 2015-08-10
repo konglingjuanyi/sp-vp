@@ -11,8 +11,8 @@ import java.util.Date;
  * 安防服务 车辆位置信息类
  * @author 叶荣杰
  * create date 2015-5-13 10:14
- * modify date 2015-6-25 11:06
- * @version 0.2, 2015-6-25
+ * modify date 2015-7-30 15:20
+ * @version 0.3, 2015-7-30
  */
 @Entity()
 @Table(name = "TB_VEHICLE_POS")
@@ -40,23 +40,23 @@ public class VehiclePos extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "ALTITUDE", nullable = false, precision = 11, scale = 0)
     private Integer altitude;
 
-    @Column(name = "HEADING", nullable = false, precision = 3, scale = 0)
+    @Column(name = "HEADING", precision = 3, scale = 0)
     private Integer heading;
 
-    @Column(name = "SPEED", nullable = false, precision = 3, scale = 0)
+    @Column(name = "SPEED", precision = 3, scale = 0)
     private Integer speed;
 
-    @Column(name = "HDOP", nullable = false, precision = 3, scale = 0)
+    @Column(name = "HDOP", precision = 3, scale = 0)
     private Integer hdop;
 
-    @Column(name = "SATELLITES", nullable = false, precision = 2, scale = 0)
+    @Column(name = "SATELLITES", precision = 2, scale = 0)
     private Integer satellites;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "GPS_TIME", nullable = false, length = 7)
+    @Column(name = "GPS_TIME", length = 7)
     private Date gpsTime;
 
-    @Column(name = "GPS_STATUS", nullable = false, precision = 2, scale = 0)
+    @Column(name = "GPS_STATUS", precision = 2, scale = 0)
     private Integer gpsStatus;
 
     public VehiclePos() {}

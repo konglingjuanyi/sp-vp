@@ -10,8 +10,8 @@ import java.io.Serializable;
  * 安防服务 车辆状态信息类
  * @author 叶荣杰
  * create time 2015-5-13 10:38
- * modify time 2015-5-25 11:23
- * @version 0.3, 2015-5-25
+ * modify time 2015-8-3 18:37
+ * @version 0.4, 2015-8-3
  */
 @Entity()
 @Table(name = "TB_VEHICLE_STATUS")
@@ -46,6 +46,12 @@ public class VehicleStatus extends MyBaseEntity<Long> implements Serializable {
     private String data;
 
     public VehicleStatus() {}
+
+    public VehicleStatus(String code, Integer value) {
+        this.code = code;
+        this.value = value;
+        this.type = 1; // 状态
+    }
 
     public VehicleStatus(String code, Integer value, String data, Integer type) {
         this.code = code;

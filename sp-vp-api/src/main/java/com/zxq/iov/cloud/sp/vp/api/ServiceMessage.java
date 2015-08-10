@@ -13,6 +13,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 public class ServiceMessage extends OtaDto {
 
     private String appData;
+    private String messageKey;
 
     public ServiceMessage() {}
 
@@ -38,5 +39,13 @@ public class ServiceMessage extends OtaDto {
 
     public void setAppData(String appData) {
         this.appData = appData;
+    }
+
+    public String getMessageKey() {
+        return messageKey;
+    }
+
+    public void setMessageKey(String messageKey) {
+        this.messageKey = messageKey;
     }
 }
