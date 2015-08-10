@@ -14,6 +14,7 @@ import com.zxq.iov.cloud.sp.vp.service.ITboxConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
     @Override
     public Integer checkConfigDelta(Long tboxId, byte[] mcuVersion, byte[] mpuVersion,
                                     String vin, String iccid, byte[] configVersion,
-                                    Integer configDelta, Long eventId) throws Exception {
+                                    Integer configDelta, Long eventId) throws ServLayerException {
         AssertRequired("mcuVersion,mpuVersion,vin,iccid,configVersion,configDelta,eventId", mcuVersion,
                 mpuVersion, vin, iccid, configVersion, configDelta, eventId);
         TboxPersonalConfig tboxPersonalConfig = tboxPersonalConfigDao.findTboxPersonalConfigByVin(vin);
@@ -69,14 +70,18 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
                 configPackage.put(String.valueOf(i), list.subList(i*packageSize, toIndex));
                 configPackages.add(configPackage);
             }
-            String value = JSON.json(configPackages);
+            try {
+                String value = JSON.json(configPackages);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return tboxPersonalConfig.getConfigDelta();
     }
 
     @Override
     public List<TboxConfigSetting> getConfigPackage(Long tboxId, Integer packageId,
-                                                    Long eventId) throws Exception {
+                                                    Long eventId) throws ServLayerException {
         AssertRequired("packageId,eventId", packageId, eventId);
         // 此处读取缓存
         String key = eventId.toString();

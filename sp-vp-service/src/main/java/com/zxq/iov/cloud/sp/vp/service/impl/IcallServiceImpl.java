@@ -48,7 +48,7 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     @Override
     public CallRecord start(Long tboxId, List<VehiclePos> vehiclePoses, Integer icallType,
                                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            Date icallTime) throws Exception {
+                            Date icallTime) throws ServLayerException {
         AssertRequired("tboxId,vehiclePoses,icallType,tboxBatteryStatus,vehicleBatteryStatus",
                 tboxId, vehiclePoses, icallType, tboxBatteryStatus, vehicleBatteryStatus);
         Call call = update(tboxId, vehiclePoses, icallType, tboxBatteryStatus,
@@ -60,7 +60,7 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     @Override
     public Call update(Long tboxId, List<VehiclePos> vehiclePoses, Integer icallType,
                             Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                       Date icallTime) throws Exception {
+                       Date icallTime) throws ServLayerException {
         AssertRequired("tboxId,vehiclePoses,icallType,tboxBatteryStatus,vehicleBatteryStatus",
                 tboxId, vehiclePoses, icallType, tboxBatteryStatus, vehicleBatteryStatus);
         List<Call> list = callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
@@ -80,7 +80,7 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     }
 
     @Override
-    public void hangUp(String vin) throws Exception {
+    public void hangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         Call call = getRunningIcallByVinOrTboxId(vin, null);
         List<CallRecord> callRecords = callRecordDao.listCallRecordByCallId(call.getId(), RUNNING_STATUS);
@@ -93,7 +93,7 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     }
 
     @Override
-    public CallRecord callBack(String vin, String callNumber) throws Exception {
+    public CallRecord callBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
         Call call = getRunningIcallByVinOrTboxId(vin, null);
         if(null == callNumber) {
@@ -103,7 +103,7 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     }
 
     @Override
-    public void responseCallBack(Long tboxId, Boolean callbackAccepted, Integer rejectReason) throws Exception {
+    public void responseCallBack(Long tboxId, Boolean callbackAccepted, Integer rejectReason) throws ServLayerException {
         AssertRequired("tboxId,callbackAccepted", tboxId, callbackAccepted);
         if(!callbackAccepted) {
             Call call = getRunningIcallByVinOrTboxId(null, tboxId);
@@ -119,13 +119,13 @@ public class IcallServiceImpl extends BaseService implements IIcallService {
     }
 
     @Override
-    public void close(String vin) throws Exception {
+    public void close(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         close(vin, null);
     }
 
     @Override
-    public void close(Long tboxId) throws Exception {
+    public void close(Long tboxId) throws ServLayerException {
         AssertRequired("tboxId", tboxId);
         close(null, tboxId);
     }

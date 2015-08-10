@@ -15,6 +15,7 @@ import com.zxq.iov.cloud.sp.vp.service.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -44,11 +45,16 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
 
     @Override
     public ControlCommand requestControl(String requestClient, Long userId, String vin, String command,
-                               Map<String, Object> parameters, Long eventId) throws Exception {
+                               Map<String, Object> parameters, Long eventId) throws ServLayerException {
         AssertRequired("userId,vin,command", userId, vin, command);
-        ControlCommand controlCommand = new ControlCommand(tboxDao.findTboxIdByVin(vin),
-                    vin, requestClient, Constants.RVC_CMD.get(command), Constants.RVC_CMD_CODE.get(command),
-                    JSON.json(parameters));
+        ControlCommand controlCommand = null;
+        try {
+            controlCommand = new ControlCommand(tboxDao.findTboxIdByVin(vin),
+                        vin, requestClient, Constants.RVC_CMD.get(command), Constants.RVC_CMD_CODE.get(command),
+                        JSON.json(parameters));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         controlCommand.setCommandStatus(RVC_STATUS_PENDING);
         controlCommand.setIsCancel(false);
         controlCommand.setStatus(RUNNING_STATUS);
@@ -61,7 +67,7 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
     }
 
     @Override
-    public void cancelControl(String requestClient, Long userId, String vin, String command) throws Exception {
+    public void cancelControl(String requestClient, Long userId, String vin, String command) throws ServLayerException {
         AssertRequired("userId,vin,command", userId, vin, command);
         List<ControlCommand> list = controlCommandDao.listControlCommandByVinAndCommand(vin,
                 command, RUNNING_STATUS);
@@ -78,7 +84,7 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
 
     @Override
     public void updateControlStatus(Long tboxId, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
-                                    List<VehicleStatus> vehicleStatuses, Long eventId) throws Exception{
+                                    List<VehicleStatus> vehicleStatuses, Long eventId) throws ServLayerException{
         AssertRequired("eventId,tboxId,rvcStatus", eventId, tboxId, rvcStatus);
         ControlCommand controlCommand = controlCommandDao.findControlCommandByEventId(eventId);
         if(null != controlCommand) {
@@ -97,7 +103,7 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
     }
 
     @Override
-    public ControlCommand getControlStatus(Long controlCommandId, String vin, Long userId) throws Exception {
+    public ControlCommand getControlStatus(Long controlCommandId, String vin, Long userId) throws ServLayerException {
         AssertRequired("controlCommandId,vin", controlCommandId, vin);
         ControlCommand controlCommand = controlCommandDao.findControlCommandById(controlCommandId);
         if(null != controlCommand) {

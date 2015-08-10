@@ -63,19 +63,19 @@ public class EventDefinitionServiceImpl extends BaseService implements IEventDef
     }
 
     @Override
-    public EventDefinition findEventDefinitionById(Long eventDefinitionId) throws Exception {
+    public EventDefinition findEventDefinitionById(Long eventDefinitionId) throws ServLayerException {
         AssertRequired("eventDefinitionId", eventDefinitionId);
         return eventDefinitionDao.findEventDefinitionById(eventDefinitionId);
     }
 
     @Override
-    public TaskDefinition findTaskDefinitionById(Long taskDefinitionId) throws Exception {
+    public TaskDefinition findTaskDefinitionById(Long taskDefinitionId) throws ServLayerException {
         AssertRequired("taskDefinitionId", taskDefinitionId);
         return taskDefinitionDao.findTaskDefinitionById(taskDefinitionId);
     }
 
     @Override
-    public StepDefinition findStepDefinitionById(Long stepDefinitionId) throws Exception {
+    public StepDefinition findStepDefinitionById(Long stepDefinitionId) throws ServLayerException {
         AssertRequired("stepDefinitionId", stepDefinitionId);
         return stepDefinitionDao.findStepDefinitionById(stepDefinitionId);
     }
@@ -97,7 +97,7 @@ public class EventDefinitionServiceImpl extends BaseService implements IEventDef
     }
 
     @Override
-    public void removeEventDefinition(Long eventDefinitionId) throws Exception {
+    public void removeEventDefinition(Long eventDefinitionId) throws ServLayerException {
         if(listTaskDefinitionByEventDefinitionId(eventDefinitionId).size() > 0) {
             throw new ServLayerException(ExceptionConstants.HAS_CHILD);
         }
@@ -105,7 +105,7 @@ public class EventDefinitionServiceImpl extends BaseService implements IEventDef
     }
 
     @Override
-    public void removeTaskDefinition(Long taskDefinitionId) throws Exception {
+    public void removeTaskDefinition(Long taskDefinitionId) throws ServLayerException {
         if(listStepDefinitionByTaskDefinitionId(taskDefinitionId).size() > 0) {
             throw new ServLayerException(ExceptionConstants.HAS_CHILD);
         }

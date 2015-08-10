@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfo;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;
@@ -23,7 +24,7 @@ public interface IStatusService {
      * @param eventId           事件ID
      * @return                  车辆状态快照传输对象
      */
-    VehicleInfo getVehicleInfo(String vin, Long eventId) throws Exception;
+    VehicleInfo getVehicleInfo(String vin, Long eventId) throws ServLayerException;
 
     /**
      * 记录车辆信息快照
@@ -39,7 +40,7 @@ public interface IStatusService {
      */
     VehicleInfo logVehicleInfo(Long tboxId, Integer sourceType, Long sourceId, VehiclePos vehiclePos,
                         List<VehicleStatus> vehicleStatuses, List<VehicleStatus> vehicleAlerts,
-                        Date statusTime, Long eventId) throws Exception;
+                        Date statusTime, Long eventId) throws ServLayerException;
 
     /**
      * 记录车辆警告信息
@@ -50,6 +51,6 @@ public interface IStatusService {
      * @return                  车辆信息快照ID
      */
     VehicleInfo logVehicleAlert(Long tboxId, Date alertTime, VehiclePos vehiclePos,
-                         VehicleStatus vehicleAlert) throws Exception;
+                         VehicleStatus vehicleAlert) throws ServLayerException;
 
 }

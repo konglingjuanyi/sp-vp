@@ -124,7 +124,7 @@ public interface IEventService {
      * @param owner             事件拥有者
      * @param stepInstanceId    步骤实例ID
      */
-    void dispatchAck(String owner, Long stepInstanceId) throws Exception;
+    void dispatchAck(String owner, Long stepInstanceId) throws ServLayerException;
 
     /**
      * 检查超时步骤、任务及事件

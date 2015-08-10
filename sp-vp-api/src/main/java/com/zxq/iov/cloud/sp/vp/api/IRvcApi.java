@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
@@ -28,7 +29,7 @@ public interface IRvcApi {
      * @return                  控制命令ID
      */
     Long requestControl(String requestClient, Long userId, String vin, String command,
-                        Map<String, Object> parameters) throws Exception;
+                        Map<String, Object> parameters) throws ApiException;
 
     /**
      * 取消控制
@@ -38,7 +39,7 @@ public interface IRvcApi {
      * @param command           命令代码
      */
     void cancelControl(String requestClient, Long userId, String vin,
-                       String command) throws Exception;
+                       String command) throws ApiException;
 
     /**
      * 更新控制请求状态
@@ -50,7 +51,7 @@ public interface IRvcApi {
      */
     void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
                              VehiclePosDto vehiclePosDto, List<VehicleStatusDto> vehicleStatusDtos)
-            throws Exception;
+            throws ApiException;
 
     /**
      * 根据控制命令ID得到命令状态传输对象
@@ -59,6 +60,6 @@ public interface IRvcApi {
      * @param userId            用户ID
      * @return                  控制命令状态传输对象
      */
-    RvcStatusDto getControlStatus(Long controlCommandId, String vin, Long userId) throws Exception;
+    RvcStatusDto getControlStatus(Long controlCommandId, String vin, Long userId) throws ApiException;
 
 }

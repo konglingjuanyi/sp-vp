@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.ISvtApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
@@ -34,7 +35,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     private IEventService eventService;
 
     @Override
-    public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws Exception {
+    public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ServLayerException {
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         StolenAlarmDtoAssembler stolenAlarmDtoAssembler = new StolenAlarmDtoAssembler();
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
@@ -46,7 +47,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws Exception {
+    public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws ServLayerException {
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         VehicleStatusDtoAssembler statusDtoAssembler = new VehicleStatusDtoAssembler();
@@ -74,7 +75,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws Exception {
+    public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 3);
         eventService.start(vin, Constants.AID_SVT + "3");
@@ -83,7 +84,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void requestSingleTrack(String vin) throws Exception {
+    public void requestSingleTrack(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 4);
         eventService.start(vin, Constants.AID_SVT + "4");
@@ -92,7 +93,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void requestCloseAlarm(String vin) throws Exception {
+    public void requestCloseAlarm(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 5);
         eventService.start(vin, Constants.AID_SVT + "5");
@@ -102,7 +103,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 
     @Override
     public void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed,
-                                   List<StolenAlarmDto> stolenAlarmDtos) throws Exception {
+                                   List<StolenAlarmDto> stolenAlarmDtos) throws ServLayerException {
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         if(allAlarmClosed) {
             eventService.end(getVin(otaDto), getCode(otaDto));
@@ -113,7 +114,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void requestAuthKey(String vin, Integer keyId) throws Exception {
+    public void requestAuthKey(String vin, Integer keyId) throws ServLayerException {
         AssertRequired("vin,keyId", vin, keyId);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 7);
         eventService.start(vin, Constants.AID_SVT + "7");
@@ -123,13 +124,13 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 
     @Override
     public void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted,
-                                Integer failureReason) throws Exception {
+                                Integer failureReason) throws ServLayerException {
         eventService.start(getVin(otaDto), getCode(otaDto));
         eventService.end(getVin(otaDto), getCode(otaDto));
     }
 
     @Override
-    public void requestImmobilise(String vin, Integer immoStatus) throws Exception {
+    public void requestImmobilise(String vin, Integer immoStatus) throws ServLayerException {
         AssertRequired("vin,immoStatus", vin, immoStatus);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 9);
         eventService.start(vin, Constants.AID_SVT + "9");
@@ -139,7 +140,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 
     @Override
     public void responseImmobilise(OtaDto otaDto, Integer immoStatus,
-                                   Integer failureReason) throws Exception {
+                                   Integer failureReason) throws ServLayerException {
         eventService.start(getVin(otaDto), getCode(otaDto));
         eventService.end(getVin(otaDto), getCode(otaDto));
     }
@@ -147,7 +148,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     @Override
     public void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
                                              List<ProtectStrategySettingDto> protectStrategySettingDtos)
-            throws Exception{
+            throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 11);
         eventService.start(vin, Constants.AID_SVT + "11");
@@ -161,7 +162,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     }
 
     @Override
-    public void requestAlarm(String vin) throws Exception {
+    public void requestAlarm(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 13);
         eventService.start(vin, Constants.AID_SVT + "13");

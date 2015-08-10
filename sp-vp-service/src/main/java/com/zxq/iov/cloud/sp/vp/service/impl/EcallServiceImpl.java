@@ -46,7 +46,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     @Override
     public CallRecord start(Long tboxId, List<VehiclePos> vehiclePoses, Integer ecallType,
                                      Integer crashSeverity, Integer tboxBatteryStatus,
-                            Integer vehicleBatteryStatus, Date ecallTime) throws Exception {
+                            Integer vehicleBatteryStatus, Date ecallTime) throws ServLayerException {
         AssertRequired("tboxId,vehiclePoses,ecallType,crashSeverity,tboxBatteryStatus,vehicleBatteryStatus",
                 tboxId, vehiclePoses, ecallType, crashSeverity, tboxBatteryStatus, vehicleBatteryStatus);
         Call call = update(tboxId, vehiclePoses, ecallType, crashSeverity, tboxBatteryStatus,
@@ -58,7 +58,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     @Override
     public Call update(Long tboxId, List<VehiclePos> vehiclePoses, Integer ecallType,
                             Integer crashSeverity, Integer tboxBatteryStatus,
-                       Integer vehicleBatteryStatus, Date ecallTime) throws Exception {
+                       Integer vehicleBatteryStatus, Date ecallTime) throws ServLayerException {
         AssertRequired("tboxId,vehiclePoses,ecallType,crashSeverity,tboxBatteryStatus,vehicleBatteryStatus",
                 tboxId, vehiclePoses, ecallType, crashSeverity, tboxBatteryStatus, vehicleBatteryStatus);
         List<Call> list = callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
@@ -78,7 +78,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     }
 
     @Override
-    public void hangUp(String vin) throws Exception {
+    public void hangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         Call call = getRunningEcallByVinOrTboxId(vin, null);
         List<CallRecord> callRecords = callRecordDao.listCallRecordByCallId(call.getId(), RUNNING_STATUS);
@@ -91,7 +91,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     }
 
     @Override
-    public CallRecord callBack(String vin, String callNumber) throws Exception {
+    public CallRecord callBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
         Call call = getRunningEcallByVinOrTboxId(vin, null);
         if(null == callNumber) {
@@ -101,7 +101,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     }
 
     @Override
-    public void responseCallBack(Long tboxId, Boolean callbackAccepted, Integer rejectReason) throws Exception {
+    public void responseCallBack(Long tboxId, Boolean callbackAccepted, Integer rejectReason) throws ServLayerException {
         AssertRequired("tboxId,callbackAccepted", tboxId, callbackAccepted);
         if(!callbackAccepted) {
             Call call = getRunningEcallByVinOrTboxId(null, tboxId);
@@ -117,13 +117,13 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     }
 
     @Override
-    public void close(String vin) throws Exception {
+    public void close(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         close(vin, null);
     }
 
     @Override
-    public void close(Long tboxId) throws Exception {
+    public void close(Long tboxId) throws ServLayerException {
         AssertRequired("tboxId", tboxId);
         close(null, tboxId);
     }

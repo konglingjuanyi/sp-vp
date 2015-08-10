@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.call.Call;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
@@ -29,7 +30,7 @@ public interface IIcallService {
      */
     CallRecord start(Long tboxId, List<VehiclePos> vehiclePoses, Integer icallType,
                               Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                     Date icallTime) throws Exception;
+                     Date icallTime) throws ServLayerException;
 
     /**
      * 更新iCall状态
@@ -43,13 +44,13 @@ public interface IIcallService {
      */
     Call update(Long tboxId, List<VehiclePos> vehiclePoses, Integer icallType,
                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                Date icallTime) throws Exception;
+                Date icallTime) throws ServLayerException;
 
     /**
      * 请求挂断通话
      * @param vin                   车辆唯一码
      */
-    void hangUp(String vin) throws Exception;
+    void hangUp(String vin) throws ServLayerException;
 
     /**
      * 车辆回拨
@@ -57,7 +58,7 @@ public interface IIcallService {
      * @param callNumber            呼叫号码
      * @return                      iCall通话对象
      */
-    CallRecord callBack(String vin, String callNumber) throws Exception;
+    CallRecord callBack(String vin, String callNumber) throws ServLayerException;
 
     /**
      * 响应车辆回拨
@@ -66,17 +67,17 @@ public interface IIcallService {
      * @param rejectReason          拒绝理由
      */
     void responseCallBack(Long tboxId, Boolean callbackAccepted,
-                          Integer rejectReason) throws Exception;
+                          Integer rejectReason) throws ServLayerException;
 
     /**
      * 结束iCall
      * @param vin                   车辆唯一码
      */
-    void close(String vin) throws Exception;
+    void close(String vin) throws ServLayerException;
 
     /**
      * 结束iCall
      * @param tboxId                TBOX ID
      */
-    void close(Long tboxId) throws Exception;
+    void close(Long tboxId) throws ServLayerException;
 }

@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IEventApi;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EventApiImpl implements IEventApi {
     }
 
     @Override
-    public void dispatchAck(Long tboxId, Long stepInstanceId) throws Exception {
+    public void dispatchAck(Long tboxId, Long stepInstanceId) throws ServLayerException {
         String vin = "11111111111111111"; // 这里应该根据TBOX ID获得VIN
         eventService.dispatchAck(vin, stepInstanceId);
     }

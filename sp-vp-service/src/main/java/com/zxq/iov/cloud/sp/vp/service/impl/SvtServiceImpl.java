@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.svt.IStolenAlarmDao;
@@ -33,7 +34,7 @@ public class SvtServiceImpl extends BaseService implements ISvtService {
 
     @Override
     public void alarm(Long tboxId, StolenAlarm stolenAlarm, VehiclePos vehiclePos,
-                      Long eventId) throws Exception {
+                      Long eventId) throws ServLayerException {
         stolenAlarm.setTboxId(tboxId);
         stolenAlarm.setVehicleInfoId(statusService.logVehicleInfo(tboxId,
                 Constants.VEHICLE_INFO_SOURCE_SVT, eventId, vehiclePos, null, null,
@@ -43,7 +44,7 @@ public class SvtServiceImpl extends BaseService implements ISvtService {
 
     @Override
     public void updateTrack(Long tboxId, List<VehicleStatus> vehicleStatuses,
-                            VehiclePos vehiclePos, Long eventId) throws Exception {
+                            VehiclePos vehiclePos, Long eventId) throws ServLayerException {
         statusService.logVehicleInfo(tboxId, Constants.VEHICLE_INFO_SOURCE_SVT,
                 eventId, vehiclePos, vehicleStatuses, null, null, eventId);
     }

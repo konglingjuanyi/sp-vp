@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.ProtectStrategySettingDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenAlarmDto;
@@ -23,14 +24,14 @@ public interface ISvtApi {
      * @param otaDto                        OTA传输对象
      * @param stolenAlarmDtos               被盗警报传输对象列表
      */
-    void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws Exception;
+    void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ApiException;
 
     /**
      * 更新追踪点
      * @param otaDto                        OTA传输对象
      * @param trackDtos                     追踪点传输对象列表
      */
-    void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws Exception;
+    void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws ApiException;
 
     /**
      * 请求手动修改追踪设置
@@ -38,19 +39,19 @@ public interface ISvtApi {
      * @param trackInterval                 追踪点间隔时间（秒）
      * @param tracks                        追踪点数量
      */
-    void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws Exception;
+    void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws ApiException;
 
     /**
      * 请求单次跟踪
      * @param vin                           车辆唯一码
      */
-    void requestSingleTrack(String vin) throws Exception;
+    void requestSingleTrack(String vin) throws ApiException;
 
     /**
      * 请求关闭警报
      * @param vin                           车辆唯一码
      */
-    void requestCloseAlarm(String vin) throws Exception;
+    void requestCloseAlarm(String vin) throws ApiException;
 
     /**
      * 响应警报关闭状态请求
@@ -59,14 +60,14 @@ public interface ISvtApi {
      * @param stolenAlarmDtos               被盗警报传输对象列表
      */
     void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed,
-                            List<StolenAlarmDto> stolenAlarmDtos) throws Exception;
+                            List<StolenAlarmDto> stolenAlarmDtos) throws ApiException;
 
     /**
      * 请求验证钥匙
      * @param vin                           车辆唯一码
      * @param keyId                         钥匙ID
      */
-    void requestAuthKey(String vin, Integer keyId) throws Exception;
+    void requestAuthKey(String vin, Integer keyId) throws ApiException;
 
     /**
      * 响应钥匙验证请求
@@ -75,14 +76,14 @@ public interface ISvtApi {
      * @param failureReason                 失败原因
      */
     void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted,
-                         Integer failureReason) throws Exception;
+                         Integer failureReason) throws ApiException;
 
     /**
      * 请求更改车辆固定状态
      * @param vin                           车辆唯一码
      * @param immoStatus                    固定状态
      */
-    void requestImmobilise(String vin, Integer immoStatus) throws Exception;
+    void requestImmobilise(String vin, Integer immoStatus) throws ApiException;
 
     /**
      * 响应更改车辆固定状态请求
@@ -91,7 +92,7 @@ public interface ISvtApi {
      * @param failureReason                 失败原因
      */
     void responseImmobilise(OtaDto otaDto, Integer immoStatus,
-                            Integer failureReason) throws Exception;
+                            Integer failureReason) throws ApiException;
 
     /**
      * 请求修改保护策略
@@ -102,16 +103,16 @@ public interface ISvtApi {
      */
     void requestUpdateProtectStrategy(String vin, Date startTime, Date endTime,
                                       List<ProtectStrategySettingDto> protectStrategySettingDtos)
-            throws Exception;
+            throws ApiException;
 
     /**
      * 响应修改保护策略请求
      */
-    void responseUpdateProtectStrategy() throws Exception;
+    void responseUpdateProtectStrategy() throws ApiException;
 
     /**
      * 请求触发报警
      * @param vin                   车辆唯一码
      */
-    void requestAlarm(String vin) throws Exception;
+    void requestAlarm(String vin) throws ApiException;
 }

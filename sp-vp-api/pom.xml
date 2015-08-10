@@ -11,4 +11,11 @@
     <groupId>com.zxq.iov.cloud.sp</groupId>
     <artifactId>sp-vp-api</artifactId>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.saicmotor.telematics.framework.api</groupId>
+            <artifactId>sp-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>

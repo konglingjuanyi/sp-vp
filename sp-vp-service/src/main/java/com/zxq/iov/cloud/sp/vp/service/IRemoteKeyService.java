@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.service.domain.Ota;
 
 import java.util.Date;
@@ -23,7 +24,7 @@ public interface IRemoteKeyService {
      * @param keyValidityEndTime    有效结束时间
      */
     void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                         Date keyValidityStartTime, Date keyValidityEndTime) throws Exception;
+                         Date keyValidityStartTime, Date keyValidityEndTime) throws ServLayerException;
 
     /**
      * 响应写入钥匙请求
@@ -32,14 +33,14 @@ public interface IRemoteKeyService {
      * @param writeFailureReason    写入失败原因
      */
     void responseWriteKey(Long tboxId, Boolean writeSuccess,
-                          Integer writeFailureReason) throws Exception;
+                          Integer writeFailureReason) throws ServLayerException;
 
     /**
      * 请求删除钥匙
      * @param vin                   OTA传输对象
      * @param keyReference          钥匙引用
      */
-    void requestDeleteKey(String vin, Integer keyReference) throws Exception;
+    void requestDeleteKey(String vin, Integer keyReference) throws ServLayerException;
 
     /**
      * 响应删除钥匙请求
@@ -48,12 +49,12 @@ public interface IRemoteKeyService {
      * @param deleteFailureReason   删除失败原因
      */
     void responseDeleteKey(Long tboxId, Boolean deleteSuccess,
-                           Integer deleteFailureReason) throws Exception;
+                           Integer deleteFailureReason) throws ServLayerException;
 
     /**
      * 钥匙异常报警
      * @param tboxId    OTA传输对象
      */
-    void keyAlarm(Long tboxId) throws Exception;
+    void keyAlarm(Long tboxId) throws ServLayerException;
 
 }

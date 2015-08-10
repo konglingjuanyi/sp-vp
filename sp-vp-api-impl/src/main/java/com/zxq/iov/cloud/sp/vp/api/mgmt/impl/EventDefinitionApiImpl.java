@@ -60,19 +60,19 @@ public class EventDefinitionApiImpl implements IEventDefinitionApi {
     }
 
     @Override
-    public EventDefinitionDto findEventDefinitionById(Long eventDefinitionId) throws Exception {
+    public EventDefinitionDto findEventDefinitionById(Long eventDefinitionId) throws ServLayerException {
         return new EventDefinitionDtoAssembler().toDto(
                 eventDefinitionService.findEventDefinitionById(eventDefinitionId));
     }
 
     @Override
-    public TaskDefinitionDto findTaskDefinitionById(Long taskDefinitionId) throws Exception {
+    public TaskDefinitionDto findTaskDefinitionById(Long taskDefinitionId) throws ServLayerException {
         return new TaskDefinitionDtoAssembler().toDto(
                 eventDefinitionService.findTaskDefinitionById(taskDefinitionId));
     }
 
     @Override
-    public StepDefinitionDto findStepDefinitionById(Long stepDefinitionId) throws Exception {
+    public StepDefinitionDto findStepDefinitionById(Long stepDefinitionId) throws ServLayerException {
         return new StepDefinitionDtoAssembler().toDto(
                 eventDefinitionService.findStepDefinitionById(stepDefinitionId));
     }
@@ -95,7 +95,7 @@ public class EventDefinitionApiImpl implements IEventDefinitionApi {
     }
 
     @Override
-    public void removeEventDefinition(Long eventDefinitionId) throws Exception {
+    public void removeEventDefinition(Long eventDefinitionId) throws ServLayerException {
         if(listTaskDefinitionByEventDefinitionId(eventDefinitionId).size() > 0) {
             throw new ServLayerException(ExceptionConstants.HAS_CHILD);
         }
@@ -103,7 +103,7 @@ public class EventDefinitionApiImpl implements IEventDefinitionApi {
     }
 
     @Override
-    public void removeTaskDefinition(Long taskDefinitionId) throws Exception {
+    public void removeTaskDefinition(Long taskDefinitionId) throws ServLayerException {
         if(listStepDefinitionByTaskDefinitionId(taskDefinitionId).size() > 0) {
             throw new ServLayerException(ExceptionConstants.HAS_CHILD);
         }

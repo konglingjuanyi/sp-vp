@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.config.*;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -30,7 +31,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     private IEventService eventService;
 
     @Override
-    public void requestConfigUpdate(String vin) throws Exception {
+    public void requestConfigUpdate(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 3);
         eventService.start(vin, Constants.AID_CONFIGURATION + "3");
@@ -39,7 +40,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     }
 
     @Override
-    public void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted) throws Exception {
+    public void responseConfigUpdate(OtaDto otaDto, Boolean isAccepted) throws ServLayerException {
         AssertRequired("isAccepted", isAccepted);
         eventService.start(getVin(otaDto), getCode(otaDto));
         eventService.end(getVin(otaDto), getCode(otaDto));
@@ -48,7 +49,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     @Override
     public TboxConfigDto checkConfigDelta(OtaDto otaDto, byte[] mcuVersion, byte[] mpuVersion, String vin,
                                           String iccid, byte[] configVersion, Integer configDelta)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("mcuVersion,mpuVersion,vin,iccid,configVersion,configDelta,eventId", mcuVersion,
                 mpuVersion, vin, iccid, configVersion, configDelta, otaDto.getEventId());
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -67,7 +68,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     }
 
     @Override
-    public TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId) throws Exception {
+    public TboxConfigPackageDto getConfigPackage(OtaDto otaDto, Integer packageId) throws ServLayerException {
         AssertRequired("packageId,eventId", packageId, otaDto.getEventId());
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         TboxConfigPackageDto tboxConfigPackageDto = new TboxConfigPackageDto();
@@ -91,13 +92,13 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
 
     @Override
     public void closeConfigUpdate(OtaDto otaDto, Boolean result, byte[] mcuVersion, byte[] mpuVersion,
-                                  byte[] configVersion, Integer configDelta) throws Exception {
+                                  byte[] configVersion, Integer configDelta) throws ServLayerException {
         eventService.start(getVin(otaDto), getCode(otaDto));
         eventService.end(getVin(otaDto), getCode(otaDto));
     }
 
     @Override
-    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) throws Exception {
+    public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 8);
         eventService.start(vin, Constants.AID_CONFIGURATION + "8");
@@ -107,13 +108,13 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
 
     @Override
     public void responseReadConfig(OtaDto otaDto,
-                                   List<TboxConfigSettingDto> tboxConfigSettingDtos) throws Exception {
+                                   List<TboxConfigSettingDto> tboxConfigSettingDtos) throws ServLayerException {
         eventService.start(getVin(otaDto), getCode(otaDto));
         eventService.end(getVin(otaDto), getCode(otaDto));
     }
 
     @Override
-    public KeyDto generateAsymmetricKey(OtaDto otaDto) throws Exception {
+    public KeyDto generateAsymmetricKey(OtaDto otaDto) throws ServLayerException {
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         KeyDto asymmetricKeyDto = new KeyDto();
         String key = tboxConfigService.generateAsymmetricKey(otaDto.getTboxId());
@@ -130,7 +131,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
 
     @Override
     public KeyDto bindTboxWithSecretKey(OtaDto otaDto, byte[] secretKeyWithEnc,
-                                        byte[] tboxSnWithEnc) throws Exception {
+                                        byte[] tboxSnWithEnc) throws ServLayerException {
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
         tboxConfigService.bindTboxWithSecretKey(otaDto.getTboxId(), secretKeyWithEnc, tboxSnWithEnc);
         KeyDto keyDto = new KeyDto();

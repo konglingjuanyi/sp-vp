@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IEcallApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -35,7 +36,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     @Override
     public EcallRecordDto startEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
                                      Integer crashSeverity, Integer tboxBatteryStatus,
-                                     Integer vehicleBatteryStatus) throws Exception {
+                                     Integer vehicleBatteryStatus) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,ecallType,crashSeverity,tboxBatteryStatus,vehicleBatteryStatus",
                 otaDto, vehiclePosDtos, ecallType, crashSeverity, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -53,7 +54,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void requestEcallStatus(String vin) throws Exception {
+    public void requestEcallStatus(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 3);
         eventService.start(vin, Constants.AID_ECALL + "3");
@@ -64,7 +65,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     @Override
     public Long updateEcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer ecallType,
                             Integer crashSeverity, Integer tboxBatteryStatus,
-                            Integer vehicleBatteryStatus) throws Exception {
+                            Integer vehicleBatteryStatus) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,ecallType,crashSeverity,tboxBatteryStatus,vehicleBatteryStatus",
                 otaDto, vehiclePosDtos, ecallType, crashSeverity, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -75,7 +76,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void requestHangUp(String vin) throws Exception {
+    public void requestHangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 5);
         eventService.start(vin, Constants.AID_ECALL + "5");
@@ -85,7 +86,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) throws Exception {
+    public void requestCallBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 7);
         eventService.start(vin, Constants.AID_ECALL + "7");
@@ -95,7 +96,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws Exception {
+    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws ServLayerException {
         AssertRequired("otaDto,callbackAcdepted", otaDto, callbackAccepted);
         eventService.start(getVin(otaDto), getCode(otaDto));
         ecallService.responseCallBack(otaDto.getTboxId(), callbackAccepted, rejectReason);
@@ -103,7 +104,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void requestCloseEcall(String vin) throws Exception {
+    public void requestCloseEcall(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 6);
         eventService.start(vin, Constants.AID_ECALL + "6");
@@ -113,7 +114,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
     }
 
     @Override
-    public void closeEcall(OtaDto otaDto) throws Exception {
+    public void closeEcall(OtaDto otaDto) throws ServLayerException {
         AssertRequired("otaDto", otaDto);
         eventService.start(getVin(otaDto), getCode(otaDto));
         ecallService.close(otaDto.getTboxId());

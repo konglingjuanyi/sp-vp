@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.diagnostic.IDiagnosticDao;
 import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
@@ -26,7 +27,7 @@ public class DiagnosticServiceImpl extends BaseService implements IDiagnosticSer
     private ITboxDao tboxDao;
 
     @Override
-    public void requestDiagnostic(String vin, List<Diagnostic> diagnostics) throws Exception {
+    public void requestDiagnostic(String vin, List<Diagnostic> diagnostics) throws ServLayerException {
         AssertRequired("vin,diagnostics", vin, diagnostics);
         Long tboxId = tboxDao.findTboxIdByVin(vin);
         for(Diagnostic diagnostic : diagnostics) {
@@ -37,7 +38,8 @@ public class DiagnosticServiceImpl extends BaseService implements IDiagnosticSer
     }
 
     @Override
-    public void responseDiagnostic(Long tboxId, List<Diagnostic> diagnostics) {
+    public void responseDiagnostic(Long tboxId, List<Diagnostic> diagnostics) throws ServLayerException {
+        AssertRequired("tboxId,diagnostics", tboxId, diagnostics);
         for(Diagnostic diagnostic : diagnostics) {
             diagnostic = diagnosticDao.findDiagnosticByEventId(diagnostic.getEventId());
             diagnostic.setResult(diagnostic.getResult());

@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IIcallApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -34,7 +35,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
 
     @Override
     public IcallRecordDto startIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws Exception {
+                                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,ecallType,tboxBatteryStatus,vehicleBatteryStatus",
                 otaDto, vehiclePosDtos, icallType, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -52,7 +53,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     }
 
     @Override
-    public void requestIcallStatus(String vin) throws Exception {
+    public void requestIcallStatus(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 3);
         eventService.start(vin, Constants.AID_ICALL + "3");
@@ -62,7 +63,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
 
     @Override
     public Long updateIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws Exception {
+                            Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,ecallType,tboxBatteryStatus,vehicleBatteryStatus",
                 otaDto, vehiclePosDtos, icallType, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -73,7 +74,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     }
 
     @Override
-    public void requestHangUp(String vin) throws Exception {
+    public void requestHangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 5);
         eventService.start(vin, Constants.AID_ICALL + "5");
@@ -83,7 +84,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) throws Exception {
+    public void requestCallBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 7);
         eventService.start(vin, Constants.AID_ICALL + "7");
@@ -94,7 +95,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
 
     @Override
     public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted,
-                                 Integer rejectReason) throws Exception {
+                                 Integer rejectReason) throws ServLayerException {
         AssertRequired("otaDto,callbackAcdepted", otaDto, callbackAccepted);
         eventService.start(getVin(otaDto), getCode(otaDto));
         icallService.responseCallBack(otaDto.getTboxId(), callbackAccepted, rejectReason);
@@ -102,7 +103,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     }
 
     @Override
-    public void requestCloseIcall(String vin) throws Exception {
+    public void requestCloseIcall(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 6);
         eventService.start(vin, Constants.AID_ICALL + "6");
@@ -112,7 +113,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     }
 
     @Override
-    public void closeIcall(OtaDto otaDto) throws Exception {
+    public void closeIcall(OtaDto otaDto) throws ServLayerException {
         AssertRequired("otaDto", otaDto);
         eventService.start(getVin(otaDto), getCode(otaDto));
         icallService.close(otaDto.getTboxId());

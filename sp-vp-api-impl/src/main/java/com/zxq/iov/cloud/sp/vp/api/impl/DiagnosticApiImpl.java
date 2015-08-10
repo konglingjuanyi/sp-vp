@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IDiagnosticApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
@@ -29,7 +30,7 @@ public class DiagnosticApiImpl extends BaseApi implements IDiagnosticApi {
     private IEventService eventService;
 
     @Override
-    public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) throws Exception {
+    public void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) throws ServLayerException {
         AssertRequired("vin,diagnosticDtos", vin, diagnosticDtos);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_DIAGNOSTIC, 1);
         eventService.start(vin, Constants.AID_DIAGNOSTIC + "1");
@@ -38,7 +39,7 @@ public class DiagnosticApiImpl extends BaseApi implements IDiagnosticApi {
     }
 
     @Override
-    public void responseDiagnostic(OtaDto otaDto, List<DiagnosticDto> diagnosticDtos) throws Exception {
+    public void responseDiagnostic(OtaDto otaDto, List<DiagnosticDto> diagnosticDtos) throws ServLayerException {
         AssertRequired("otaDto,diagnosticDtos", otaDto, diagnosticDtos);
         eventService.start(getVin(otaDto), getCode(otaDto));
         diagnosticService.responseDiagnostic(otaDto.getTboxId(),

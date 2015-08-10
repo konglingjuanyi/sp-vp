@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
@@ -24,7 +25,7 @@ public interface IStatusApi {
      * @param statusType        请求车辆状态类别
      * @return                  事件ID
      */
-    Long requestVehicleStatus(String vin, Integer statusType) throws Exception;
+    Long requestVehicleStatus(String vin, Integer statusType) throws ApiException;
 
     /**
      * TBOX响应车辆状态请求
@@ -36,7 +37,7 @@ public interface IStatusApi {
      */
     void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto,
                              List<VehicleStatusDto> vehicleStatusDtos,
-                             List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
+                             List<VehicleAlertDto> vehicleAlertDtos) throws ApiException;
 
     /**
      * 得到车辆状态信息快照
@@ -45,13 +46,13 @@ public interface IStatusApi {
      * @param eventId           事件ID
      * @return                  车辆状态快照传输对象
      */
-    VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws Exception;
+    VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws ApiException;
 
     /**
      * 记录车辆警告信息
      * @param otaDto            OTA传输对象
      * @param vehicleAlertDtos  车辆报警信息传输对象列表
      */
-    void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
+    void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws ApiException;
 
 }

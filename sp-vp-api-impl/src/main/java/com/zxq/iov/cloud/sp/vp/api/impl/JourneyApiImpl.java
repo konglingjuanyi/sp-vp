@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IJourneyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
@@ -32,7 +33,7 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
 
     @Override
     public void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("otaDto,startTime,tboxJourneyId", otaDto, startTime, tboxJourneyId);
         Journey journey = journeyService.getByIdAndTboxJourneyId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
@@ -47,7 +48,7 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
 
     @Override
     public void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption,
-                              VehiclePosDto vehiclePosDto) throws Exception {
+                              VehiclePosDto vehiclePosDto) throws ServLayerException {
         AssertRequired("otaDto,tboxJourneyId,vehiclePosDto", otaDto, tboxJourneyId, vehiclePosDto);
         Journey journey = journeyService.getByIdAndTboxJourneyId(tboxJourneyId, otaDto.getTboxId());
         if(null != journey && journey.getStatus().intValue() == END_STATUS.intValue()) {
@@ -66,7 +67,7 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
     public void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
                            Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
                            Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("otaDto,startVehiclePosDto,endVehiclePosDto,tboxJourneyId,distance,avgSpeed",
                 otaDto, startVehiclePosDto, endVehiclePosDto, tboxJourneyId, distance, avgSpeed);
         VehiclePosDtoAssembler assembler = new VehiclePosDtoAssembler();

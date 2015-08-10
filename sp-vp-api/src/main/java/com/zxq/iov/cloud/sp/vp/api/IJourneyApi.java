@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 
@@ -23,7 +24,7 @@ public interface IJourneyApi {
      * @param keyId                 钥匙ID
      */
     void startJourney(OtaDto otaDto, Date startTime, Integer tboxJourneyId, Integer keyId)
-            throws Exception;
+            throws ApiException;
 
     /**
      * 更新车辆行程状态
@@ -33,7 +34,7 @@ public interface IJourneyApi {
      * @param vehiclePosDto         车辆位置传输对象
      */
     void updateJourney(OtaDto otaDto, Integer tboxJourneyId, Integer instFuelConsumption,
-                       VehiclePosDto vehiclePosDto) throws Exception;
+                       VehiclePosDto vehiclePosDto) throws ApiException;
 
     /**
      * 结束车辆行程
@@ -52,6 +53,6 @@ public interface IJourneyApi {
     void endJourney(OtaDto otaDto, VehiclePosDto startVehiclePosDto, VehiclePosDto endVehiclePosDto,
                     Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
                     Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
-            throws Exception;
+            throws ApiException;
 
 }

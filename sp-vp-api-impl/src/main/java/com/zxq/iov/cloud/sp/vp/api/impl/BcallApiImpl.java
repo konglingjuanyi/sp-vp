@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IBcallApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -38,7 +39,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     @Override
     public BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                                     List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
+                                     List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,bcallType,tboxBatteryStatus,vehicleBatteryStatus", otaDto,
                 vehiclePosDtos, bcallType, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -57,7 +58,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void requestBcallStatus(String vin) throws Exception {
+    public void requestBcallStatus(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 3);
         eventService.start(vin, Constants.AID_BCALL + "3");
@@ -68,7 +69,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     @Override
     public Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                             Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                            List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
+                            List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,vehiclePosDtos,bcallType,tboxBatteryStatus,vehicleBatteryStatus", otaDto,
                 vehiclePosDtos, bcallType, tboxBatteryStatus, vehicleBatteryStatus);
         Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
@@ -80,7 +81,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void requestHangUp(String vin) throws Exception {
+    public void requestHangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 5);
         eventService.start(vin, Constants.AID_BCALL + "5");
@@ -90,7 +91,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void requestCallBack(String vin, String callNumber) throws Exception {
+    public void requestCallBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 7);
         eventService.start(vin, Constants.AID_BCALL + "7");
@@ -100,7 +101,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws Exception {
+    public void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws ServLayerException {
         AssertRequired("otaDto,callbackAcdepted", otaDto, callbackAccepted);
         eventService.start(getVin(otaDto), getCode(otaDto));
         bcallService.responseCallBack(otaDto.getTboxId(), callbackAccepted, rejectReason);
@@ -108,7 +109,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void requestCloseBcall(String vin) throws Exception {
+    public void requestCloseBcall(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 6);
         eventService.start(vin, Constants.AID_BCALL + "6");
@@ -118,7 +119,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
     }
 
     @Override
-    public void closeBcall(OtaDto otaDto) throws Exception {
+    public void closeBcall(OtaDto otaDto) throws ServLayerException {
         AssertRequired("otaDto", otaDto);
         eventService.start(getVin(otaDto), getCode(otaDto));
         bcallService.close(otaDto.getTboxId());

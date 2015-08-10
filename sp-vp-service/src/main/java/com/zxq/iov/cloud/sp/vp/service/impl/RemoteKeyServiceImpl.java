@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
@@ -29,7 +30,7 @@ public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyServi
 
     @Override
     public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                                Date keyValidityStartTime, Date keyValidityEndTime) throws Exception {
+                                Date keyValidityStartTime, Date keyValidityEndTime) throws ServLayerException {
         AssertRequired("vin,keyType,keyValue", vin, keyType, keyValue);
         RemoteKey remoteKey = new RemoteKey(tboxDao.findTboxIdByVin(vin), keyType, keyValue, keyReference,
                 keyValidityStartTime, keyValidityEndTime);
@@ -48,7 +49,7 @@ public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyServi
     }
 
     @Override
-    public void requestDeleteKey(String vin, Integer keyReference) throws Exception {
+    public void requestDeleteKey(String vin, Integer keyReference) throws ServLayerException {
         AssertRequired("vin,keyReference", vin, keyReference);
     }
 

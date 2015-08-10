@@ -96,7 +96,7 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public void dispatchAck(String owner, Long stepInstanceId) throws Exception {
+    public void dispatchAck(String owner, Long stepInstanceId) throws ServLayerException {
         eventDispatcher.end(owner, stepInstanceId);
     }
 

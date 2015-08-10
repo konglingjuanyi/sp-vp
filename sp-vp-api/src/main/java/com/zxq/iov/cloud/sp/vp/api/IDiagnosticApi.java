@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
 
@@ -19,13 +20,13 @@ public interface IDiagnosticApi {
      * @param vin                   车辆唯一码
      * @param diagnosticDtos        远程诊断传输对象列表
      */
-    void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) throws Exception;
+    void requestDiagnostic(String vin, List<DiagnosticDto> diagnosticDtos) throws ApiException;
 
     /**
      * 响应远程诊断请求
      * @param otaDto                OTA传输对象
      * @param diagnosticDtos        远程诊断传输对象列表
      */
-    void responseDiagnostic(OtaDto otaDto, List<DiagnosticDto> diagnosticDtos) throws Exception;
+    void responseDiagnostic(OtaDto otaDto, List<DiagnosticDto> diagnosticDtos) throws ApiException;
 
 }

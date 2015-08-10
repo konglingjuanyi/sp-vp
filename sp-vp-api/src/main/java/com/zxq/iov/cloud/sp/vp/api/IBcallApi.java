@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
@@ -29,7 +30,7 @@ public interface IBcallApi {
      */
     BcallRecordDto startBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                               Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                              List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
+                              List<VehicleAlertDto> vehicleAlertDtos) throws ApiException;
 
     /**
      * 请求bCall状态
@@ -49,20 +50,20 @@ public interface IBcallApi {
      */
     Long updateBcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer bcallType,
                      Integer tboxBatteryStatus, Integer vehicleBatteryStatus,
-                     List<VehicleAlertDto> vehicleAlertDtos) throws Exception;
+                     List<VehicleAlertDto> vehicleAlertDtos) throws ApiException;
 
     /**
      * 请求挂断通话
      * @param vin                   车辆唯一码
      */
-    void requestHangUp(String vin) throws Exception;
+    void requestHangUp(String vin) throws ApiException;
 
     /**
      * 请求车辆回拨
      * @param vin                   车辆唯一码
      * @param callNumber            呼叫号码
      */
-    void requestCallBack(String vin, String callNumber) throws Exception;
+    void requestCallBack(String vin, String callNumber) throws ApiException;
 
     /**
      * 响应车辆回拨请求
@@ -71,17 +72,17 @@ public interface IBcallApi {
      * @param rejectReason          拒绝理由
      */
     void responseCallBack(OtaDto otaDto, Boolean callbackAccepted,
-                          Integer rejectReason) throws Exception;
+                          Integer rejectReason) throws ApiException;
 
     /**
      * 请求结束bCall
      * @param vin                   车辆唯一码
      */
-    void requestCloseBcall(String vin) throws Exception;
+    void requestCloseBcall(String vin) throws ApiException;
 
     /**
      * 结束bCall
      * @param otaDto                OTA传输对象
      */
-    void closeBcall(OtaDto otaDto) throws Exception;
+    void closeBcall(OtaDto otaDto) throws ApiException;
 }

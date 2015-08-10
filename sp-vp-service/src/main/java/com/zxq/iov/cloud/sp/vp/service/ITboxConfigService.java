@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxConfigSetting;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface ITboxConfigService {
      */
     Integer checkConfigDelta(Long tboxId, byte[] mcuVersion, byte[] mpuVersion, String vin,
                                    String iccid, byte[] configVersion,
-                                   Integer configDelta, Long eventId) throws Exception;
+                                   Integer configDelta, Long eventId) throws ServLayerException;
 
     /**
      * 获得配置更新包
@@ -38,14 +39,14 @@ public interface ITboxConfigService {
      * @return                      配置参数对象列表
      */
     List<TboxConfigSetting> getConfigPackage(Long tboxId, Integer packageId,
-                                             Long eventId) throws Exception;
+                                             Long eventId) throws ServLayerException;
 
     /**
      * 生成非对称密钥，用以对TBOX密钥加解密
      * @param tboxId                TBOX ID
      * @return                      密钥传输对象
      */
-    String generateAsymmetricKey(Long tboxId) throws Exception;
+    String generateAsymmetricKey(Long tboxId) throws ServLayerException;
 
     /**
      * 将TBOX密钥与TBOX ID绑定
@@ -55,6 +56,6 @@ public interface ITboxConfigService {
      * @return                      密钥传输对象
      */
     void bindTboxWithSecretKey(Long tboxId, byte[] secretKeyWithEnc,
-                                 byte[] tboxSnWithEnc) throws Exception;
+                                 byte[] tboxSnWithEnc) throws ServLayerException;
 
 }

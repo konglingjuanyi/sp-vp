@@ -1,5 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
+
 /**
  * 安防 事件接口
  *
@@ -14,7 +16,7 @@ public interface IEventApi {
      * Dispatch超时
      * @param stepInstanceId    步骤实例ID
      */
-    void dispatchTimeout(Long stepInstanceId);
+    void dispatchTimeout(Long stepInstanceId) throws ApiException;
 
 
     /**
@@ -22,10 +24,10 @@ public interface IEventApi {
      * @param tboxId            TBOX ID
      * @param stepInstanceId    步骤实例ID
      */
-    void dispatchAck(Long tboxId, Long stepInstanceId) throws Exception;
+    void dispatchAck(Long tboxId, Long stepInstanceId) throws ApiException;
 
     /**
      * 检查超时步骤、任务及事件
      */
-    void checkTimeout();
+    void checkTimeout() throws ApiException;
 }

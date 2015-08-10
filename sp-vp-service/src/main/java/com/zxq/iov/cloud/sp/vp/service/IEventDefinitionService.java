@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventDefinition;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepDefinition;
@@ -49,21 +50,21 @@ public interface IEventDefinitionService {
      * @param eventDefinitionId     事件定义主键
      * @return                      事件定义对象
      */
-    EventDefinition findEventDefinitionById(Long eventDefinitionId) throws Exception;
+    EventDefinition findEventDefinitionById(Long eventDefinitionId) throws ServLayerException;
 
     /**
      * 根据主键得到任务定义对象
      * @param taskDefinitionId      任务定义主键
      * @return                      任务定义对象
      */
-    TaskDefinition findTaskDefinitionById(Long taskDefinitionId) throws Exception;
+    TaskDefinition findTaskDefinitionById(Long taskDefinitionId) throws ServLayerException;
 
     /**
      * 根据主键得到步骤定义对象
      * @param stepDefinitionId      步骤定义主键
      * @return                      步骤定义对象
      */
-    StepDefinition findStepDefinitionById(Long stepDefinitionId) throws Exception;
+    StepDefinition findStepDefinitionById(Long stepDefinitionId) throws ServLayerException;
 
     /**
      * 列出事件定义下的所有任务定义
@@ -89,13 +90,13 @@ public interface IEventDefinitionService {
      * 删除事件定义
      * @param eventDefinitionId     事件定义主键
      */
-    void removeEventDefinition(Long eventDefinitionId) throws Exception;
+    void removeEventDefinition(Long eventDefinitionId) throws ServLayerException;
 
     /**
      * 删除任务定义
      * @param taskDefinitionId      任务定义主键
      */
-    void removeTaskDefinition(Long taskDefinitionId) throws Exception;
+    void removeTaskDefinition(Long taskDefinitionId) throws ServLayerException;
 
     /**
      * 删除步骤定义

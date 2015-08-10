@@ -24,7 +24,7 @@ public interface IJourneyService {
      * @param keyId                 钥匙ID
      */
     void start(Long tboxId, Date startTime, Integer tboxJourneyId, Integer keyId)
-            throws Exception;
+            throws ServLayerException;
 
     /**
      * 更新车辆行程状态
@@ -34,7 +34,7 @@ public interface IJourneyService {
      * @param vehiclePos            车辆位置对象
      */
     void update(Long tboxId, Integer tboxJourneyId, Integer instFuelConsumption,
-                       VehiclePos vehiclePos) throws Exception;
+                       VehiclePos vehiclePos) throws ServLayerException;
 
     /**
      * 结束车辆行程
@@ -53,7 +53,7 @@ public interface IJourneyService {
     void end(Long tboxId, VehiclePos startVehiclePos, VehiclePos endVehiclePos,
                     Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
                     Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
-            throws Exception;
+            throws ServLayerException;
 
     /**
      * 根据TBOX ID和TBOX行程ID得到行程对象

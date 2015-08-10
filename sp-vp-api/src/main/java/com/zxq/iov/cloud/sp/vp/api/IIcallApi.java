@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.icall.IcallRecordDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
@@ -26,13 +27,13 @@ public interface IIcallApi {
      * @return                      bCall通话传输对象
      */
     IcallRecordDto startIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws Exception;
+                              Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws ApiException;
 
     /**
      * 请求iCall状态
      * @param vin                   车辆唯一码
      */
-    void requestIcallStatus(String vin) throws Exception;
+    void requestIcallStatus(String vin) throws ApiException;
 
     /**
      * 更新iCall状态
@@ -44,20 +45,20 @@ public interface IIcallApi {
      * @return                      呼叫对象ID
      */
     Long updateIcall(OtaDto otaDto, List<VehiclePosDto> vehiclePosDtos, Integer icallType,
-                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws Exception;
+                     Integer tboxBatteryStatus, Integer vehicleBatteryStatus) throws ApiException;
 
     /**
      * 请求挂断通话
      * @param vin                   车辆唯一码
      */
-    void requestHangUp(String vin) throws Exception;
+    void requestHangUp(String vin) throws ApiException;
 
     /**
      * 请求车辆回拨
      * @param vin                   车辆唯一码
      * @param callNumber            呼叫号码
      */
-    void requestCallBack(String vin, String callNumber) throws Exception;
+    void requestCallBack(String vin, String callNumber) throws ApiException;
 
     /**
      * 响应车辆回拨请求
@@ -65,17 +66,17 @@ public interface IIcallApi {
      * @param callbackAccepted      是否接受回拨
      * @param rejectReason          拒绝理由
      */
-    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws Exception;
+    void responseCallBack(OtaDto otaDto, Boolean callbackAccepted, Integer rejectReason) throws ApiException;
 
     /**
      * 请求结束iCall
      * @param vin                   车辆唯一码
      */
-    void requestCloseIcall(String vin) throws Exception;
+    void requestCloseIcall(String vin) throws ApiException;
 
     /**
      * 结束iCall
      * @param otaDto                OTA传输对象
      */
-    void closeIcall(OtaDto otaDto) throws Exception;
+    void closeIcall(OtaDto otaDto) throws ApiException;
 }

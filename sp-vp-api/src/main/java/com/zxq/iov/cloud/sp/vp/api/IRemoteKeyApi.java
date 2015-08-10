@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 
 import java.util.Date;
@@ -23,7 +24,7 @@ public interface IRemoteKeyApi {
      * @param keyValidityEndTime    有效结束时间
      */
     void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                         Date keyValidityStartTime, Date keyValidityEndTime) throws Exception;
+                         Date keyValidityStartTime, Date keyValidityEndTime) throws ApiException;
 
     /**
      * 响应写入钥匙请求
@@ -32,14 +33,14 @@ public interface IRemoteKeyApi {
      * @param writeFailureReason    写入失败原因
      */
     void responseWriteKey(OtaDto otaDto, Boolean writeSuccess,
-                          Integer writeFailureReason) throws Exception;
+                          Integer writeFailureReason) throws ApiException;
 
     /**
      * 请求删除钥匙
      * @param vin                   OTA传输对象
      * @param keyReference          钥匙引用
      */
-    void requestDeleteKey(String vin, Integer keyReference) throws Exception;
+    void requestDeleteKey(String vin, Integer keyReference) throws ApiException;
 
     /**
      * 响应删除钥匙请求
@@ -48,12 +49,12 @@ public interface IRemoteKeyApi {
      * @param deleteFailureReason   删除失败原因
      */
     void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess,
-                           Integer deleteFailureReason) throws Exception;
+                           Integer deleteFailureReason) throws ApiException;
 
     /**
      * 钥匙异常报警
      * @param otaDto    OTA传输对象
      */
-    void keyAlarm(OtaDto otaDto) throws Exception;
+    void keyAlarm(OtaDto otaDto) throws ApiException;
 
 }

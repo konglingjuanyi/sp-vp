@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -39,7 +40,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 
     @Override
     public Long requestControl(String requestClient, Long userId, String vin, String command,
-                               Map<String, Object> parameters) throws Exception {
+                               Map<String, Object> parameters) throws ServLayerException {
         AssertRequired("userId,vin,command", userId, vin, command);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
@@ -62,7 +63,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 
     @Override
     public void cancelControl(String requestClient, Long userId, String vin,
-                              String command) throws Exception {
+                              String command) throws ServLayerException {
         AssertRequired("userId,vin,command", userId, vin, command);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_RVC, 1);
         Map<String, Object> paramMap = new HashMap<>();
@@ -80,7 +81,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
     @Override
     public void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType,
                                     VehiclePosDto vehiclePosDto,
-                                    List<VehicleStatusDto> vehicleStatusDtos) throws Exception {
+                                    List<VehicleStatusDto> vehicleStatusDtos) throws ServLayerException {
         AssertRequired("otaDto,rvcStatus", otaDto, rvcStatus);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);
@@ -92,7 +93,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
     }
 
     @Override
-    public RvcStatusDto getControlStatus(Long controlCommandId, String vin, Long userId) throws Exception {
+    public RvcStatusDto getControlStatus(Long controlCommandId, String vin, Long userId) throws ServLayerException {
         AssertRequired("controlCommandId,vin", controlCommandId, vin);
         return new RvcStatusDtoAssembler().toDto(rvcService.getControlStatus(controlCommandId, vin, userId));
     }

@@ -1,6 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;
@@ -28,7 +29,7 @@ public interface IRvcService {
      * @return                  控制命令ID
      */
     ControlCommand requestControl(String requestClient, Long userId, String vin, String command,
-                        Map<String, Object> parameters, Long eventId) throws Exception;
+                        Map<String, Object> parameters, Long eventId) throws ServLayerException;
 
     /**
      * 取消控制
@@ -38,7 +39,7 @@ public interface IRvcService {
      * @param command           命令代码
      */
     void cancelControl(String requestClient, Long userId, String vin,
-                       String command) throws Exception;
+                       String command) throws ServLayerException;
 
     /**
      * 更新控制请求状态
@@ -50,7 +51,7 @@ public interface IRvcService {
      * @param eventId           事件ID
      */
     void updateControlStatus(Long tboxId, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
-                             List<VehicleStatus> vehicleStatuses, Long eventId) throws Exception;
+                             List<VehicleStatus> vehicleStatuses, Long eventId) throws ServLayerException;
 
     /**
      * 根据控制命令ID得到命令状态传输对象
@@ -59,6 +60,6 @@ public interface IRvcService {
      * @param userId            用户ID
      * @return                  控制命令状态对象
      */
-    ControlCommand getControlStatus(Long controlCommandId, String vin, Long userId) throws Exception;
+    ControlCommand getControlStatus(Long controlCommandId, String vin, Long userId) throws ServLayerException;
 
 }

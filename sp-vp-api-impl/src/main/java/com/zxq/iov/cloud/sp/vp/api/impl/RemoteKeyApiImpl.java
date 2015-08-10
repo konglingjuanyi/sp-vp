@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.DeleteKeyDto;
@@ -31,7 +32,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 
     @Override
     public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
-                                Date keyValidityStartTime, Date keyValidityEndTime) throws Exception {
+                                Date keyValidityStartTime, Date keyValidityEndTime) throws ServLayerException {
         AssertRequired("vin,keyType,keyValue", vin, keyType, keyValue);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 1);
         eventService.start(vin, Constants.AID_REMOTE_KEY + "1");
@@ -44,7 +45,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 
     @Override
     public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess,
-                                 Integer writeFailureReason) throws Exception {
+                                 Integer writeFailureReason) throws ServLayerException {
         AssertRequired("otaDto,writeSuccess", otaDto, writeSuccess);
         eventService.start(getVin(otaDto), getCode(otaDto));
         remoteKeyService.responseWriteKey(otaDto.getTboxId(), writeSuccess, writeFailureReason);
@@ -52,7 +53,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
     }
 
     @Override
-    public void requestDeleteKey(String vin, Integer keyReference) throws Exception {
+    public void requestDeleteKey(String vin, Integer keyReference) throws ServLayerException {
         AssertRequired("vin,keyReference", vin, keyReference);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 3);
         eventService.start(vin, Constants.AID_REMOTE_KEY + "3");
@@ -63,7 +64,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 
     @Override
     public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess,
-                                  Integer deleteFailureReason) throws Exception {
+                                  Integer deleteFailureReason) throws ServLayerException {
         AssertRequired("otaDto,deleteSuccess", otaDto, deleteSuccess);
         eventService.start(getVin(otaDto), getCode(otaDto));
         remoteKeyService.responseDeleteKey(otaDto.getTboxId(), deleteSuccess, deleteFailureReason);
@@ -71,7 +72,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
     }
 
     @Override
-    public void keyAlarm(OtaDto otaDto) throws Exception {
+    public void keyAlarm(OtaDto otaDto) throws ServLayerException {
         AssertRequired("otaDto", otaDto);
         eventService.start(getVin(otaDto), getCode(otaDto));
         remoteKeyService.keyAlarm(otaDto.getTboxId());

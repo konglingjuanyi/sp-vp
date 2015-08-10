@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleInfoDao;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehiclePosDao;
@@ -36,7 +37,7 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
     private IVehicleStatusDao vehicleStatusDao;
 
     @Override
-    public VehicleInfo getVehicleInfo(String vin, Long eventId) throws Exception {
+    public VehicleInfo getVehicleInfo(String vin, Long eventId) throws ServLayerException {
         AssertRequired("vin", vin);
         VehicleInfo vehicleInfo = null;
         if(null != eventId) {
@@ -55,7 +56,7 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
     public VehicleInfo logVehicleInfo(Long tboxId, Integer sourceType, Long sourceId,
                                     VehiclePos vehiclePos, List<VehicleStatus> vehicleStatuses,
                                     List<VehicleStatus> vehicleAlerts, Date statusTime, Long eventId)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("tboxId", tboxId);
         VehicleInfo vehicleInfo = new VehicleInfo(tboxId, tboxDao.findVinById(tboxId), sourceType, sourceId);
         vehicleInfo.setOwnerId(tboxDao.findUserIdById(tboxId));
@@ -85,7 +86,7 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
 
     @Override
     public VehicleInfo logVehicleAlert(Long tboxId, Date alertTime, VehiclePos vehiclePos,
-                                VehicleStatus vehicleAlert) throws Exception {
+                                VehicleStatus vehicleAlert) throws ServLayerException {
         AssertRequired("tboxId,alertTime,vehicleAlert", tboxId, alertTime, vehicleAlert);
         List<VehicleStatus> vehicleAlerts = new ArrayList<>();
         vehicleAlerts.add(vehicleAlert);

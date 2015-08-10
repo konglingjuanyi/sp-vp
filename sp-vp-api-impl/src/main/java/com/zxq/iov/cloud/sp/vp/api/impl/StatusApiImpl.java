@@ -35,7 +35,7 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
     private IEventService eventService;
 
     @Override
-    public Long requestVehicleStatus(String vin, Integer statusType) throws Exception {
+    public Long requestVehicleStatus(String vin, Integer statusType) throws ServLayerException {
         AssertRequired("vin", vin);
         if(null == statusType) {
             statusType = Constants.VEHICLE_STATUS_BASIC;
@@ -53,7 +53,7 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
     @Override
     public void responseVehicleStatus(OtaDto otaDto, Date statusTime, VehiclePosDto vehiclePosDto,
                                       List<VehicleStatusDto> vehicleStatusDtos,
-                                      List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
+                                      List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,statusTime,vehiclePosDto,vehicleStatusDtos", otaDto, statusTime,
                 vehiclePosDto, vehicleStatusDtos);
         eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
@@ -66,13 +66,13 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
     }
 
     @Override
-    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws Exception {
+    public VehicleInfoDto getVehicleStatus(String vin, Long eventId) throws ServLayerException {
         AssertRequired("vin", vin);
         return new VehicleInfoDtoAssembler().toDto(statusService.getVehicleInfo(vin, eventId));
     }
 
     @Override
-    public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws Exception {
+    public void logVehicleAlert(OtaDto otaDto, List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,vehicleAlertDtos", otaDto, vehicleAlertDtos);
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
         VehicleAlertDtoAssembler alertDtoAssembler = new VehicleAlertDtoAssembler();

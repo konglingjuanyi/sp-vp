@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
 
 import java.util.List;
@@ -18,13 +19,13 @@ public interface IDiagnosticService {
      * @param vin                   车辆唯一码
      * @param diagnostics           远程诊断对象列表
      */
-    void requestDiagnostic(String vin, List<Diagnostic> diagnostics) throws Exception;
+    void requestDiagnostic(String vin, List<Diagnostic> diagnostics) throws ServLayerException;
 
     /**
      * 响应远程诊断请求
      * @param tboxId                TBOX ID
      * @param diagnostics           远程诊断对象列表
      */
-    void responseDiagnostic(Long tboxId, List<Diagnostic> diagnostics) throws Exception;
+    void responseDiagnostic(Long tboxId, List<Diagnostic> diagnostics) throws ServLayerException;
 
 }

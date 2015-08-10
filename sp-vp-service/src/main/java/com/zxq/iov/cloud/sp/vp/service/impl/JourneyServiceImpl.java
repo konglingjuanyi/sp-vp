@@ -40,7 +40,7 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
 
     @Override
     public void start(Long tboxId, Date startTime, Integer tboxJourneyId, Integer keyId)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("tboxId,startTime,tboxJourneyId", tboxId, startTime, tboxJourneyId);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
         if(null == journey) {
@@ -60,7 +60,7 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
 
     @Override
     public void update(Long tboxId, Integer tboxJourneyId, Integer instFuelConsumption,
-                              VehiclePos vehiclePos) throws Exception {
+                              VehiclePos vehiclePos) throws ServLayerException {
         AssertRequired("tboxId,tboxJourneyId,vehiclePos", tboxId, tboxJourneyId, vehiclePos);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
         if(null == journey) {
@@ -79,7 +79,7 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
     public void end(Long tboxId, VehiclePos startVehiclePos, VehiclePos endVehiclePos,
                            Integer tboxJourneyId, Integer distance, Integer avgSpeed, Integer fuelEco,
                            Integer odometer, Integer fuelLevelPrc, Integer fuelLevelDisp, Integer fuelRange)
-            throws Exception {
+            throws ServLayerException {
         AssertRequired("tboxId,startVehiclePos,endVehiclePos,tboxJourneyId,distance,avgSpeed,fuelEco",
                 tboxId, startVehiclePos, endVehiclePos, tboxJourneyId, distance, avgSpeed, fuelEco);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
