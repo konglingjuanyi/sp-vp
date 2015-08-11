@@ -79,6 +79,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 3);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "3", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new TrackSettingReqDto(trackInterval, tracks));
         eventService.end(vin, Constants.AID_SVT + "3", eventId);
     }
@@ -88,6 +89,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 4);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "4", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_SVT + "4", eventId);
     }
@@ -97,6 +99,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 5);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "5", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_SVT + "5", eventId);
     }
@@ -118,6 +121,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin,keyId", vin, keyId);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 7);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "7", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new AuthKeyReqDto(keyId));
         eventService.end(vin, Constants.AID_SVT + "7", eventId);
     }
@@ -134,6 +138,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin,immoStatus", vin, immoStatus);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 9);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "9", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new ImmobiliseReqDto(immoStatus));
         eventService.end(vin, Constants.AID_SVT + "9", eventId);
     }
@@ -152,6 +157,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 11);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "11", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new UpdateProtectStrategyReqDto(startTime, endTime, protectStrategySettingDtos));
         eventService.end(vin, Constants.AID_SVT + "11", eventId);
     }
@@ -166,6 +172,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 13);
         Long eventId = eventService.start(vin, Constants.AID_SVT + "13", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_SVT + "13", eventId);
     }

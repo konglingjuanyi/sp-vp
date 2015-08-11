@@ -45,6 +45,7 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
         }
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_STATUS, 1);
         Long eventId = eventService.start(vin, Constants.AID_STATUS + "1", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new VehicleStatusReqDto(statusType));
         eventService.end(vin, Constants.AID_STATUS + "1", eventId);
         return eventId;

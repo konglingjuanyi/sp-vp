@@ -58,6 +58,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 3);
         Long eventId = eventService.start(vin, Constants.AID_ECALL + "3", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_ECALL + "3", eventId);
     }
@@ -81,6 +82,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 5);
         Long eventId = eventService.start(vin, Constants.AID_ECALL + "5", null);
         ecallService.hangUp(vin);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_ECALL + "5", eventId);
     }
@@ -91,6 +93,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ECALL, 7);
         Long eventId = eventService.start(vin, Constants.AID_ECALL + "7", null);
         ecallService.callBack(vin, callNumber);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new BcallRecordDto(callNumber));
         eventService.end(vin, Constants.AID_ECALL + "7", eventId);
     }
@@ -110,6 +113,7 @@ public class EcallApiImpl extends BaseApi implements IEcallApi {
         Long eventId = eventService.start(vin, Constants.AID_ECALL + "6", null);
         ecallService.close(vin);
         Long stepId = eventService.findInstance(vin, Constants.AID_ECALL + "6").getId();
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, null, stepId.toString());
     }
 

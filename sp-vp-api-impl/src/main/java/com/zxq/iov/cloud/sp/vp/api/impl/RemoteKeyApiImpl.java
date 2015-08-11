@@ -38,6 +38,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
         Long eventId = eventService.start(vin, Constants.AID_REMOTE_KEY + "1", null);
         remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, keyValidityStartTime,
                 keyValidityEndTime);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new WriteKeyDto(keyType, BinaryAndHexUtil.hexStringToByte(keyValue),
                 keyReference, keyValidityStartTime, keyValidityEndTime));
         eventService.end(vin, Constants.AID_REMOTE_KEY + "1", eventId);
@@ -56,10 +57,11 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
     public void requestDeleteKey(String vin, Integer keyReference) throws ServLayerException {
         AssertRequired("vin,keyReference", vin, keyReference);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_REMOTE_KEY, 3);
-        Long evnetId = eventService.start(vin, Constants.AID_REMOTE_KEY + "3", null);
+        Long eventId = eventService.start(vin, Constants.AID_REMOTE_KEY + "3", null);
         remoteKeyService.requestDeleteKey(vin, keyReference);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new DeleteKeyDto(keyReference));
-        eventService.end(vin, Constants.AID_REMOTE_KEY + "3", evnetId);
+        eventService.end(vin, Constants.AID_REMOTE_KEY + "3", eventId);
     }
 
     @Override

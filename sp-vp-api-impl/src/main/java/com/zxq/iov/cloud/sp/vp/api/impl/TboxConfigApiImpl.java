@@ -35,6 +35,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 3);
         Long eventId = eventService.start(vin, Constants.AID_CONFIGURATION + "3", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_CONFIGURATION + "3", eventId);
     }
@@ -102,6 +103,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 8);
         Long eventId = eventService.start(vin, Constants.AID_CONFIGURATION + "8", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new ReadConfigReqDto(tboxConfigsettingIds));
         eventService.end(vin, Constants.AID_CONFIGURATION + "8", eventId);
     }

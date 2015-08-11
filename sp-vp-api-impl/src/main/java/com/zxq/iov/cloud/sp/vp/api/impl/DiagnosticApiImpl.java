@@ -35,6 +35,7 @@ public class DiagnosticApiImpl extends BaseApi implements IDiagnosticApi {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_DIAGNOSTIC, 1);
         Long eventId = eventService.start(vin, Constants.AID_DIAGNOSTIC + "1", null);
         diagnosticService.requestDiagnostic(vin, new DiagnosticDtoAssembler().fromDtoList(diagnosticDtos));
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
     }
 

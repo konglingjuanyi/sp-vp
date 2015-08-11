@@ -1,5 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IRvcApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -12,6 +13,7 @@ import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IRvcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
             }
         }
         Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap, null);
+        otaDto.setEventId(eventId);
         Long controlCommandId = rvcService.requestControl(requestClient, userId, vin, command, parameters, eventId).getId();
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 tboxConfig));
@@ -73,6 +76,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         rvcService.cancelControl(requestClient, userId, vin, command);
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("cancel", true);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 convertConfig2Tbox(parameter)));
         eventService.end(vin, Constants.AID_RVC + "1", paramMap, eventId);
@@ -102,7 +106,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
      * 将请求的命令配置参数转换成TBOX能识别的参数
      * @return
      */
-    private Map<Integer, byte[]> convertConfig2Tbox(Map<String, Object> parameters) {
+    private Map<Integer, byte[]> convertConfig2Tbox(Map<String, Object> parameters) throws ServLayerException {
         Map<Integer, byte[]> result = new HashMap<>();
         Iterator iterator = parameters.keySet().iterator();
         String key, val = null;
@@ -110,8 +114,12 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         while(iterator.hasNext()) {
             key = iterator.next().toString();
             keyId = Constants.RVC_CMD_PARAM_ID.get(key);
+            val = Constants.RVC_CMD_PARAM_VALUE.get(key + "_" + parameters.get(key));
+            if(StringUtils.isBlank(val)) {
+                throw new ServLayerException(ExceptionConstants.WRONG_CONTROL_CMD_PARAM);
+            }
             result.put(keyId,
-                    BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_PARAM_VALUE.get(key + "_" + parameters.get(key))));
+                    BinaryAndHexUtil.hexStringToByte(val));
         }
         return result;
     }

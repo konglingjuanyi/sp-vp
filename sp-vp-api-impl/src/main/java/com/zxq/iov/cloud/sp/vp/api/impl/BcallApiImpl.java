@@ -62,6 +62,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 3);
         Long eventId = eventService.start(vin, Constants.AID_BCALL + "3", null);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_BCALL + "3", eventId);
     }
@@ -86,6 +87,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 5);
         Long eventId = eventService.start(vin, Constants.AID_BCALL + "5", null);
         bcallService.hangUp(vin);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto);
         eventService.end(vin, Constants.AID_BCALL + "5", eventId);
     }
@@ -96,6 +98,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_BCALL, 7);
         Long eventId = eventService.start(vin, Constants.AID_BCALL + "7", null);
         bcallService.callBack(vin, callNumber);
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, new BcallRecordDto(callNumber));
         eventService.end(vin, Constants.AID_BCALL + "7", eventId);
     }
@@ -115,6 +118,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
         Long eventId = eventService.start(vin, Constants.AID_BCALL + "6", null);
         bcallService.close(vin);
         Long stepId = eventService.findInstance(vin, Constants.AID_BCALL + "6").getId();
+        otaDto.setEventId(eventId);
         sendQueue(otaDto, null, stepId.toString());
     }
 
