@@ -10,18 +10,10 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-4-23 11:17
- * modify date 2015-8-7 13:51
- * @version 0.12, 2015-8-7
+ * modify date 2015-8-11 9:53
+ * @version 0.13, 2015-8-11
  */
 public interface IEventService {
-
-    /**
-     * 开始事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @return                  事件ID
-     */
-    Long start(String owner, String code) throws ServLayerException;
 
     /**
      * 开始事件
@@ -37,15 +29,6 @@ public interface IEventService {
      * @param owner             事件拥有者
      * @param code              触发代码
      * @param paramMap          参数MAP
-     * @return                  事件ID
-     */
-    Long start(String owner, String code, Map<String, Object> paramMap) throws ServLayerException;
-
-    /**
-     * 开始事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param paramMap          参数MAP
      * @param eventId           事件ID
      * @return                  事件ID
      */
@@ -55,34 +38,27 @@ public interface IEventService {
      * 结束事件
      * @param owner             事件拥有者
      * @param code              触发代码
+     * @param eventId           事件ID
      */
-    void end(String owner, String code) throws ServLayerException;
+    void end(String owner, String code, Long eventId) throws ServLayerException;
 
     /**
      * 结束事件
      * @param owner             事件拥有者
      * @param code              触发代码
      * @param paramMap          参数MAP
+     * @param eventId           事件ID
      */
-    void end(String owner, String code, Map<String, Object> paramMap) throws ServLayerException;
-
-    /**
-     * 结束事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param paramMap          参数MAP
-     * @param result            结果对象
-     */
-    void end(String owner, String code, Map<String, Object> paramMap,
-             Object result) throws ServLayerException;
+    void end(String owner, String code, Map<String, Object> paramMap, Long eventId) throws ServLayerException;
 
     /**
      * 结束事件
      * @param owner             事件拥有者
      * @param code              触发代码
      * @param result            结果对象
+     * @param eventId           事件ID
      */
-    void end(String owner, String code, Object result) throws ServLayerException;
+    void end(String owner, String code, Object result, Long eventId) throws ServLayerException;
 
     /**
      * 结束事件

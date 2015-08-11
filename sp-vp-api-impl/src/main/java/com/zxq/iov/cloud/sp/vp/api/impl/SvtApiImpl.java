@@ -23,8 +23,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-15 13:03
- * modify date 2015-8-7 15:06
- * @version 0.8, 2015-8-7
+ * modify date 2015-8-11 10:40
+ * @version 0.9, 2015-8-11
  */
 @Service
 public class SvtApiImpl extends BaseApi implements ISvtApi {
@@ -36,19 +36,19 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 
     @Override
     public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ServLayerException {
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         StolenAlarmDtoAssembler stolenAlarmDtoAssembler = new StolenAlarmDtoAssembler();
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
         for(StolenAlarmDto stolenAlarmDto : stolenAlarmDtos) {
             svtService.alarm(otaDto.getTboxId(), stolenAlarmDtoAssembler.fromDto(stolenAlarmDto),
                     posDtoAssembler.fromDto(stolenAlarmDto.getVehiclePosDto()), eventId);
         }
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override
     public void updateTrack(OtaDto otaDto, List<TrackDto> trackDtos) throws ServLayerException {
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         VehicleStatusDtoAssembler statusDtoAssembler = new VehicleStatusDtoAssembler();
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
@@ -71,42 +71,42 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
                     posDtoAssembler.fromDto(trackDto.getVehiclePosDto()), eventId);
             vehicleStatusDtos.clear();
         }
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override
     public void requestTrackSetting(String vin, Integer trackInterval, Integer tracks) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 3);
-        eventService.start(vin, Constants.AID_SVT + "3");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "3", null);
         sendQueue(otaDto, new TrackSettingReqDto(trackInterval, tracks));
-        eventService.end(vin, Constants.AID_SVT + "3");
+        eventService.end(vin, Constants.AID_SVT + "3", eventId);
     }
 
     @Override
     public void requestSingleTrack(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 4);
-        eventService.start(vin, Constants.AID_SVT + "4");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "4", null);
         sendQueue(otaDto);
-        eventService.end(vin, Constants.AID_SVT + "4");
+        eventService.end(vin, Constants.AID_SVT + "4", eventId);
     }
 
     @Override
     public void requestCloseAlarm(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 5);
-        eventService.start(vin, Constants.AID_SVT + "5");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "5", null);
         sendQueue(otaDto);
-        eventService.end(vin, Constants.AID_SVT + "5");
+        eventService.end(vin, Constants.AID_SVT + "5", eventId);
     }
 
     @Override
     public void responseCloseAlarm(OtaDto otaDto, Boolean allAlarmClosed,
                                    List<StolenAlarmDto> stolenAlarmDtos) throws ServLayerException {
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         if(allAlarmClosed) {
-            eventService.end(getVin(otaDto), getCode(otaDto));
+            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
         }
         else {
             eventService.error(getVin(otaDto), getCode(otaDto), 1, eventId);
@@ -117,32 +117,32 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     public void requestAuthKey(String vin, Integer keyId) throws ServLayerException {
         AssertRequired("vin,keyId", vin, keyId);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 7);
-        eventService.start(vin, Constants.AID_SVT + "7");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "7", null);
         sendQueue(otaDto, new AuthKeyReqDto(keyId));
-        eventService.end(vin, Constants.AID_SVT + "7");
+        eventService.end(vin, Constants.AID_SVT + "7", eventId);
     }
 
     @Override
     public void responseAuthKey(OtaDto otaDto, Boolean keyIsAccepted,
                                 Integer failureReason) throws ServLayerException {
-        eventService.start(getVin(otaDto), getCode(otaDto));
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override
     public void requestImmobilise(String vin, Integer immoStatus) throws ServLayerException {
         AssertRequired("vin,immoStatus", vin, immoStatus);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 9);
-        eventService.start(vin, Constants.AID_SVT + "9");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "9", null);
         sendQueue(otaDto, new ImmobiliseReqDto(immoStatus));
-        eventService.end(vin, Constants.AID_SVT + "9");
+        eventService.end(vin, Constants.AID_SVT + "9", eventId);
     }
 
     @Override
     public void responseImmobilise(OtaDto otaDto, Integer immoStatus,
                                    Integer failureReason) throws ServLayerException {
-        eventService.start(getVin(otaDto), getCode(otaDto));
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override
@@ -151,9 +151,9 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
             throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 11);
-        eventService.start(vin, Constants.AID_SVT + "11");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "11", null);
         sendQueue(otaDto, new UpdateProtectStrategyReqDto(startTime, endTime, protectStrategySettingDtos));
-        eventService.end(vin, Constants.AID_SVT + "11");
+        eventService.end(vin, Constants.AID_SVT + "11", eventId);
     }
 
     @Override
@@ -165,8 +165,8 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
     public void requestAlarm(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_SVT, 13);
-        eventService.start(vin, Constants.AID_SVT + "13");
+        Long eventId = eventService.start(vin, Constants.AID_SVT + "13", null);
         sendQueue(otaDto);
-        eventService.end(vin, Constants.AID_SVT + "13");
+        eventService.end(vin, Constants.AID_SVT + "13", eventId);
     }
 }

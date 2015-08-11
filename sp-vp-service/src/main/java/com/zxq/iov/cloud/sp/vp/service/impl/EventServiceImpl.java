@@ -1,7 +1,6 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.impl.event.EventDispatcher;
@@ -16,8 +15,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-5 15:45
- * modify date 2015-8-7 13:46
- * @version 0.15, 2015-8-7
+ * modify date 2015-8-11 9:53
+ * @version 0.16, 2015-8-11
  */
 @Service
 @Transactional
@@ -25,23 +24,10 @@ public class EventServiceImpl implements IEventService {
 
     @Autowired
     private EventDispatcher eventDispatch;
-    @Autowired
-    private ITboxDao tboxDaoService;
-
-    @Override
-    public Long start(String owner, String code) throws ServLayerException {
-        return start(owner, code, null, null);
-    }
 
     @Override
     public Long start(String owner, String code, Long eventId) throws ServLayerException {
         return start(owner, code, null, eventId);
-    }
-
-    @Override
-    public Long start(String owner, String code, Map<String, Object> paramMap)
-            throws ServLayerException {
-        return start(owner, code, paramMap, null);
     }
 
     @Override
@@ -51,24 +37,19 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public void end(String owner, String code) throws ServLayerException {
-        end(owner, code, null, null, null);
-    }
-
-    @Override
-    public void end(String owner, String code, Map<String, Object> paramMap) throws ServLayerException {
-        end(owner, code, paramMap, null, null);
+    public void end(String owner, String code, Long eventId) throws ServLayerException {
+        end(owner, code, null, null, eventId);
     }
 
     @Override
     public void end(String owner, String code, Map<String, Object> paramMap,
-                    Object result) throws ServLayerException {
-        end(owner, code, paramMap, result, null);
+                    Long eventId) throws ServLayerException {
+        end(owner, code, paramMap, null, eventId);
     }
 
     @Override
-    public void end(String owner, String code, Object result) throws ServLayerException {
-        end(owner, code, null, result, null);
+    public void end(String owner, String code, Object result, Long eventId) throws ServLayerException {
+        end(owner, code, null, result, eventId);
     }
 
     @Override

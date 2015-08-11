@@ -53,11 +53,11 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
                 paramMap.put("unlockSilentFlag", parameters.get("silent_flag"));
             }
         }
-        Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap);
+        Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap, null);
         Long controlCommandId = rvcService.requestControl(requestClient, userId, vin, command, parameters, eventId).getId();
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 tboxConfig));
-        eventService.end(vin, Constants.AID_RVC + "1", paramMap, controlCommandId);
+        eventService.end(vin, Constants.AID_RVC + "1", paramMap, controlCommandId, eventId);
         return controlCommandId;
     }
 
@@ -69,13 +69,13 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", Constants.RVC_CMD_CODE.get(command));
         paramMap.put("cancelFlag", 1);
-        eventService.start(vin, Constants.AID_RVC + "1", paramMap);
+        Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap, null);
         rvcService.cancelControl(requestClient, userId, vin, command);
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("cancel", true);
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 convertConfig2Tbox(parameter)));
-        eventService.end(vin, Constants.AID_RVC + "1", paramMap);
+        eventService.end(vin, Constants.AID_RVC + "1", paramMap, eventId);
     }
 
     @Override
@@ -85,11 +85,11 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         AssertRequired("otaDto,rvcStatus", otaDto, rvcStatus);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         rvcService.updateControlStatus(otaDto.getTboxId(), rvcStatus, failureType,
                 new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
                 new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos), eventId);
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override

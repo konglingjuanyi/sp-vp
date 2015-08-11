@@ -22,8 +22,8 @@ import java.io.IOException;
  */
 public class BaseApi {
 
-    @Resource(name = "tboxAppServiceTemplate")
-    private RabbitTemplate tboxAppServiceTemplate;
+//    @Resource(name = "tboxAppServiceTemplate")
+//    private RabbitTemplate tboxAppServiceTemplate;
 
     protected void sendQueue(OtaDto otaDto) {
         sendQueue(otaDto, null);
@@ -42,7 +42,7 @@ public class BaseApi {
             if(null != appData) {
                 serviceMessage.setAppData(JSON.json(appData));
             }
-            tboxAppServiceTemplate.convertAndSend(Constants.QUEUE_ROUTING_KEY, serviceMessage);
+//            tboxAppServiceTemplate.convertAndSend(Constants.QUEUE_ROUTING_KEY, serviceMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }

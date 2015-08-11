@@ -44,9 +44,9 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
             throw new ServLayerException(ExceptionConstants.WRONG_VEHICLE_STATUS);
         }
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_STATUS, 1);
-        Long eventId = eventService.start(vin, Constants.AID_STATUS + "1");
+        Long eventId = eventService.start(vin, Constants.AID_STATUS + "1", null);
         sendQueue(otaDto, new VehicleStatusReqDto(statusType));
-        eventService.end(vin, Constants.AID_STATUS + "1");
+        eventService.end(vin, Constants.AID_STATUS + "1", eventId);
         return eventId;
     }
 
@@ -56,13 +56,13 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
                                       List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,statusTime,vehiclePosDto,vehicleStatusDtos", otaDto, statusTime,
                 vehiclePosDto, vehicleStatusDtos);
-        eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         statusService.logVehicleInfo(otaDto.getTboxId(), null, null,
                 new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
                 new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos),
                 new VehicleAlertDtoAssembler().fromDtoList(vehicleAlertDtos),
                 otaDto.getEventCreateTime(), otaDto.getEventId());
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
     @Override
@@ -76,13 +76,13 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
         AssertRequired("otaDto,vehicleAlertDtos", otaDto, vehicleAlertDtos);
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
         VehicleAlertDtoAssembler alertDtoAssembler = new VehicleAlertDtoAssembler();
-        eventService.start(getVin(otaDto), getCode(otaDto));
+        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
         for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
             statusService.logVehicleAlert(otaDto.getTboxId(), otaDto.getEventCreateTime(),
                     posDtoAssembler.fromDto(vehicleAlertDto.getVehiclePosDto()),
                     alertDtoAssembler.fromDto(vehicleAlertDto));
         }
-        eventService.end(getVin(otaDto), getCode(otaDto));
+        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
 }

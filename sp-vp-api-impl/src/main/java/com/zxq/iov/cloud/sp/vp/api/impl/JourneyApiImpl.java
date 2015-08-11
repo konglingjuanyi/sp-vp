@@ -18,8 +18,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-8-7 13:17
- * @version 0.11, 2015-8-7
+ * modify date 2015-8-11 10:21
+ * @version 0.12, 2015-8-11
  */
 @Service
 public class JourneyApiImpl extends BaseApi implements IJourneyApi {
@@ -40,9 +40,9 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
             journeyService.start(otaDto.getTboxId(), startTime, tboxJourneyId, keyId);
         }
         else {
-            eventService.start(getVin(otaDto), getCode(otaDto));
+            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
             journeyService.start(otaDto.getTboxId(), startTime, tboxJourneyId, keyId);
-            eventService.end(getVin(otaDto), getCode(otaDto));
+            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
         }
     }
 
@@ -56,10 +56,10 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
                     new VehiclePosDtoAssembler().fromDto(vehiclePosDto));
         }
         else {
-            eventService.start(getVin(otaDto), getCode(otaDto));
+            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
             journeyService.update(otaDto.getTboxId(), tboxJourneyId, instFuelConsumption,
                 new VehiclePosDtoAssembler().fromDto(vehiclePosDto));
-            eventService.end(getVin(otaDto), getCode(otaDto));
+            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
         }
     }
 
@@ -78,11 +78,11 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
                     odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
         }
         else {
-            eventService.start(getVin(otaDto), getCode(otaDto));
+            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
             journeyService.end(otaDto.getTboxId(), assembler.fromDto(startVehiclePosDto),
                     assembler.fromDto(endVehiclePosDto), tboxJourneyId, distance, avgSpeed, fuelEco,
                     odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
-            eventService.end(getVin(otaDto), getCode(otaDto));
+            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
         }
     }
 
