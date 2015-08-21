@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
+import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleInfoDao;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehiclePosDao;
 import com.zxq.iov.cloud.sp.vp.dao.status.IVehicleStatusDao;
@@ -21,8 +21,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-8-4 9:18
- * @version 0.11, 2015-8-4
+ * modify date 2015-8-18 14:43
+ * @version 0.13, 2015-8-18
  */
 @Service
 public class StatusServiceImpl extends BaseService implements IStatusService {
@@ -31,8 +31,6 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
     private IVehicleInfoDao vehicleInfoDao;
     @Autowired
     private IVehiclePosDao vehiclePosDao;
-    @Autowired
-    private ITboxDao tboxDao;
     @Autowired
     private IVehicleStatusDao vehicleStatusDao;
 
@@ -45,6 +43,11 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
             if(vehicleInfos.size() > 0) {
                 vehicleInfo = vehicleInfos.get(0);
             }
+            vehicleInfo.setVehiclePos(vehiclePosDao.findVehiclePosByVehicleInfoId(vehicleInfo.getId()));
+            vehicleInfo.setVehicleStatuses(vehicleStatusDao.findVehicleStatusByVehicleInfoId(
+                    vehicleInfo.getId(), Constants.VEHICLE_STATUS_BASIC));
+            vehicleInfo.setVehicleAlerts(vehicleStatusDao.findVehicleStatusByVehicleInfoId(
+                    vehicleInfo.getId(), Constants.VEHICLE_STATUS_ALERT));
         }
         else {
             vehicleInfo = vehicleInfoDao.readVehicleInfo(vin);
@@ -58,8 +61,8 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
                                     List<VehicleStatus> vehicleAlerts, Date statusTime, Long eventId)
             throws ServLayerException {
         AssertRequired("tboxId", tboxId);
-        VehicleInfo vehicleInfo = new VehicleInfo(tboxId, tboxDao.findVinById(tboxId), sourceType, sourceId);
-        vehicleInfo.setOwnerId(tboxDao.findUserIdById(tboxId));
+        VehicleInfo vehicleInfo = new VehicleInfo(tboxId, findVinById(tboxId), sourceType, sourceId);
+        vehicleInfo.setOwnerId(findUserIdById(tboxId));
         if(null != eventId) {
             vehicleInfo.setEventId(eventId);
         }

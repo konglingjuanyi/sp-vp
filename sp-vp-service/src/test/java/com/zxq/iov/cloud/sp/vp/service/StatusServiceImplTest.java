@@ -34,7 +34,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testGetVehicleInfo() throws Exception {
-        Long eventId = 197L;
+        Long eventId = 230L;
         VehicleInfo vehicleInfo = statusService.getVehicleInfo(vin, eventId);
         Assert.assertNotNull(vehicleInfo);
     }

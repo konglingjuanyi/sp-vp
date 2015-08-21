@@ -13,7 +13,7 @@ import java.util.TreeMap;
  */
 public class Constants {
 
-	public static final String QUEUE_ROUTING_KEY = "AppTBOXServiceQueue.AV1.0";
+	public static final String QUEUE_ROUTING_KEY = "AppTBOXServiceQueue.AV.1.0";
 
 	public static final Integer CALL_TYPE_BCALL = 1;
 	public static final Integer CALL_TYPE_ECALL = 2;

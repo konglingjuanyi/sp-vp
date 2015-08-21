@@ -7,20 +7,20 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:22
- * modify date 2015-7-17 17:42
- * @version 0.2, 2015-7-17
+ * modify date 2015-8-12 14:41
+ * @version 0.3, 2015-8-12
  */
 public class WriteKeyDto {
 
     private Integer keyType;
     private byte[] keyValue;
-    private Integer keyReference;
+    private Long keyReference;
     private Date keyValidityStartTime;
     private Date keyValidityEndTime;
 
     public WriteKeyDto() {}
 
-    public WriteKeyDto(Integer keyType, byte[] keyValue, Integer keyReference, Date keyValidityStartTime, Date keyValidityEndTime) {
+    public WriteKeyDto(Integer keyType, byte[] keyValue, Long keyReference, Date keyValidityStartTime, Date keyValidityEndTime) {
         this.keyType = keyType;
         this.keyValue = keyValue;
         this.keyReference = keyReference;
@@ -44,11 +44,11 @@ public class WriteKeyDto {
         this.keyValue = keyValue;
     }
 
-    public Integer getKeyReference() {
+    public Long getKeyReference() {
         return keyReference;
     }
 
-    public void setKeyReference(Integer keyReference) {
+    public void setKeyReference(Long keyReference) {
         this.keyReference = keyReference;
     }
 

@@ -10,8 +10,8 @@ import java.util.List;
  * 安防服务 远程配置接口
  * @author 叶荣杰
  * create date 2015-4-22 11:19
- * modify date 2015-8-6 10:49
- * @version 0.7, 2015-8-6
+ * modify date 2015-8-18 11:24
+ * @version 0.8, 2015-8-18
  */
 public interface ITboxConfigService {
 
@@ -44,9 +44,9 @@ public interface ITboxConfigService {
     /**
      * 生成非对称密钥，用以对TBOX密钥加解密
      * @param tboxId                TBOX ID
-     * @return                      密钥传输对象
+     * @return                      公钥模
      */
-    String generateAsymmetricKey(Long tboxId) throws ServLayerException;
+    byte[] generateAsymmetricKey(Long tboxId) throws ServLayerException;
 
     /**
      * 将TBOX密钥与TBOX ID绑定
@@ -55,7 +55,7 @@ public interface ITboxConfigService {
      * @param tboxSnWithEnc         加密过的TBOX序列号
      * @return                      密钥传输对象
      */
-    void bindTboxWithSecretKey(Long tboxId, byte[] secretKeyWithEnc,
-                                 byte[] tboxSnWithEnc) throws ServLayerException;
+    void bindTboxWithSecretKey(Long tboxId, String secretKeyWithEnc,
+                               String tboxSnWithEnc) throws ServLayerException;
 
 }

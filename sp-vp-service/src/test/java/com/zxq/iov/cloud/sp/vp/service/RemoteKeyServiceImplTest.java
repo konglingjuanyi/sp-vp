@@ -13,8 +13,8 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 14:54
- * modify date 2015-8-5 17:10
- * @version 0.3, 2015-8-5
+ * modify date 2015-8-12 14:37
+ * @version 0.4, 2015-8-12
  */
 @Transactional
 public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
@@ -30,7 +30,7 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
     public void testRequestWriteKey() throws Exception {
         Integer keyType = 1;
         String keyValue = "1";
-        Integer keyReference = 1;
+        Long keyReference = 1L;
         remoteKeyService.requestWriteKey(vin, keyType, keyValue, keyReference, new Date(), new Date());
     }
 
@@ -43,7 +43,7 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRequestDeleteKey() throws Exception {
-        remoteKeyService.requestDeleteKey(vin, 1);
+        remoteKeyService.requestDeleteKey(vin, 1L);
     }
 
     @Test

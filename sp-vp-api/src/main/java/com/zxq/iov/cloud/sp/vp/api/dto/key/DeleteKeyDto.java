@@ -5,24 +5,24 @@ package com.zxq.iov.cloud.sp.vp.api.dto.key;
  *
  * @author 叶荣杰
  * create date 2015-7-6 16:36
- * modify date
- * @version 0.1, 2015-7-6
+ * modify date 2015-8-12 14:41
+ * @version 0.2, 2015-8-12
  */
 public class DeleteKeyDto {
 
-    private Integer keyReference;
+    private Long keyReference;
 
     public DeleteKeyDto() {}
 
-    public DeleteKeyDto(Integer keyReference) {
+    public DeleteKeyDto(Long keyReference) {
         this.keyReference = keyReference;
     }
 
-    public Integer getKeyReference() {
+    public Long getKeyReference() {
         return keyReference;
     }
 
-    public void setKeyReference(Integer keyReference) {
+    public void setKeyReference(Long keyReference) {
         this.keyReference = keyReference;
     }
 

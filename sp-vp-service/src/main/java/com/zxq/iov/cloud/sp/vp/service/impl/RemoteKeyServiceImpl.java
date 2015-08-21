@@ -3,7 +3,6 @@ package com.zxq.iov.cloud.sp.vp.service.impl;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.key.IRemoteKeyDao;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 import com.zxq.iov.cloud.sp.vp.service.IRemoteKeyService;
@@ -17,22 +16,20 @@ import java.util.Date;
  *
  * @author 叶荣杰
  * create date 2015-6-23 13:47
- * modify date 2015-8-5 17:07
- * @version 0.5, 2015-8-5
+ * modify date 2015-8-18 14:42
+ * @version 0.7, 2015-8-18
  */
 @Service
 public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyService {
 
     @Autowired
     private IRemoteKeyDao remoteKeyDao;
-    @Autowired
-    private ITboxDao tboxDao;
 
     @Override
-    public void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+    public void requestWriteKey(String vin, Integer keyType, String keyValue, Long keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) throws ServLayerException {
         AssertRequired("vin,keyType,keyValue", vin, keyType, keyValue);
-        RemoteKey remoteKey = new RemoteKey(tboxDao.findTboxIdByVin(vin), keyType, keyValue, keyReference,
+        RemoteKey remoteKey = new RemoteKey(findTboxIdByVin(vin), keyType, keyValue, keyReference,
                 keyValidityStartTime, keyValidityEndTime);
         remoteKeyDao.createRemoteKey(remoteKey);
     }
@@ -49,7 +46,7 @@ public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyServi
     }
 
     @Override
-    public void requestDeleteKey(String vin, Integer keyReference) throws ServLayerException {
+    public void requestDeleteKey(String vin, Long keyReference) throws ServLayerException {
         AssertRequired("vin,keyReference", vin, keyReference);
     }
 

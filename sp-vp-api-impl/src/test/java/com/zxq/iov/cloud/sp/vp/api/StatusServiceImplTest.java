@@ -60,7 +60,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testGetVehicleStatus() throws Exception {
-        Long eventId = 197L;
+        Long eventId = 230L;
         VehicleInfoDto vehicleInfoDto = statusApi.getVehicleStatus(vin, eventId);
         Assert.assertNotNull(vehicleInfoDto);
     }

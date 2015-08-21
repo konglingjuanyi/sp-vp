@@ -58,8 +58,8 @@ public class RvcApiImplTest extends BaseServiceTestCase {
     public void testUpdateControlStatus() throws Exception {
         Integer mid = 2;
         OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_RVC, mid);
-        otaDto.setEventId(128L);
-        String rvcStatus = "3";
+        otaDto.setEventId(241L);
+        String rvcStatus = "00";
         VehiclePosDto vehiclePosDto =  new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
         List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
         vehicleStatusDtos.add(new VehicleStatusDto("status", 1));

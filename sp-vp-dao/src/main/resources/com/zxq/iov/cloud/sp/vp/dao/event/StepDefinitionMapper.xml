@@ -4,24 +4,24 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.StepDefinitionMapper">
 
 	<resultMap id="stepDefinitionResultMap" type="StepDefinition">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="TASK_DEFINITION_ID" jdbcType="DECIMAL" property="taskDefinitionId"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="TASK_DEFINITION_ID" jdbcType="BIGINT" property="taskDefinitionId"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
-		<result column="LIFECYCLE" jdbcType="DECIMAL" property="lifecycle"/>
-		<result column="PRE_STEP_DEFINITION_ID" jdbcType="DECIMAL" property="preStepDefinitionId"/>
-		<result column="RETRY_LIMIT" jdbcType="DECIMAL" property="retryLimit"/>
+		<result column="LIFECYCLE" jdbcType="INTEGER" property="lifecycle"/>
+		<result column="PRE_STEP_DEFINITION_ID" jdbcType="BIGINT" property="preStepDefinitionId"/>
+		<result column="RETRY_LIMIT" jdbcType="INTEGER" property="retryLimit"/>
 		<result column="START_CODE" jdbcType="VARCHAR" property="startCode"/>
-		<result column="IS_ROLLBACK" jdbcType="DECIMAL" property="isRollback"/>
-		<result column="IS_LAST" jdbcType="DECIMAL" property="isLast"/>
-		<result column="SORT" jdbcType="DECIMAL" property="sort"/>
+		<result column="IS_ROLLBACK" jdbcType="INTEGER" property="isRollback"/>
+		<result column="IS_LAST" jdbcType="INTEGER" property="isLast"/>
+		<result column="SORT" jdbcType="INTEGER" property="sort"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 		<association column="TASK_DEFINITION_ID" property="taskDefinition" javaType="TaskDefinition"
 					 select="com.zxq.iov.cloud.sp.vp.entity.event.TaskDefinitionMapper.selectOne"/>
 		<association column="PRE_STEP_DEFINITION_ID" property="preStepDefinition" javaType="StepDefinition"
@@ -55,10 +55,10 @@
 	<select id="selectList" parameterType="hashmap" resultMap="stepDefinitionResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="eventDefinitionId != null">
-			AND TASK_DEFINITION_ID in (SELECT ID FROM TB_TASK_DEFINITION WHERE EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=DECIMAL})
+			AND TASK_DEFINITION_ID in (SELECT ID FROM TB_TASK_DEFINITION WHERE EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=BIGINT})
 		</if>
 		<if test="taskDefinitionId != null">
-			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=DECIMAL}
+			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=BIGINT}
 		</if>
 		<if test="startCode != null and startCode != ''">
 			AND START_CODE = #{startCode,jdbcType=VARCHAR}
@@ -67,7 +67,7 @@
 
 	<select id="selectOne" resultMap="stepDefinitionResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id,jdbcType=DECIMAL}
+		AND ID = #{id,jdbcType=BIGINT}
 	</select>
 
 </mapper>

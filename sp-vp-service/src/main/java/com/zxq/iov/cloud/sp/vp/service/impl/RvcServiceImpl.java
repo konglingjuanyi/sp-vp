@@ -5,7 +5,6 @@ import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDao;
 import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
@@ -24,8 +23,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-8-5 17:20
- * @version 0.11, 2015-8-5
+ * modify date 2015-8-18 14:42
+ * @version 0.12, 2015-8-18
  */
 @Service
 public class RvcServiceImpl extends BaseService implements IRvcService {
@@ -33,13 +32,11 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
     @Autowired
     private IControlCommandDao controlCommandDao;
     @Autowired
-    private ITboxDao tboxDao;
-    @Autowired
     private IStatusService statusService;
 
-    private static final String RVC_STATUS_PENDING = "0";
-    private static final String RVC_STATUS_COMPLETED = "2";
-    private static final String RVC_STATUS_FAILED = "3";
+    private static final String RVC_STATUS_PENDING = "00";
+    private static final String RVC_STATUS_COMPLETED = "02";
+    private static final String RVC_STATUS_FAILED = "03";
     private static final Integer RUNNING_STATUS = 1;
     private static final Integer END_STATUS = 2;
 
@@ -49,7 +46,7 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
         AssertRequired("userId,vin,command", userId, vin, command);
         ControlCommand controlCommand = null;
         try {
-            controlCommand = new ControlCommand(tboxDao.findTboxIdByVin(vin),
+            controlCommand = new ControlCommand(findTboxIdByVin(vin),
                         vin, requestClient, Constants.RVC_CMD.get(command), Constants.RVC_CMD_CODE.get(command),
                         JSON.json(parameters));
         } catch (IOException e) {

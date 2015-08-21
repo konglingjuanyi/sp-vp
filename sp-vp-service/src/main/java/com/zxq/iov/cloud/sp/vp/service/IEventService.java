@@ -2,8 +2,7 @@ package com.zxq.iov.cloud.sp.vp.service;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
-
-import java.util.Map;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 
 /**
  * 安防 事件消息及回调接口
@@ -17,59 +16,16 @@ public interface IEventService {
 
     /**
      * 开始事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param eventId           事件ID
-     * @return                  事件ID
+     * @param event             事件对象
+     * @return                  事件对象
      */
-    Long start(String owner, String code, Long eventId) throws ServLayerException;
-
-    /**
-     * 开始事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param paramMap          参数MAP
-     * @param eventId           事件ID
-     * @return                  事件ID
-     */
-    Long start(String owner, String code, Map<String, Object> paramMap, Long eventId) throws ServLayerException;
+    Event start(Event event) throws ServLayerException;
 
     /**
      * 结束事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param eventId           事件ID
+     * @param event             事件对象
      */
-    void end(String owner, String code, Long eventId) throws ServLayerException;
-
-    /**
-     * 结束事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param paramMap          参数MAP
-     * @param eventId           事件ID
-     */
-    void end(String owner, String code, Map<String, Object> paramMap, Long eventId) throws ServLayerException;
-
-    /**
-     * 结束事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param result            结果对象
-     * @param eventId           事件ID
-     */
-    void end(String owner, String code, Object result, Long eventId) throws ServLayerException;
-
-    /**
-     * 结束事件
-     * @param owner             事件拥有者
-     * @param code              触发代码
-     * @param paramMap          参数MAP
-     * @param result            结果对象
-     * @param eventId           事件ID
-     */
-    void end(String owner, String code, Map<String, Object> paramMap, Object result,
-             Long eventId) throws ServLayerException;
+    void end(Event event) throws ServLayerException;
 
     /**
      * 异常事件

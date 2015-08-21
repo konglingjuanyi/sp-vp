@@ -2,6 +2,7 @@ package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-8 9:35
- * modify date 2015-6-30 9:43
- * @version 0.8, 2015-6-30
+ * modify date 2015-8-11 14:50
+ * @version 0.9, 2015-8-11
  */
 @Service
 public class EventDispatcher {
@@ -30,102 +31,70 @@ public class EventDispatcher {
 
     /**
      * 启动事件
-     * @param owner             事件拥有者
-     * @param eventId           事件ID
-     * @param code              代码
-     * @param paramMap          参数MAP
-     * @return                  事件实例ID
+     * @param event             事件对象
+     * @return                  事件对象
      */
-    public Long start(String owner, Long eventId, String code, Map<String, Object> paramMap)
-            throws ServLayerException{
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
-        Long eventInstanceId = null;
-        Long taskInstanceId = null;
-        boolean isCreateEvent = false;
-        boolean isCreateTask = false;
-        boolean isCreateStep = false;
-        if(null != eventId) {
-            EventInstance eventInstance = eventConvert.findEventInstanceById(eventId);
-            if(null != eventInstance) {
-                eventInstanceId = eventInstance.getId();
-                if(stepDefinition.getTaskDefinition().isExclusive()) {
-                    TaskInstance taskInstance = eventConvert.findRunningTaskInstance(eventInstance.getId(),
-                            stepDefinition.getTaskDefinition().getId());
-                    if(null != taskInstance) {
-                        //这里有一步判断是否重试，如果重试的话isCreateStep=false并且获得对应result
-                        taskInstanceId = taskInstance.getId();
-                        isCreateStep = true;
-                    }
-                    else {
-                        isCreateTask = true;
-                    }
-                }
-                else {
-                    isCreateTask = true;
-                }
-            }
-            else {
-                isCreateEvent = true;
-            }
+    public Event start(Event event) throws ServLayerException{
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(event.getCode(), event.getParamMap(), event.getId());
+        EventInstance eventInstance = null;
+        if(null != event.getId()) {
+            eventInstance = eventConvert.findEventInstanceById(event.getId());
         }
         else {
             EventDefinition eventDefinition = stepDefinition.getTaskDefinition().getEventDefinition();
             if(eventDefinition.isExclusive()) {
-                List<EventInstance> list = eventConvert.findRunningEventInstance(eventDefinition.getId(), owner);
+                List<EventInstance> list = eventConvert.findRunningEventInstance(eventDefinition.getId(), event.getOwner());
                 if(list.size()>0) {
-                    eventInstanceId = list.get(0).getId();
-                    TaskInstance taskInstance = eventConvert.findRunningTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId());
-                    if(null != taskInstance) {
-                        //这里有一步判断是否重试，如果重试的话isCreateStep=false并且获得对应result
-                        taskInstanceId = taskInstance.getId();
-                        isCreateStep = true;
-                    }
-                    else {
-                        isCreateTask = true;
-                    }
-                }
-                else {
-                    isCreateEvent = true;
+                    eventInstance = list.get(0);
                 }
             }
-            else {
-                isCreateEvent = true;
+        }
+        if(null == eventInstance) {
+            eventInstance = eventCreator.createEventInstance(stepDefinition.getTaskDefinition().getEventDefinitionId(),
+                    event.getOwner());
+        }
+        event.setId(eventInstance.getId());
+        TaskInstance taskInstance = null;
+        if(stepDefinition.getTaskDefinition().isExclusive()) {
+            taskInstance = eventConvert.findRunningTaskInstance(eventInstance.getId(), stepDefinition.getTaskDefinitionId());
+        }
+        if(null == taskInstance) {
+            taskInstance = eventCreator.createTaskInstance(eventInstance.getId(), stepDefinition.getTaskDefinitionId(),
+                    event.getOwner());
+        }
+        event.setTask(taskInstance);
+        StepInstance stepInstance = eventConvert.findLastStepInstance(taskInstance.getId());
+        if(null != stepInstance && stepInstance.getStepDefinition().getId().intValue() == stepDefinition.getId().intValue()) {
+            event.setIsRetry(true);
+            EventParameter eventParameter = eventConvert.retryStepInstance(stepInstance.getId());
+            if(null != eventParameter) {
+                event.setResult(eventParameter.getValue());
             }
         }
-        if(isCreateEvent) {
-            isCreateTask = true;
-            eventInstanceId = eventCreator.createEventInstance(stepDefinition.getTaskDefinition().getEventDefinitionId(), owner).getId();
+        else {
+            stepInstance = eventCreator.createStepInstance(taskInstance.getId(), stepDefinition.getId(), event.getOwner());
         }
-        if(isCreateTask) {
-            isCreateStep = true;
-            taskInstanceId = eventCreator.createTaskInstance(eventInstanceId, stepDefinition.getTaskDefinitionId(), owner).getId();
-        }
-        if(isCreateStep) {
-            eventCreator.createStepInstance(taskInstanceId, stepDefinition.getId(), owner);
-        }
-        return eventInstanceId;
+        event.setStep(stepInstance);
+        return event;
     }
 
     /**
      * 结束事件
-     * @param owner             事件拥有者
-     * @param eventId           事件实例ID
-     * @param code              代码
-     * @param paramMap          参数MAP
-     * @param result            结果对象
+     * @param event             事件对象
      */
-    public void end(String owner, Long eventId, String code, Map<String, Object> paramMap, Object result)
-            throws ServLayerException {
-        StepDefinition stepDefinition = eventParse.findStepDefiniton(code, paramMap, eventId);
-        StepInstance stepInstance = eventConvert.finishRunningStepInstance(eventId, stepDefinition.getId(), null);
-        if(null != result) {
-            eventConvert.saveResult(stepInstance.getId(), result);
-        }
-        if(stepDefinition.isLast()) {
-            eventConvert.finishRunningTaskInstance(eventId, stepDefinition.getTaskDefinitionId(), null);
-            if(stepDefinition.getTaskDefinition().isLast()) {
-                eventConvert.finishRunningEventInstance(eventId,
-                        stepDefinition.getTaskDefinition().getEventDefinitionId(), owner);
+    public void end(Event event) throws ServLayerException {
+        StepDefinition stepDefinition = eventParse.findStepDefiniton(event.getCode(), event.getParamMap(), event.getId());
+        StepInstance stepInstance = eventConvert.finishRunningStepInstance(event.getId(), stepDefinition.getId(), null);
+        if(null != stepInstance) {
+            if(null != event.getResult()) {
+                eventConvert.saveResult(stepInstance.getId(), event.getResult());
+            }
+            if(stepDefinition.isLast()) {
+                eventConvert.finishRunningTaskInstance(event.getId(), stepDefinition.getTaskDefinitionId(), null);
+                if(stepDefinition.getTaskDefinition().isLast()) {
+                    eventConvert.finishRunningEventInstance(event.getId(),
+                            stepDefinition.getTaskDefinition().getEventDefinitionId(), event.getOwner());
+                }
             }
         }
     }

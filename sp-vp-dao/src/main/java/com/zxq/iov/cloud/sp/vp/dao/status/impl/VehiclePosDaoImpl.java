@@ -71,6 +71,6 @@ public class VehiclePosDaoImpl extends BaseServiceImpl<IVehiclePosRepository, Ve
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("vehicleInfoId", vehicleInfoId);
 		List<VehiclePos> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 }

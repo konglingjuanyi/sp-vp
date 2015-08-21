@@ -64,4 +64,8 @@
     <bean id="tboxConfigApi" class="com.zxq.iov.cloud.sp.vp.api.impl.TboxConfigApiImpl" />
     <dubbo:service interface="com.zxq.iov.cloud.sp.vp.api.ITboxConfigApi" ref="tboxConfigApi" version="1.0" retries="0" timeout="30000" connections="${dubbo.vp.client.connections}" registry="${dubbo.service.registry}"/>
 
+    <dubbo:reference  id="tboxApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.ITboxApi" version="1.1" />
+
+    <dubbo:reference  id="vehicleApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi" version="1.1" />
+
 </beans>

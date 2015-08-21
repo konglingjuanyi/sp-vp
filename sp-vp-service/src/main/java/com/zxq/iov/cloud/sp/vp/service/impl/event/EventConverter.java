@@ -1,6 +1,8 @@
 package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.alibaba.dubbo.common.json.JSON;
+import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.*;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +17,20 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-8 10:12
- * modify date 2015-6-24 13:52
- * @version 0.6, 2015-6-24
+ * modify date 2015-8-12 10:21
+ * @version 0.8, 2015-8-12
  */
 @Service
 public class EventConverter {
 
     @Autowired
-    private IEventInstanceDao eventInstanceDaoService;
+    private IEventInstanceDao eventInstanceDao;
     @Autowired
-    private ITaskInstanceDao taskInstanceDaoService;
+    private ITaskInstanceDao taskInstanceDao;
     @Autowired
-    private IStepInstanceDao stepInstanceDaoService;
+    private IStepInstanceDao stepInstanceDao;
     @Autowired
-    private IEventParameterDao eventParameterDaoService;
+    private IEventParameterDao eventParameterDao;
 
     private static final Integer RUNNING_STATUS = 1;
     private static final Integer END_STATUS = 2;
@@ -39,8 +41,12 @@ public class EventConverter {
      * @param eventInstantId        事件实例ID
      * @return                      事件实例对象
      */
-    public EventInstance findEventInstanceById(Long eventInstantId) {
-        return eventInstanceDaoService.findEventInstanceById(eventInstantId);
+    public EventInstance findEventInstanceById(Long eventInstantId) throws ServLayerException {
+        EventInstance eventInstance = eventInstanceDao.findEventInstanceById(eventInstantId);
+        if(null == eventInstance) {
+            throw new ServLayerException(ExceptionConstants.EVENT_NOT_EXIST);
+        }
+        return eventInstance;
     }
 
     /**
@@ -50,7 +56,7 @@ public class EventConverter {
      * @return                      事件实例列表
      */
     public List<EventInstance> findRunningEventInstance(Long eventDefinitionId, String owner) {
-        return eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId, owner,
+        return eventInstanceDao.listEventInstanceByEventDefinitionId(eventDefinitionId, owner,
                 RUNNING_STATUS);
     }
 
@@ -62,8 +68,18 @@ public class EventConverter {
      */
     public TaskInstance findRunningTaskInstance(Long eventInstanceId, Long taskDefinitionId) {
         Integer runningStatus = 1;
-        List<TaskInstance> list = taskInstanceDaoService.listTaskInstanceByEventInstanceId(eventInstanceId, taskDefinitionId, runningStatus);
-        return (list.size()>0)?list.get(0):null;
+        List<TaskInstance> list = taskInstanceDao.listTaskInstanceByEventInstanceId(eventInstanceId, taskDefinitionId, runningStatus);
+        return list.size()>0?list.get(0):null;
+    }
+
+    /**
+     * 得到任务实例当前的步骤实例
+     * @param taskInstanceId        任务实例ID
+     * @return                      步骤实例对象
+     */
+    public StepInstance findLastStepInstance(Long taskInstanceId) {
+        List<StepInstance> list = stepInstanceDao.listStepInstanceByTaskInstanceId(taskInstanceId);
+        return list.size()>0?list.get(0):null;
     }
 
     /**
@@ -73,8 +89,23 @@ public class EventConverter {
      * @return                      步骤实例
      */
     public StepInstance findOwnerRunningStepInstance(String owner, Long stepDefinitionId) {
-        List<StepInstance> list = stepInstanceDaoService.listStepInstanceByOwner(owner, stepDefinitionId, RUNNING_STATUS);
-        return (list.size()>0)?list.get(0):null;
+        List<StepInstance> list = stepInstanceDao.listStepInstanceByOwner(owner, stepDefinitionId, RUNNING_STATUS);
+        return list.size()>0?list.get(0):null;
+    }
+
+    /**
+     * 重试步骤实例
+     * @param stepInstanceId        步骤实例ID
+     * @return                      事件参数对象
+     */
+    public EventParameter retryStepInstance(Long stepInstanceId) throws ServLayerException {
+        StepInstance stepInstance = stepInstanceDao.findStepInstanceById(stepInstanceId);
+        stepInstance.setRetryCount(stepInstance.getRetryCount() + 1);
+        if(stepInstance.getRetryCount().intValue() > stepInstance.getStepDefinition().getRetryLimit().intValue()) {
+            throw new ServLayerException(ExceptionConstants.MORE_THAN_RETRY_COUNT);
+        }
+        stepInstanceDao.updateStepInstance(stepInstance);
+        return eventParameterDao.findEventParameterByTypeAndStepIdAndName(2, stepInstanceId, "result");
     }
 
     /**
@@ -84,7 +115,7 @@ public class EventConverter {
      * @return                      步骤实例对象
      */
     public StepInstance finishRunningStepInstance(Long stepInstanceId, Integer errorCode) {
-        StepInstance stepInstance = stepInstanceDaoService.findStepInstanceById(stepInstanceId);
+        StepInstance stepInstance = stepInstanceDao.findStepInstanceById(stepInstanceId);
         stepInstance.setEndTime(new Date());
         if(null != errorCode) {
             stepInstance.setStatus(ERROR_STATUS);
@@ -93,7 +124,7 @@ public class EventConverter {
         else {
             stepInstance.setStatus(END_STATUS);
         }
-        return stepInstanceDaoService.updateStepInstance(stepInstance);
+        return stepInstanceDao.updateStepInstance(stepInstance);
     }
 
     /**
@@ -104,9 +135,9 @@ public class EventConverter {
      * @return                      步骤实例对象
      */
     public StepInstance finishRunningStepInstance(Long eventInstanceId, Long stepDefinitionId, Integer errorCode) {
-        List<StepInstance> list = stepInstanceDaoService.listStepInstanceByEventInstanceId(eventInstanceId,
+        List<StepInstance> list = stepInstanceDao.listStepInstanceByEventInstanceId(eventInstanceId,
                 stepDefinitionId, RUNNING_STATUS);
-        return (list.size()>0)?finishRunningStepInstance(list.get(0).getId(), errorCode):null;
+        return list.size()>0?finishRunningStepInstance(list.get(0).getId(), errorCode):null;
     }
 
     /**
@@ -116,7 +147,7 @@ public class EventConverter {
      * @return                      任务实例对象
      */
     public TaskInstance finishRunningTaskInstance(Long taskInstanceId, Integer errorCode) {
-        TaskInstance taskInstance = taskInstanceDaoService.findTaskInstanceById(taskInstanceId);
+        TaskInstance taskInstance = taskInstanceDao.findTaskInstanceById(taskInstanceId);
         taskInstance.setEndTime(new Date());
         if(null != errorCode) {
             taskInstance.setStatus(ERROR_STATUS);
@@ -125,7 +156,7 @@ public class EventConverter {
         else {
             taskInstance.setStatus(END_STATUS);
         }
-        return taskInstanceDaoService.updateTaskInstance(taskInstance);
+        return taskInstanceDao.updateTaskInstance(taskInstance);
     }
 
     /**
@@ -136,9 +167,9 @@ public class EventConverter {
      * @return                      任务实例对象
      */
     public TaskInstance finishRunningTaskInstance(Long eventInstanceId, Long taskDefinitionId, Integer errorCode) {
-        List<TaskInstance> list = taskInstanceDaoService.listTaskInstanceByEventInstanceId(eventInstanceId,
+        List<TaskInstance> list = taskInstanceDao.listTaskInstanceByEventInstanceId(eventInstanceId,
                 taskDefinitionId, RUNNING_STATUS);
-        return (list.size()>0)?finishRunningTaskInstance(list.get(0).getId(), errorCode):null;
+        return list.size()>0?finishRunningTaskInstance(list.get(0).getId(), errorCode):null;
     }
 
     /**
@@ -151,10 +182,10 @@ public class EventConverter {
     public EventInstance finishRunningEventInstance(Long eventInstanceId, Long eventDefinitionId, String owner) {
         EventInstance eventInstance = null;
         if(null != eventInstanceId) {
-            eventInstance = eventInstanceDaoService.findEventInstanceById(eventInstanceId);
+            eventInstance = eventInstanceDao.findEventInstanceById(eventInstanceId);
         }
         if(null == eventInstance) {
-            List<EventInstance> list = eventInstanceDaoService.listEventInstanceByEventDefinitionId(eventDefinitionId,
+            List<EventInstance> list = eventInstanceDao.listEventInstanceByEventDefinitionId(eventDefinitionId,
                     owner, RUNNING_STATUS);
             if(list.size() > 0) {
                 eventInstance = list.get(0);
@@ -162,7 +193,7 @@ public class EventConverter {
         }
         eventInstance.setEndTime(new Date());
         eventInstance.setStatus(END_STATUS);
-        return eventInstanceDaoService.updateEventInstance(eventInstance);
+        return eventInstanceDao.updateEventInstance(eventInstance);
     }
 
     /**
@@ -181,6 +212,6 @@ public class EventConverter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        eventParameterDaoService.createEventParameter(eventParameter);
+        eventParameterDao.createEventParameter(eventParameter);
     }
 }

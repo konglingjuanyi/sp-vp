@@ -6,7 +6,6 @@ import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallDao;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallRecordDao;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.entity.call.Call;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
@@ -25,8 +24,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-12 11:26
- * modify date 2015-8-5 11:11
- * @version 0.8, 2015-8-5
+ * modify date 2015-8-18 14:38
+ * @version 0.9, 2015-8-18
  */
 @Service
 public class EcallServiceImpl extends BaseService implements IEcallService {
@@ -35,8 +34,6 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
     private ICallDao callDao;
     @Autowired
     private ICallRecordDao callRecordDao;
-    @Autowired
-    private ITboxDao tboxDao;
     @Autowired
     private IStatusService statusService;
 
@@ -62,7 +59,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
         AssertRequired("tboxId,vehiclePoses,ecallType,crashSeverity,tboxBatteryStatus,vehicleBatteryStatus",
                 tboxId, vehiclePoses, ecallType, crashSeverity, tboxBatteryStatus, vehicleBatteryStatus);
         List<Call> list = callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
-        Call call = (list.size()>0)?list.get(0):callDao.createCall(new Call(tboxDao.findVinById(tboxId),
+        Call call = list.size()>0?list.get(0):callDao.createCall(new Call(findVinById(tboxId),
                 tboxId, Constants.CALL_TYPE_ECALL, ecallType, ecallTime));
         for(VehiclePos vehiclePos : vehiclePoses) {
             // 这里的pos可能会和journey的pos重复，是否要规避
@@ -154,7 +151,7 @@ public class EcallServiceImpl extends BaseService implements IEcallService {
      * @return          呼叫对象
      */
     private Call getRunningEcallByVinOrTboxId(String vin, Long tboxId) throws ServLayerException {
-        List<Call> list = (StringUtils.isNotEmpty(vin))
+        List<Call> list = StringUtils.isNotEmpty(vin)
                 ?callDao.listCallByVinAndType(vin, Constants.CALL_TYPE_ECALL, RUNNING_STATUS)
                 :callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
         if(list.size() > 0) {

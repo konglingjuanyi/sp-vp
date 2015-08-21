@@ -3,12 +3,11 @@ package com.zxq.iov.cloud.sp.vp.service.impl;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import com.zxq.iov.cloud.sp.vp.service.impl.event.EventDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 /**
  * 安防 事件消息及回调实现类
@@ -26,36 +25,13 @@ public class EventServiceImpl implements IEventService {
     private EventDispatcher eventDispatch;
 
     @Override
-    public Long start(String owner, String code, Long eventId) throws ServLayerException {
-        return start(owner, code, null, eventId);
+    public Event start(Event event) throws ServLayerException {
+        return eventDispatch.start(event);
     }
 
     @Override
-    public Long start(String owner, String code, Map<String, Object> paramMap, Long eventId)
-            throws ServLayerException {
-        return eventDispatch.start(owner, eventId, code, paramMap);
-    }
-
-    @Override
-    public void end(String owner, String code, Long eventId) throws ServLayerException {
-        end(owner, code, null, null, eventId);
-    }
-
-    @Override
-    public void end(String owner, String code, Map<String, Object> paramMap,
-                    Long eventId) throws ServLayerException {
-        end(owner, code, paramMap, null, eventId);
-    }
-
-    @Override
-    public void end(String owner, String code, Object result, Long eventId) throws ServLayerException {
-        end(owner, code, null, result, eventId);
-    }
-
-    @Override
-    public void end(String owner, String code, Map<String, Object> paramMap, Object result,
-                    Long eventId) throws ServLayerException {
-        eventDispatch.end(owner, eventId, code, paramMap, result);
+    public void end(Event event) throws ServLayerException {
+        eventDispatch.end(event);
     }
 
     @Override

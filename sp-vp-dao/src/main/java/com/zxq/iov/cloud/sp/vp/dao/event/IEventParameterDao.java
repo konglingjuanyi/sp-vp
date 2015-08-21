@@ -3,15 +3,13 @@ package com.zxq.iov.cloud.sp.vp.dao.event;
 import com.saicmotor.telematics.framework.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventParameter;
 
-
-
 /**
  * 安防 事件参数持久化服务接口
  *
  * @author 叶荣杰
  * create date 2015-6-8 15:48
- * modify date
- * @version 0.1, 2015-6-8
+ * modify date 2015-8-11 15:17
+ * @version 0.2, 2015-8-11
  */
 public interface IEventParameterDao extends BaseService<EventParameter, Long> {
 
@@ -41,5 +39,15 @@ public interface IEventParameterDao extends BaseService<EventParameter, Long> {
 	 * @return					事件参数对象
 	 */
 	EventParameter findEventParameterById(Long eventParameterId);
+
+	/**
+	 * 根据类型、步骤实例ID、名称得到事件参数对象
+	 * @param type          	类型
+	 * @param stepInstanceId   	步骤实例ID
+	 * @param name            	名称
+	 * @return                	事件参数对象
+	 */
+	EventParameter findEventParameterByTypeAndStepIdAndName(Integer type,
+															Long stepInstanceId, String name);
 
 }

@@ -71,7 +71,7 @@ public class ControlCommandDaoImpl extends BaseServiceImpl<IControlCommandReposi
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("eventId", eventId);
 		List<ControlCommand> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 
 	@Override

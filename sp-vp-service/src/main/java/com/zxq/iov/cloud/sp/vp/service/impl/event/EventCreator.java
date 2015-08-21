@@ -143,11 +143,10 @@ public class EventCreator {
                 throw new ServLayerException(ExceptionConstants.PRE_NOT_FIND);
             }
         }
-        if(taskDefinition.getCycleLimit() > 0) {
-            if(taskInstanceDaoService.listTaskInstanceByEventInstanceId(eventIntanceId, taskDefinitionId, null).size()
-                    >= taskDefinition.getCycleLimit().intValue()) {
+        if(taskDefinition.getCycleLimit() > 0 && taskInstanceDaoService.
+                listTaskInstanceByEventInstanceId(eventIntanceId, taskDefinitionId, null).size()
+                >= taskDefinition.getCycleLimit()) {
                 throw new ServLayerException(ExceptionConstants.CYCLE_LIMIT);
-            }
         }
 
     }

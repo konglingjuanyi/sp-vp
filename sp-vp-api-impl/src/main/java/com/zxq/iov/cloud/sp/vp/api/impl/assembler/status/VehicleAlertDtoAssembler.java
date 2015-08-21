@@ -17,7 +17,7 @@ import java.util.List;
 public class VehicleAlertDtoAssembler {
 
     public VehicleStatus fromDto(final VehicleAlertDto vehicleAlertDto) {
-        Integer value = (vehicleAlertDto.isAlertStatus())?1:0;
+        Integer value = vehicleAlertDto.isAlertStatus()?1:0;
         return new VehicleStatus(vehicleAlertDto.getAlertId().toString(), value,
                 vehicleAlertDto.getAlertData().toString(), 1);
     }
@@ -34,7 +34,7 @@ public class VehicleAlertDtoAssembler {
 
     public VehicleAlertDto toDto(final VehicleStatus vehicleStatus) {
         return new VehicleAlertDto(Integer.parseInt(vehicleStatus.getCode()), null, null,
-                (vehicleStatus.getStatus()==1)?true:false,
+                vehicleStatus.getStatus()==1?true:false,
                 Integer.parseInt(vehicleStatus.getData()));
     }
 

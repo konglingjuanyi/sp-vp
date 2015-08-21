@@ -3,6 +3,8 @@ package com.zxq.iov.cloud.sp.vp.dao.config.impl;
 import com.saicmotor.telematics.framework.core.log.LoggerFactory;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,54 +12,38 @@ import org.springframework.stereotype.Service;
  *
  * @author 叶荣杰
  * create date 2015-4-29 15:01
- * modify date 2015-6-29 10:18
- * @version 0.3, 2015-6-29
+ * modify date 2015-8-18 12:50
+ * @version 0.5, 2015-8-18
  */
 @Service
 public class TboxDaoImpl implements ITboxDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TboxDaoImpl.class);
 
-	@Override
-	public void updateAsymmetricKey(Long tboxId, String publicKey, String privateKey) {
+	@Autowired
+	private RedisTemplate<String,Object> redisTemplate;
 
+	@Override
+	public void updateAsymmetricKey(Long tboxId, String modulus, String publicExponent,
+									String privateExponent) {
+		redisTemplate.opsForHash().put(tboxId.toString(), "modulus", modulus);
+		redisTemplate.opsForHash().put(tboxId.toString(), "publicExponent", publicExponent);
+		redisTemplate.opsForHash().put(tboxId.toString(), "privateExponent", privateExponent);
 	}
 
 	@Override
 	public void updateSecretKey(Long tboxId, String secretKey) {
-
+		redisTemplate.opsForHash().put(tboxId.toString(), "secretKey", secretKey);
 	}
 
 	@Override
-	public String findPrivateKeyById(Long tboxId) {
-		return null;
+	public String findModulusById(Long tboxId) {
+		return redisTemplate.opsForHash().get(tboxId.toString(), "modulus").toString();
 	}
 
 	@Override
-	public String findVinById(Long tboxId) {
-		// 如何获得待定
-		String vin = "11111111111111111";
-		return vin;
+	public String findPrivateExponentyById(Long tboxId) {
+		return redisTemplate.opsForHash().get(tboxId.toString(), "privateExponent").toString();
 	}
 
-	@Override
-	public String findVinByTboxSn(String tboxSn) {
-		// 如何获得待定
-		String vin = "11111111111111111";
-		return vin;
-	}
-
-	@Override
-	public Long findTboxIdByVin(String vin) {
-		// 如何获得待定
-		Long tboxId = 1L;
-		return tboxId;
-	}
-
-	@Override
-	public Long findUserIdById(Long tboxId) {
-		// 如何获得待定
-		Long userId = 1L;
-		return userId;
-	}
 }

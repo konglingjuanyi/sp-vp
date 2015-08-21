@@ -7,13 +7,14 @@ import com.zxq.iov.cloud.sp.vp.common.Constants;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防服务 车辆信息快照类
  * @author 叶荣杰
  * create time 2015-5-13 9:54
- * modify time 2015-8-4 11:01
- * @version 0.8, 2015-8-4
+ * modify time 2015-8-13 9:21
+ * @version 0.9, 2015-8-13
  */
 @Entity()
 @Table(name = "TB_VEHICLE_INFO")
@@ -47,11 +48,20 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
     @Column(name = "STATUS_TIME", length = 7)
     private Date statusTime;
 
-    @Column(name = "OWNER_ID", nullable = false, precision = 20, scale = 0)
+    @Column(name = "OWNER_ID", precision = 20, scale = 0)
     private Long ownerId;
 
     @Column(name = "USER_ID", precision = 20, scale = 0)
     private Long userId;
+
+    @Transient
+    private VehiclePos vehiclePos;
+
+    @Transient
+    private List<VehicleStatus> vehicleStatuses;
+
+    @Transient
+    private List<VehicleStatus> vehicleAlerts;
 
     public VehicleInfo(){}
 
@@ -134,5 +144,29 @@ public class VehicleInfo extends MyBaseEntity<Long> implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public VehiclePos getVehiclePos() {
+        return vehiclePos;
+    }
+
+    public void setVehiclePos(VehiclePos vehiclePos) {
+        this.vehiclePos = vehiclePos;
+    }
+
+    public List<VehicleStatus> getVehicleStatuses() {
+        return vehicleStatuses;
+    }
+
+    public void setVehicleStatuses(List<VehicleStatus> vehicleStatuses) {
+        this.vehicleStatuses = vehicleStatuses;
+    }
+
+    public List<VehicleStatus> getVehicleAlerts() {
+        return vehicleAlerts;
+    }
+
+    public void setVehicleAlerts(List<VehicleStatus> vehicleAlerts) {
+        this.vehicleAlerts = vehicleAlerts;
     }
 }

@@ -4,10 +4,12 @@ import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IJourneyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
+import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IJourneyService;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +42,12 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
             journeyService.start(otaDto.getTboxId(), startTime, tboxJourneyId, keyId);
         }
         else {
-            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-            journeyService.start(otaDto.getTboxId(), startTime, tboxJourneyId, keyId);
-            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
+            Event event = new EventAssembler().fromOtaDto(otaDto);
+            eventService.start(event);
+            if(!event.isRetry()) {
+                journeyService.start(otaDto.getTboxId(), startTime, tboxJourneyId, keyId);
+                eventService.end(event);
+            }
         }
     }
 
@@ -56,10 +61,13 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
                     new VehiclePosDtoAssembler().fromDto(vehiclePosDto));
         }
         else {
-            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-            journeyService.update(otaDto.getTboxId(), tboxJourneyId, instFuelConsumption,
-                new VehiclePosDtoAssembler().fromDto(vehiclePosDto));
-            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
+            Event event = new EventAssembler().fromOtaDto(otaDto);
+            eventService.start(event);
+            if(!event.isRetry()) {
+                journeyService.update(otaDto.getTboxId(), tboxJourneyId, instFuelConsumption,
+                        new VehiclePosDtoAssembler().fromDto(vehiclePosDto));
+                eventService.end(event);
+            }
         }
     }
 
@@ -78,11 +86,14 @@ public class JourneyApiImpl extends BaseApi implements IJourneyApi {
                     odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
         }
         else {
-            Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-            journeyService.end(otaDto.getTboxId(), assembler.fromDto(startVehiclePosDto),
-                    assembler.fromDto(endVehiclePosDto), tboxJourneyId, distance, avgSpeed, fuelEco,
-                    odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
-            eventService.end(getVin(otaDto), getCode(otaDto), eventId);
+            Event event = new EventAssembler().fromOtaDto(otaDto);
+            eventService.start(event);
+            if(!event.isRetry()) {
+                journeyService.end(otaDto.getTboxId(), assembler.fromDto(startVehiclePosDto),
+                        assembler.fromDto(endVehiclePosDto), tboxJourneyId, distance, avgSpeed, fuelEco,
+                        odometer, fuelLevelPrc, fuelLevelDisp, fuelRange);
+                eventService.end(event);
+            }
         }
     }
 

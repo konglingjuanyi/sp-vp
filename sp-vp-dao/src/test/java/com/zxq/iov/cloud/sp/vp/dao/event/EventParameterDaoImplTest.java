@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author 叶荣杰
  * create date 2015-6-8 16:35
- * modify date
- * @version 0.1, 2015-6-8
+ * modify date 2015-8-11 15:25
+ * @version 0.2, 2015-8-11
  */
 @Transactional
 public class EventParameterDaoImplTest extends BaseServiceTestCase {
@@ -50,6 +50,17 @@ public class EventParameterDaoImplTest extends BaseServiceTestCase {
     public void testRemoveEventParameter() {
         Long eventParameterId = 15L;
         eventParameterDao.removeEventParameter(eventParameterId);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testFindEventParameterByTypeAndStepIdAndName() {
+        Integer type = 2;
+        Long stepInstanceId = 310L;
+        String name = "result";
+        EventParameter eventParameter = eventParameterDao.
+                findEventParameterByTypeAndStepIdAndName(type, stepInstanceId, name);
+        Assert.assertNotNull(eventParameter);
     }
 
 }

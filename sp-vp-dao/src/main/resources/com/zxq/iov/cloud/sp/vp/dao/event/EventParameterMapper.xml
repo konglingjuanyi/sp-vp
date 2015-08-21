@@ -4,19 +4,19 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.EventParameterMapper">
 
 	<resultMap id="eventParameterResultMap" type="EventParameter">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
-		<result column="STEP_INSTANCE_ID" jdbcType="DECIMAL" property="stepInstanceId"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="TYPE" jdbcType="INTEGER" property="type"/>
+		<result column="STEP_INSTANCE_ID" jdbcType="BIGINT" property="stepInstanceId"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
 		<result column="VALUE" jdbcType="VARCHAR" property="value"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 		<association column="STEP_INSTANCE_ID" property="stepInstance" javaType="StepInstance"
 					 select="com.zxq.iov.cloud.sp.vp.entity.event.StepInstanceMapper.selectOne"/>
 	</resultMap>
@@ -48,13 +48,19 @@
 	<select id="selectList" parameterType="hashmap" resultMap="eventParameterResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="stepInstanceId != null">
-			AND STEP_INSTANCE_ID = #{stepInstanceId,jdbcType=DECIMAL}
+			AND STEP_INSTANCE_ID = #{stepInstanceId,jdbcType=BIGINT}
+		</if>
+		<if test="type != null">
+			AND TYPE = #{type,jdbcType=INTEGER}
+		</if>
+		<if test="name != null and name != ''">
+			AND NAME = #{name,jdbcType=VARCHAR}
 		</if>
 	</select>
 
 	<select id="selectOne" resultMap="eventParameterResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id,jdbcType=DECIMAL}
+		AND ID = #{id,jdbcType=BIGINT}
 	</select>
 
 </mapper>

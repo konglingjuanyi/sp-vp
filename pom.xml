@@ -40,6 +40,11 @@
             </dependency>
             <dependency>
                 <groupId>com.zxq.iov.cloud.sp</groupId>
+                <artifactId>sp-mds-api</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zxq.iov.cloud.sp</groupId>
                 <artifactId>sp-vp-api-mgmt</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>

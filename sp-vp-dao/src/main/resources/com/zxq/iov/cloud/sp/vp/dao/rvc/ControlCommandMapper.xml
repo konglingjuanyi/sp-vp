@@ -4,26 +4,26 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommandMapper">
 
 	<resultMap id="controlCommandResultMap" type="ControlCommand">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="TBOX_ID" jdbcType="DECIMAL" property="tboxId"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="TBOX_ID" jdbcType="BIGINT" property="tboxId"/>
 		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
-		<result column="EVENT_ID" jdbcType="DECIMAL" property="eventId"/>
-		<result column="USER_ID" jdbcType="DECIMAL" property="userId"/>
+		<result column="EVENT_ID" jdbcType="BIGINT" property="eventId"/>
+		<result column="USER_ID" jdbcType="BIGINT" property="userId"/>
 		<result column="REQUEST_CLIENT" jdbcType="VARCHAR" property="requestClient"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
 		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="PARAMETER" jdbcType="VARCHAR" property="parameter"/>
 		<result column="COMMAND_STATUS" jdbcType="VARCHAR" property="commandStatus"/>
-		<result column="IS_CANCEL" jdbcType="DECIMAL" property="isCancel"/>
-		<result column="FAILURE_TYPE" jdbcType="DECIMAL" property="failureType"/>
+		<result column="IS_CANCEL" jdbcType="INTEGER" property="isCancel"/>
+		<result column="FAILURE_TYPE" jdbcType="INTEGER" property="failureType"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 	</resultMap>
 	
 	<!-- 分页查询 -->
@@ -53,13 +53,13 @@
 	<select id="selectList" parameterType="hashmap" resultMap="controlCommandResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="eventId != null">
-			AND EVENT_ID = #{eventId,jdbcType=DECIMAL}
+			AND EVENT_ID = #{eventId,jdbcType=BIGINT}
 		</if>
 	</select>
 
 	<select id="selectOne" resultMap="controlCommandResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id, jdbcType=DECIMAL}
+		AND ID = #{id, jdbcType=BIGINT}
 	</select>
 
 </mapper>

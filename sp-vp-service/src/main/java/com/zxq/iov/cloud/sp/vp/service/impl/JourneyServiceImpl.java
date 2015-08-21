@@ -2,10 +2,8 @@ package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.journey.IJourneyDao;
 import com.zxq.iov.cloud.sp.vp.entity.journey.Journey;
-import com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfo;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;
 import com.zxq.iov.cloud.sp.vp.service.IJourneyService;
@@ -22,16 +20,14 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-9 14:19
- * modify date 2015-8-7 13:15
- * @version 0.11, 2015-8-7
+ * modify date 2015-8-18 14:41
+ * @version 0.12, 2015-8-18
  */
 @Service
 public class JourneyServiceImpl extends BaseService implements IJourneyService {
 
     @Autowired
     private IJourneyDao journeyDao;
-    @Autowired
-    private ITboxDao tboxDao;
     @Autowired
     private IStatusService statusService;
 
@@ -44,8 +40,8 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
         AssertRequired("tboxId,startTime,tboxJourneyId", tboxId, startTime, tboxJourneyId);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
         if(null == journey) {
-            journey = new Journey(tboxJourneyId, tboxId, tboxDao.findUserIdById(tboxId),
-                    tboxDao.findVinById(tboxId));
+            journey = new Journey(tboxJourneyId, tboxId, findUserIdById(tboxId),
+                    findVinById(tboxId));
             journey.setStartTime(startTime);
             journey.setKeyId(keyId);
             journey.setStatus(RUNNING_STATUS);
@@ -64,8 +60,8 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
         AssertRequired("tboxId,tboxJourneyId,vehiclePos", tboxId, tboxJourneyId, vehiclePos);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
         if(null == journey) {
-            journey = new Journey(tboxJourneyId, tboxId, tboxDao.findUserIdById(tboxId),
-                    tboxDao.findVinById(tboxId));
+            journey = new Journey(tboxJourneyId, tboxId, findUserIdById(tboxId),
+                    findVinById(tboxId));
             journey.setStatus(RUNNING_STATUS);
             journeyDao.createJourney(journey);
         }
@@ -84,8 +80,8 @@ public class JourneyServiceImpl extends BaseService implements IJourneyService {
                 tboxId, startVehiclePos, endVehiclePos, tboxJourneyId, distance, avgSpeed, fuelEco);
         Journey journey = getByIdAndTboxJourneyId(tboxJourneyId, tboxId);
         if(null == journey) {
-            journey = new Journey(tboxJourneyId, tboxId, tboxDao.findUserIdById(tboxId),
-                    tboxDao.findVinById(tboxId));
+            journey = new Journey(tboxJourneyId, tboxId, findUserIdById(tboxId),
+                    findVinById(tboxId));
             journey.setStatus(END_STATUS);
             journeyDao.createJourney(journey);
         }

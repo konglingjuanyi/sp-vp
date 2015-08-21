@@ -71,6 +71,6 @@ public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Di
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("eventId", eventId);
 		List<Diagnostic> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 }

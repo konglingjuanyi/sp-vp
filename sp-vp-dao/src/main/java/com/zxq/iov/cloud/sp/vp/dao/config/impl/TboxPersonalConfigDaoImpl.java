@@ -71,7 +71,7 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tboxId", tboxId);
 		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 
 	@Override
@@ -79,6 +79,6 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("vin", vin);
 		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 }

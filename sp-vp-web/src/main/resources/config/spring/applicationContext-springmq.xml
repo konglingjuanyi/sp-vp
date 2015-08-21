@@ -18,12 +18,12 @@
     </bean>
 
     <!-- 存放发往tbox app消息的queue -->
-    <rabbit:queue id="AppTBOXServiceQueue.app.v1.0" name="AppTBOXServiceQueue.app.v1.0" durable="true" auto-delete="false"/>
+    <rabbit:queue id="AppTBOXServiceQueue.app.v.1.0" name="AppTBOXServiceQueue.app.v.1.0" durable="true" auto-delete="false"/>
 
     <!-- 发往tbox app消息的exchange -->
     <rabbit:topic-exchange id="tboxAppServiceExchange" name="tboxAppServiceExchange" durable="true" auto-delete="false">
         <rabbit:bindings>
-            <rabbit:binding queue="AppTBOXServiceQueue.app.v1.0" pattern="AppTBOXServiceQueue.AV1.*"/>
+            <rabbit:binding queue="AppTBOXServiceQueue.app.v.1.0" pattern="AppTBOXServiceQueue.AV.1.*"/>
         </rabbit:bindings>
     </rabbit:topic-exchange>
 

@@ -4,21 +4,21 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.TaskInstanceMapper">
 
 	<resultMap id="taskInstanceResultMap" type="TaskInstance">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="TASK_DEFINITION_ID" jdbcType="DECIMAL" property="taskDefinitionId"/>
-		<result column="EVENT_INSTANCE_ID" jdbcType="DECIMAL" property="eventInstanceId"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="TASK_DEFINITION_ID" jdbcType="BIGINT" property="taskDefinitionId"/>
+		<result column="EVENT_INSTANCE_ID" jdbcType="BIGINT" property="eventInstanceId"/>
 		<result column="OWNER" jdbcType="VARCHAR" property="owner"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
-		<result column="ERROR_CODE" jdbcType="DECIMAL" property="errorCode"/>
+		<result column="ERROR_CODE" jdbcType="INTEGER" property="errorCode"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 		<association column="TASK_DEFINITION_ID" property="taskDefinition" javaType="TaskDefinition"
 					 select="com.zxq.iov.cloud.sp.vp.entity.event.TaskDefinitionMapper.selectOne"/>
 		<association column="EVENT_INSTANCE_ID" property="eventInstance" javaType="EventInstance"
@@ -52,19 +52,19 @@
 	<select id="selectList" parameterType="hashmap" resultMap="taskInstanceResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="eventInstanceId != null">
-			AND EVENT_INSTANCE_ID = #{eventInstanceId,jdbcType=DECIMAL}
+			AND EVENT_INSTANCE_ID = #{eventInstanceId,jdbcType=BIGINT}
 		</if>
 		<if test="taskDefinitionId != null">
-			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=DECIMAL}
+			AND TASK_DEFINITION_ID = #{taskDefinitionId,jdbcType=BIGINT}
 		</if>
 		<if test="status != null">
-			AND STATUS = #{status,jdbcType=DECIMAL}
+			AND STATUS = #{status,jdbcType=INTEGER}
 		</if>
 	</select>
 
 	<select id="selectOne" resultMap="taskInstanceResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id,jdbcType=DECIMAL}
+		AND ID = #{id,jdbcType=BIGINT}
 	</select>
 
 </mapper>

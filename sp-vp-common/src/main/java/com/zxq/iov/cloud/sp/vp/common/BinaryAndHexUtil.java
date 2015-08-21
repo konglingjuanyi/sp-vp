@@ -19,8 +19,9 @@ public class BinaryAndHexUtil {
         String sTemp;
         for (int i = 0; i < bArray.length; i++) {
             sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
+            if (sTemp.length() < 2) {
                 sb.append(0);
+            }
             sb.append(isUpperCase?sTemp.toUpperCase():sTemp.toLowerCase());
         }
         return sb.toString();

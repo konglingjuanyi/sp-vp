@@ -4,20 +4,20 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatusMapper">
 
 	<resultMap id="vehicleStatusResultMap" type="VehicleStatus">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="TYPE" jdbcType="INTEGER" property="type"/>
 		<result column="CODE" jdbcType="VARCHAR" property="code"/>
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
-		<result column="VALUE" jdbcType="DECIMAL" property="value"/>
+		<result column="VALUE" jdbcType="INTEGER" property="value"/>
 		<result column="DATA" jdbcType="VARCHAR" property="data"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 		<association column="VEHICLE_INFO_ID" property="vehicleInfo" javaType="VehicleInfo"
 					 select="com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfoMapper.selectOne" />
 	</resultMap>
@@ -49,16 +49,16 @@
 	<select id="selectList" parameterType="hashmap" resultMap="vehicleStatusResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="vehicleInfoId != null and vehicleInfoId != ''">
-			AND VEHICLE_INFO_ID = #{vehicleInfoId,jdbcType=DECIMAL}
+			AND VEHICLE_INFO_ID = #{vehicleInfoId,jdbcType=BIGINT}
 		</if>
 		<if test="type != null and type != ''">
-			AND TYPE = #{type,jdbcType=DECIMAL}
+			AND TYPE = #{type,jdbcType=INTEGER}
 		</if>
 	</select>
 
 	<select id="selectOne" resultMap="vehicleStatusResultMap" parameterType="java.lang.String">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id, jdbcType=VARCHAR}
+		AND ID = #{id, jdbcType=BIGINT}
 	</select>
 
 </mapper>

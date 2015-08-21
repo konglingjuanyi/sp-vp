@@ -75,6 +75,6 @@ public class JourneyDaoImpl extends BaseServiceImpl<IJourneyRepository, Journey,
 		paramMap.put("tboxJourneyId", tboxJourneyId);
 		paramMap.put("tboxId", tboxId);
 		List<Journey> list = super.findListViaBatis(paramMap);
-		return (list.size()>0)?list.get(0):null;
+		return list.size()>0?list.get(0):null;
 	}
 }

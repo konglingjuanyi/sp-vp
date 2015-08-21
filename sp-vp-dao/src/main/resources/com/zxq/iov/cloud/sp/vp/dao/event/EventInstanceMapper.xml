@@ -4,20 +4,20 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.EventInstanceMapper">
 
 	<resultMap id="eventInstanceResultMap" type="EventInstance">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
-		<result column="EVENT_DEFINITION_ID" jdbcType="DECIMAL" property="eventDefinitionId"/>
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
+		<result column="EVENT_DEFINITION_ID" jdbcType="BIGINT" property="eventDefinitionId"/>
 		<result column="OWNER" jdbcType="VARCHAR" property="owner"/>
 		<result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
 		<result column="END_TIME" jdbcType="TIMESTAMP" property="endTime"/>
-		<result column="ERROR_CODE" jdbcType="DECIMAL" property="errorCode"/>
+		<result column="ERROR_CODE" jdbcType="INTEGER" property="errorCode"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 	</resultMap>
 	
 	<!-- 分页查询 -->
@@ -47,16 +47,16 @@
 	<select id="selectList" parameterType="hashmap" resultMap="eventInstanceResultMap">
 		<include refid="selectPageTemplate"/>
 		<if test="eventDefinitionId != null">
-			AND EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=DECIMAL}
+			AND EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=BIGINT}
 		</if>
 		<if test="status != null">
-			AND STATUS = #{status,jdbcType=DECIMAL}
+			AND STATUS = #{status,jdbcType=INTEGER}
 		</if>
 	</select>
 
 	<select id="selectOne" resultMap="eventInstanceResultMap" parameterType="java.lang.Long">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id,jdbcType=DECIMAL}
+		AND ID = #{id,jdbcType=BIGINT}
 	</select>
 
 </mapper>

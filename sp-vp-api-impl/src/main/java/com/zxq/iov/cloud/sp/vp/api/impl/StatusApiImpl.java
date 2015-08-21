@@ -4,6 +4,7 @@ import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.api.IStatusApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.*;
+import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleAlertDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleInfoDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
@@ -12,6 +13,7 @@ import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IStatusService;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-5-13 16:37
- * modify date 2015-8-7 14:33
- * @version 0.12, 2015-8-7
+ * modify date 2015-8-11 18:04
+ * @version 0.13, 2015-8-11
  */
 @Service
 public class StatusApiImpl extends BaseApi implements IStatusApi {
@@ -44,11 +46,14 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
             throw new ServLayerException(ExceptionConstants.WRONG_VEHICLE_STATUS);
         }
         OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_STATUS, 1);
-        Long eventId = eventService.start(vin, Constants.AID_STATUS + "1", null);
-        otaDto.setEventId(eventId);
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        eventService.start(event);
+        if(!event.isRetry()) {
+            eventService.end(event);
+        }
+        otaDto.setEventId(event.getId());
         sendQueue(otaDto, new VehicleStatusReqDto(statusType));
-        eventService.end(vin, Constants.AID_STATUS + "1", eventId);
-        return eventId;
+        return event.getId();
     }
 
     @Override
@@ -57,13 +62,16 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
                                       List<VehicleAlertDto> vehicleAlertDtos) throws ServLayerException {
         AssertRequired("otaDto,statusTime,vehiclePosDto,vehicleStatusDtos", otaDto, statusTime,
                 vehiclePosDto, vehicleStatusDtos);
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-        statusService.logVehicleInfo(otaDto.getTboxId(), null, null,
-                new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
-                new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos),
-                new VehicleAlertDtoAssembler().fromDtoList(vehicleAlertDtos),
-                otaDto.getEventCreateTime(), otaDto.getEventId());
-        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        eventService.start(event);
+        if(!event.isRetry()) {
+            statusService.logVehicleInfo(otaDto.getTboxId(), null, null,
+                    new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
+                    new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos),
+                    new VehicleAlertDtoAssembler().fromDtoList(vehicleAlertDtos),
+                    otaDto.getEventCreateTime(), otaDto.getEventId());
+            eventService.end(event);
+        }
     }
 
     @Override
@@ -77,13 +85,16 @@ public class StatusApiImpl extends BaseApi implements IStatusApi {
         AssertRequired("otaDto,vehicleAlertDtos", otaDto, vehicleAlertDtos);
         VehiclePosDtoAssembler posDtoAssembler = new VehiclePosDtoAssembler();
         VehicleAlertDtoAssembler alertDtoAssembler = new VehicleAlertDtoAssembler();
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-        for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
-            statusService.logVehicleAlert(otaDto.getTboxId(), otaDto.getEventCreateTime(),
-                    posDtoAssembler.fromDto(vehicleAlertDto.getVehiclePosDto()),
-                    alertDtoAssembler.fromDto(vehicleAlertDto));
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        eventService.start(event);
+        if(!event.isRetry()) {
+            for(VehicleAlertDto vehicleAlertDto : vehicleAlertDtos) {
+                statusService.logVehicleAlert(otaDto.getTboxId(), otaDto.getEventCreateTime(),
+                        posDtoAssembler.fromDto(vehicleAlertDto.getVehiclePosDto()),
+                        alertDtoAssembler.fromDto(vehicleAlertDto));
+            }
+            eventService.end(event);
         }
-        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
     }
 
 }

@@ -8,6 +8,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
+import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.rvc.RvcStatusDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
@@ -16,6 +17,7 @@ import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IRvcService;
+import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,8 @@ import java.util.Map;
  *
  * @author 叶荣杰
  * create date 2015-6-17 13:40
- * modify date 2015-8-7 14:01
- * @version 0.12, 2015-8-7
+ * modify date 2015-8-11 15:39
+ * @version 0.13, 2015-8-11
  */
 @Service
 public class RvcApiImpl extends BaseApi implements IRvcApi {
@@ -55,12 +57,21 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
                 paramMap.put("unlockSilentFlag", parameters.get("silent_flag"));
             }
         }
-        Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap, null);
-        otaDto.setEventId(eventId);
-        Long controlCommandId = rvcService.requestControl(requestClient, userId, vin, command, parameters, eventId).getId();
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        event.setParamMap(paramMap);
+        eventService.start(event);
+        Long controlCommandId;
+        if(!event.isRetry()) {
+            controlCommandId = rvcService.requestControl(requestClient, userId, vin, command, parameters, event.getId()).getId();
+            event.setResult(controlCommandId);
+            eventService.end(event);
+        }
+        else {
+            controlCommandId = Long.parseLong(event.getResult().toString());
+        }
+        otaDto.setEventId(event.getId());
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 tboxConfig));
-        eventService.end(vin, Constants.AID_RVC + "1", paramMap, controlCommandId, eventId);
         return controlCommandId;
     }
 
@@ -72,14 +83,18 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("command", Constants.RVC_CMD_CODE.get(command));
         paramMap.put("cancelFlag", 1);
-        Long eventId = eventService.start(vin, Constants.AID_RVC + "1", paramMap, null);
-        rvcService.cancelControl(requestClient, userId, vin, command);
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        event.setParamMap(paramMap);
+        eventService.start(event);
+        if(!event.isRetry()) {
+            rvcService.cancelControl(requestClient, userId, vin, command);
+            eventService.end(event);
+        }
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("cancel", true);
-        otaDto.setEventId(eventId);
+        otaDto.setEventId(event.getId());
         sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)),
                 convertConfig2Tbox(parameter)));
-        eventService.end(vin, Constants.AID_RVC + "1", paramMap, eventId);
     }
 
     @Override
@@ -89,11 +104,15 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
         AssertRequired("otaDto,rvcStatus", otaDto, rvcStatus);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("status", rvcStatus);
-        Long eventId = eventService.start(getVin(otaDto), getCode(otaDto), otaDto.getEventId());
-        rvcService.updateControlStatus(otaDto.getTboxId(), rvcStatus, failureType,
-                new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
-                new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos), eventId);
-        eventService.end(getVin(otaDto), getCode(otaDto), eventId);
+        Event event = new EventAssembler().fromOtaDto(otaDto);
+        eventService.start(event);
+        if(!event.isRetry()) {
+            rvcService.updateControlStatus(otaDto.getTboxId(), rvcStatus, failureType,
+                    new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
+                    new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos), event.getId());
+            eventService.end(event);
+        }
+
     }
 
     @Override

@@ -28,8 +28,6 @@ public class SvtServiceImpl extends BaseService implements ISvtService {
     @Autowired
     private IStolenAlarmDao stolenAlarmDao;
     @Autowired
-    private ITboxDao tboxDao;
-    @Autowired
     private IStatusService statusService;
 
     @Override

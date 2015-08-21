@@ -24,7 +24,9 @@ public class StepDefinitionDto {
     public StepDefinitionDto() {
     }
 
-    public StepDefinitionDto(Long id, Long taskDefinitionId, String name, Integer lifecycle, Long preStepDefinitionId, Integer retryLimit, String startCode, Boolean isRollback, Boolean isLast, Integer sort) {
+    public StepDefinitionDto(Long id, Long taskDefinitionId, String name, Integer lifecycle,
+                             Long preStepDefinitionId, Integer retryLimit, String startCode,
+                             Boolean isRollback, Boolean isLast, Integer sort) {
         this.id = id;
         this.taskDefinitionId = taskDefinitionId;
         this.name = name;

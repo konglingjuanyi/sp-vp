@@ -9,8 +9,8 @@ import java.util.Date;
  * 安防服务 电子钥匙接口
  * @author 叶荣杰
  * create date 2015-6-23 10:48
- * modify date 2015-7-24 11:17
- * @version 0.5, 2015-7-24
+ * modify date 2015-8-12 14:39
+ * @version 0.6, 2015-8-12
  */
 public interface IRemoteKeyApi {
 
@@ -23,7 +23,7 @@ public interface IRemoteKeyApi {
      * @param keyValidityStartTime  有效开始时间
      * @param keyValidityEndTime    有效结束时间
      */
-    void requestWriteKey(String vin, Integer keyType, String keyValue, Integer keyReference,
+    void requestWriteKey(String vin, Integer keyType, String keyValue, Long keyReference,
                          Date keyValidityStartTime, Date keyValidityEndTime) throws ApiException;
 
     /**
@@ -40,7 +40,7 @@ public interface IRemoteKeyApi {
      * @param vin                   OTA传输对象
      * @param keyReference          钥匙引用
      */
-    void requestDeleteKey(String vin, Integer keyReference) throws ApiException;
+    void requestDeleteKey(String vin, Long keyReference) throws ApiException;
 
     /**
      * 响应删除钥匙请求

@@ -8,8 +8,8 @@ import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
  *
  * @author 叶荣杰
  * create date 2015-4-23 10:30
- * modify date 2015-7-17 18:17
- * @version 0.3, 2015-7-17
+ * modify date 2015-8-18 17:36
+ * @version 0.4, 2015-8-18
  */
 public class KeyDto extends OtaDto {
 
@@ -26,6 +26,10 @@ public class KeyDto extends OtaDto {
 
     public void setPublicKey(byte[] publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public Boolean getPublicKeyGranted() {
+        return publicKeyGranted;
     }
 
     public Boolean isPublicKeyGranted() {
@@ -51,6 +55,10 @@ public class KeyDto extends OtaDto {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public Boolean getSecretKeyAccepted() {
+        return secretKeyAccepted;
     }
 
     public Boolean isSecretKeyAccepted() {

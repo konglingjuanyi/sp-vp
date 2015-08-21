@@ -26,11 +26,10 @@ import java.util.List;
  * @version 0.4, 2015-7-22
  */
 @Transactional
-public class TboxConfigServiceImplTest extends BaseServiceTestCase {
+public class TboxConfigApimplTest extends BaseServiceTestCase {
 
     @Autowired
-    @Qualifier("tboxConfigServiceProxy")
-    private ITboxConfigApi tboxConfigService;
+    private ITboxConfigApi tboxConfigApi;
 
     private String vin = "11111111111111111";
     private Long tboxId = 1L;
@@ -38,14 +37,14 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRequestConfigUpdate() throws Exception {
-        tboxConfigService.requestConfigUpdate(vin);
+        tboxConfigApi.requestConfigUpdate(vin);
     }
 
     @Test
     @Rollback(false)
     public void testResponseConfigUpdate() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 4);
-        tboxConfigService.responseConfigUpdate(otaDto, true);
+        tboxConfigApi.responseConfigUpdate(otaDto, true);
     }
 
     @Test
@@ -59,7 +58,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         Long tboxId = 1L;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
         //otaDto.setEventId(1L);
-        TboxConfigDto tboxConfigDto = tboxConfigService.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),
+        TboxConfigDto tboxConfigDto = tboxConfigApi.checkConfigDelta(otaDto, BinaryAndHexUtil.hexStringToByte(mcuVersion),
                 BinaryAndHexUtil.hexStringToByte(mpuVersion), vin, iccid,
                 BinaryAndHexUtil.hexStringToByte(configVersion), configDelta);
         System.out.print(tboxConfigDto.getPackageCount());
@@ -71,7 +70,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         Integer packageId = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 6);
         otaDto.setEventId(1L);
-        TboxConfigPackageDto tboxConfigPackageDto = tboxConfigService.getConfigPackage(otaDto, packageId);
+        TboxConfigPackageDto tboxConfigPackageDto = tboxConfigApi.getConfigPackage(otaDto, packageId);
         Assert.assertNotNull(tboxConfigPackageDto);
     }
 
@@ -84,7 +83,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         String configVersion = "1";
         Integer configDelta = 1;
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 5);
-        tboxConfigService.closeConfigUpdate(otaDto, result, BinaryAndHexUtil.hexStringToByte(mcuVersion),
+        tboxConfigApi.closeConfigUpdate(otaDto, result, BinaryAndHexUtil.hexStringToByte(mcuVersion),
                 BinaryAndHexUtil.hexStringToByte(mpuVersion),
                 BinaryAndHexUtil.hexStringToByte(configVersion), configDelta);
     }
@@ -93,7 +92,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testRequestReadConfig() throws Exception {
         Long[] tboxConfigsettingIds = {1L, 2L};
-        tboxConfigService.requestReadConfig(vin, tboxConfigsettingIds);
+        tboxConfigApi.requestReadConfig(vin, tboxConfigsettingIds);
     }
 
     @Test
@@ -101,14 +100,14 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     public void testResponseReadConfig() throws Exception {
         List<TboxConfigSettingDto> tboxConfigSettingDtos = new ArrayList<>();
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 9);
-        tboxConfigService.responseReadConfig(otaDto, tboxConfigSettingDtos);
+        tboxConfigApi.responseReadConfig(otaDto, tboxConfigSettingDtos);
     }
 
     @Test
     @Rollback(false)
     public void testGenerateAsymmetricKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 10);
-        tboxConfigService.generateAsymmetricKey(otaDto);
+        tboxConfigApi.generateAsymmetricKey(otaDto);
     }
 
     @Test
@@ -117,7 +116,7 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 12);
         String secretKeyWithEnc = "1";
         String tboxSnWithEnc = "1";
-        tboxConfigService.bindTboxWithSecretKey(otaDto, BinaryAndHexUtil.hexStringToByte(secretKeyWithEnc),
+        tboxConfigApi.bindTboxWithSecretKey(otaDto, BinaryAndHexUtil.hexStringToByte(secretKeyWithEnc),
                 BinaryAndHexUtil.hexStringToByte(tboxSnWithEnc));
     }
 

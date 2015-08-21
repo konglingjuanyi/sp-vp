@@ -16,18 +16,9 @@
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="${redis.host}" p:port="${redis.port}" p:usePool="true" p:poolConfig-ref="poolConfig" />
 
-	<!--  cache config start -->
-    <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <!--<bean id="vehiclePackageDtoRedisTemplate"-->
-          <!--class="org.springframework.data.redis.core.RedisTemplate"-->
-          <!--p:connectionFactory-ref="jedisConnFactory"-->
-          <!--p:keySerializer-ref="stringSerializer"-->
-          <!--p:hashKeySerializer-ref="stringSerializer"-->
-          <!--p:hashValueSerializer-ref="vehiclePackageDtoSerializer" />-->
-    <!--<bean id="vehiclePackageDtoSerializer" class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer">-->
-        <!--<constructor-arg value="com.zxq.iov.cloud.sp.vp.api.dto.VehiclePackageDto"></constructor-arg>-->
-    <!--</bean>-->
-    <!--  cache config end -->
-    
+    <bean id="stringRedisTemplate"
+          class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:connectionFactory-ref="jedisConnFactory"/>
+
 </beans>
 

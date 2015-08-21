@@ -9,7 +9,6 @@ import com.zxq.iov.cloud.sp.vp.service.IBcallService;
 import com.zxq.iov.cloud.sp.vp.common.Constants;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallDao;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallRecordDao;
-import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.entity.call.Call;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 import com.zxq.iov.cloud.sp.vp.service.IStatusService;
@@ -26,8 +25,8 @@ import java.util.List;
  *
  * @author 叶荣杰
  * create date 2015-6-11 10:42
- * modify date 2015-8-4 11:46
- * @version 0.8, 2015-8-4
+ * modify date 2015-8-18 14:33
+ * @version 0.9, 2015-8-18
  */
 @Service
 @Qualifier("bcallService")
@@ -37,8 +36,6 @@ public class BcallServiceImpl extends BaseService implements IBcallService {
     private ICallDao callDao;
     @Autowired
     private ICallRecordDao callRecordDao;
-    @Autowired
-    private ITboxDao tboxDao;
     @Autowired
     private IStatusService statusService;
 
@@ -64,7 +61,7 @@ public class BcallServiceImpl extends BaseService implements IBcallService {
         AssertRequired("tboxId,vehiclePoses,bcallType,tboxBatteryStatus,vehicleBatteryStatus", tboxId,
                 vehiclePoses, bcallType, tboxBatteryStatus, vehicleBatteryStatus);
         List<Call> list = callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
-        Call call = (list.size()>0)?list.get(0):callDao.createCall(new Call(tboxDao.findVinById(tboxId),
+        Call call = list.size()>0?list.get(0):callDao.createCall(new Call(findVinById(tboxId),
                 tboxId, Constants.CALL_TYPE_BCALL, bcallType, bcallTime));
         for(VehiclePos vehiclePos : vehiclePoses) {
             // 这里的pos可能会和journey的pos重复，是否要规避
@@ -156,7 +153,7 @@ public class BcallServiceImpl extends BaseService implements IBcallService {
      * @return          呼叫对象
      */
     private Call getRunningBcallByVinOrTboxId(String vin, Long tboxId) throws ServLayerException {
-        List<Call> list = (StringUtils.isNotEmpty(vin))
+        List<Call> list = StringUtils.isNotEmpty(vin)
                 ?callDao.listCallByVinAndType(vin, Constants.CALL_TYPE_BCALL, RUNNING_STATUS)
                 :callDao.listCallByTboxId(tboxId, RUNNING_STATUS);
         if(list.size() > 0) {

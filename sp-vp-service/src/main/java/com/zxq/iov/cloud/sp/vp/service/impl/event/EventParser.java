@@ -2,7 +2,6 @@ package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
-import com.zxq.iov.cloud.sp.vp.dao.event.IEventInstanceDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDao;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;
@@ -25,7 +24,7 @@ import java.util.Map;
 public class EventParser {
 
     @Autowired
-    private IEventInstanceDao eventInstanceDaoService;
+    private EventConverter eventConvert;
     @Autowired
     private IStepDefinitionDao stepDefinitionDaoService;
     @Autowired
@@ -42,7 +41,7 @@ public class EventParser {
             throws ServLayerException {
         Long eventDefinitionId = null;
         if(null != eventInstanceId) {
-            eventDefinitionId = eventInstanceDaoService.findEventInstanceById(eventInstanceId).getEventDefinitionId();
+            eventDefinitionId = eventConvert.findEventInstanceById(eventInstanceId).getEventDefinitionId();
         }
         List<StepDefinition> list = stepDefinitionDaoService.listStepDefinitionByStartCodeAndEventDefinitionId(code,
                 eventDefinitionId);
@@ -79,13 +78,11 @@ public class EventParser {
      * @param obj           比较对象
      * @param operator      比较操作符
      * @param value         比较值
-     * @return
+     * @return              是否满足规则
      */
     private boolean validateRule(Object obj, String operator, String value) {
-        if(null != obj) {
-            if(operator.equals("eq")) {
-                return obj.toString().equals(value);
-            }
+        if(null != obj && operator.equals("eq")) {
+            return obj.toString().equals(value);
         }
         return false;
     }

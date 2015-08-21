@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd">
+
+    <rabbit:connection-factory id="rabbitConnectionFactory" addresses="${rabbitmq.address}" virtual-host="${rabbitmq.vhost}" username="${rabbitmq.username}" password="${rabbitmq.password}" />
+
+    <rabbit:admin connection-factory="rabbitConnectionFactory" />
+
+    <!-- OTAMessage的转换器 -->
+    <bean id="otaMessageConvertor"  class="org.springframework.amqp.support.converter.JsonMessageConverter">
+        <property name="classMapper">
+            <bean class="org.springframework.amqp.support.converter.DefaultClassMapper">
+                <property name="defaultType" value="com.zxq.iov.cloud.sp.vp.api.ServiceMessage"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 存放发往tbox app消息的queue -->
+    <rabbit:queue id="AppTBOXServiceQueue.app.v.1.0" name="AppTBOXServiceQueue.app.v.1.0" durable="true" auto-delete="false"/>
+
+    <!-- 发往tbox app消息的exchange -->
+    <rabbit:topic-exchange id="tboxAppServiceExchange" name="tboxAppServiceExchange" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="AppTBOXServiceQueue.app.v.1.0" pattern="AppTBOXServiceQueue.AV.1.*"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <!-- 发往tbox app消息的template-->
+    <rabbit:template id="tboxAppServiceTemplate" exchange="tboxAppServiceExchange"
+                     connection-factory="rabbitConnectionFactory"  message-converter="otaMessageConvertor"/>
+
+</beans>

@@ -4,7 +4,9 @@ import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.JSONArray;
 import com.alibaba.dubbo.common.json.JSONObject;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
 import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
+import com.zxq.iov.cloud.sp.vp.common.RSAUtils;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxConfigSettingDao;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDao;
@@ -15,16 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防 远程配置服务实现类
  *
  * @author 叶荣杰
  * create date 2015-6-19 11:44
- * modify date 2015-8-6 10:50
- * @version 0.7, 2015-8-6
+ * modify date 2015-8-18 14:00
+ * @version 0.8, 2015-8-18
  */
 @Service
 public class TboxConfigServiceImpl extends BaseService implements ITboxConfigService {
@@ -35,6 +41,7 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
     private ITboxConfigSettingDao tboxConfigSettingDao;
     @Autowired
     private ITboxDao tboxDao;
+
 
     @Override
     public Integer checkConfigDelta(Long tboxId, byte[] mcuVersion, byte[] mpuVersion,
@@ -93,20 +100,52 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
     }
 
     @Override
-    public String generateAsymmetricKey(Long tboxId) {
-        // 生成非对称的public key, private key
-        String publicKey = "";
-        String privateKey = "";
-        tboxDao.updateAsymmetricKey(tboxId, publicKey, privateKey); // 绑定tbox写入缓存
-        return publicKey;
+    public byte[] generateAsymmetricKey(Long tboxId) throws ServLayerException {
+        try {
+            Map<String, Object> keyMap = RSAUtils.getKeys();
+            RSAPublicKey publicKey = (RSAPublicKey)keyMap.get("public");
+            RSAPrivateKey privateKey = (RSAPrivateKey)keyMap.get("private");
+            //模
+            BigInteger modulus = publicKey.getModulus();
+            //公钥指数
+            String publicExponent = publicKey.getPublicExponent().toString();
+            //私钥指数
+            String privateExponent = privateKey.getPrivateExponent().toString();
+            TboxDto tboxDto = findTboxById(tboxId);
+            tboxDto.setPublicKey(publicExponent);
+            tboxDto.setPrivateKey(privateExponent);
+            //updateTbox(tboxDto); 数据库字段长度不够
+            tboxDao.updateAsymmetricKey(tboxId, modulus.toString(), publicExponent, privateExponent);
+            byte[] tmp = modulus.toByteArray();
+            byte[] modulusByte = new byte[128];
+            for(int i=1; i<tmp.length; i++) {
+                modulusByte[i-1] = tmp[i];
+            }
+            return modulusByte;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServLayerException("");
+        }
     }
 
     @Override
-    public void bindTboxWithSecretKey(Long tboxId, byte[] secretKeyWithEnc, byte[] tboxSnWithEnc) {
-        String privateKey = tboxDao.findPrivateKeyById(tboxId);  // 根据tbox从缓存中读出private key
-        // 用private Key对tboxSnWithEnc进行解密，验证是否正确，如果正确的话对secretKey进行解密
-        // 用private key对secretKey进行解密
-        String secretKey = "";
-        tboxDao.updateSecretKey(tboxId, secretKey);  // 绑定解密后的secretKey
+    public void bindTboxWithSecretKey(Long tboxId, String secretKeyWithEnc, String tboxSnWithEnc) {
+        String modulus = tboxDao.findModulusById(tboxId);
+        String privateExponent = tboxDao.findPrivateExponentyById(tboxId);
+        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(modulus, privateExponent);
+        String secretKey = null;
+        String tboxSn = null;
+        TboxDto tboxDto = findTboxById(tboxId);
+        try {
+            secretKey = RSAUtils.decryptByPrivateKey(secretKeyWithEnc, privateKey);
+            tboxSn = RSAUtils.decryptByPrivateKey(tboxSnWithEnc, privateKey);
+            if(tboxSn.equals(tboxDto.getTboxSn())) {
+                tboxDto.setSecurityKey(secretKey);
+                updateTbox(tboxDto);
+                tboxDao.updateSecretKey(tboxId, secretKey);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

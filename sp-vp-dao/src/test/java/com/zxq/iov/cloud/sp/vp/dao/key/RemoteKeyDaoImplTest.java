@@ -37,9 +37,9 @@ public class RemoteKeyDaoImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testUpdateRemoteKey(){
-        Long remoteKeyId = 4L;
+        Long remoteKeyId = 15L;
         RemoteKey remoteKey = remoteKeyDao.findRemoteKeyById(remoteKeyId);
-        remoteKey.setReference(1);
+        remoteKey.setReference(1L);
         remoteKey = remoteKeyDao.updateRemoteKey(remoteKey);
         Assert.assertNotNull(remoteKey);
     }

@@ -15,6 +15,10 @@
         <groupId>com.zxq.iov.cloud.sp</groupId>
         <artifactId>sp-vp-dao</artifactId>
     </dependency>
+    <dependency>
+        <groupId>com.zxq.iov.cloud.sp</groupId>
+        <artifactId>sp-mds-api</artifactId>
+    </dependency>
     
     <!-- AOP -->
     <dependency>

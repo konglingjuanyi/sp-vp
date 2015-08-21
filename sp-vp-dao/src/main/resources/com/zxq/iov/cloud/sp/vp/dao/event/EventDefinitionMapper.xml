@@ -4,21 +4,21 @@
 <mapper namespace="com.zxq.iov.cloud.sp.vp.entity.event.EventDefinitionMapper">
 
 	<resultMap id="eventDefinitionResultMap" type="EventDefinition">
-		<id column="ID" javaType="Long"  property="id" jdbcType="DECIMAL" />
+		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
 		<result column="NAME" jdbcType="VARCHAR" property="name"/>
-		<result column="TYPE" jdbcType="DECIMAL" property="type"/>
-		<result column="LIFECYCLE" jdbcType="DECIMAL" property="lifecycle"/>
-		<result column="IS_EXCLUSIVE" jdbcType="DECIMAL" property="isExclusive"/>
-		<result column="IS_CONTINUE" jdbcType="DECIMAL" property="isContinue"/>
-		<result column="IS_ROLLBACK" jdbcType="DECIMAL" property="isRollback"/>
+		<result column="TYPE" jdbcType="INTEGER" property="type"/>
+		<result column="LIFECYCLE" jdbcType="INTEGER" property="lifecycle"/>
+		<result column="IS_EXCLUSIVE" jdbcType="INTEGER" property="isExclusive"/>
+		<result column="IS_CONTINUE" jdbcType="INTEGER" property="isContinue"/>
+		<result column="IS_ROLLBACK" jdbcType="INTEGER" property="isRollback"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-		<result column="STATUS" jdbcType="DECIMAL" property="status"/>
+		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
-		<result column="CREATE_BY" jdbcType="DECIMAL" property="createBy"/>
+		<result column="CREATE_BY" jdbcType="BIGINT" property="createBy"/>
 		<result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
-		<result column="LAST_UPDATE_BY" jdbcType="DECIMAL" property="lastUpdateBy"/>
-		<result column="ROW_VERSION" jdbcType="DECIMAL" property="rowVersion"/>
-		<result column="IS_VALID" jdbcType="DECIMAL" property="isValid"/>
+		<result column="LAST_UPDATE_BY" jdbcType="BIGINT" property="lastUpdateBy"/>
+		<result column="ROW_VERSION" jdbcType="BIGINT" property="rowVersion"/>
+		<result column="IS_VALID" jdbcType="INTEGER" property="isValid"/>
 	</resultMap>
 	
 	<!-- 分页查询 -->
@@ -51,7 +51,7 @@
 
 	<select id="selectOne" resultMap="eventDefinitionResultMap" parameterType="java.lang.String">
 		<include refid="selectPageTemplate"/>
-		AND ID = #{id,jdbcType=VARCHAR}
+		AND ID = #{id,jdbcType=BIGINT}
 	</select>
 
 </mapper>
