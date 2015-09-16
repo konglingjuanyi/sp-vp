@@ -1,14 +1,25 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-11       荣杰         1.0            Initial Version
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.call.repo.ICallRecordRepository
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.call.repo;
 
 import com.saicmotor.telematics.framework.core.dal.repo.datajpa.BaseRepository;
 import com.zxq.iov.cloud.sp.vp.entity.call.CallRecord;
 
 /**
- * 安防 呼叫记录持久化服务Repository
- *
- * @author 叶荣杰
- * create date 2015-6-11 10:16
- * @version 0.1, 2015-6-11
+ * 安防服务 呼叫记录实体仓库
  */
 public interface ICallRecordRepository extends BaseRepository<CallRecord, Long> {
 }

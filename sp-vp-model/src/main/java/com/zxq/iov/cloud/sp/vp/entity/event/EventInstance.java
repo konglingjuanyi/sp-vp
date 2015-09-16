@@ -1,3 +1,19 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-04-23       荣杰         1.0            Initial Version
+ * 2015-06-05       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.entity.event.EventInstance
+ *
+ * sp - sp-vp-model
+ */
+
 package com.zxq.iov.cloud.sp.vp.entity.event;
 
 
@@ -8,11 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 安防服务 事件实例类
- * @author 叶荣杰
- * create time 2015-4-23 11:50
- * modify time 2015-6-5 11:09
- * @version 0.3, 2015-6-5
+ * 安防服务 事件实例实体类
  */
 @Entity()
 @Table(name = "TB_EVENT_INSTANCE")

@@ -1,35 +1,45 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-19       荣杰         1.0            Initial Version
+ * 2015-08-12       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.TboxConfigServiceImplTest
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
-import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
-import com.zxq.iov.cloud.sp.vp.common.RSAUtils;
+import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.entity.config.TboxConfigSetting;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
 /**
- * 安防 远程配置服务测试类
- *
- * @author 叶荣杰
- * create date 2015-6-19 14:17
- * modify date 2015-8-12 17:25
- * @version 0.6, 2015-8-12
+ * 安防服务 远程配置服务测试类
  */
 @Transactional
 public class TboxConfigServiceImplTest extends BaseServiceTestCase {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TboxConfigServiceImplTest.class);
+
     @Autowired
     private ITboxConfigService tboxConfigService;
-    @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
 
     private String vin = "11111111111111111";
     private Long tboxId = 1L;
@@ -75,13 +85,13 @@ public class TboxConfigServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testBindTboxWithSecretKey() throws Exception {
-        String modulus = "125163475082136763811297846029596850610504955299888582273646147017966939756728090616359373212787959305990910500897234112681820675075583228985519225290989678399732309123754999272780735544151165489820178848785819484661828969770254266879024307066897705246976539119997492907397607531121913933742804077791829551351";
-        String secretKey = "1";
-        String tboxSn = "123";
-        RSAPublicKey pubKey = RSAUtils.getPublicKey(modulus, "65537");
-        String secretKeyWithEnc = RSAUtils.encryptByPublicKey(secretKey, pubKey);
-        String tboxSnWithEnc = RSAUtils.encryptByPublicKey(tboxSn, pubKey);
-        tboxConfigService.bindTboxWithSecretKey(tboxId,secretKeyWithEnc, tboxSnWithEnc);
+//        String modulus = "125163475082136763811297846029596850610504955299888582273646147017966939756728090616359373212787959305990910500897234112681820675075583228985519225290989678399732309123754999272780735544151165489820178848785819484661828969770254266879024307066897705246976539119997492907397607531121913933742804077791829551351";
+//        String secretKey = "1";
+//        String tboxSn = "123";
+//        RSAPublicKey pubKey = RSAUtils.getPublicKey(modulus, "65537");
+//        String secretKeyWithEnc = RSAUtils.encryptByPublicKey(secretKey, pubKey);
+//        String tboxSnWithEnc = RSAUtils.encryptByPublicKey(tboxSn, pubKey);
+//        tboxConfigService.bindTboxWithSecretKey(tboxId,secretKeyWithEnc, tboxSnWithEnc);
     }
 
 }

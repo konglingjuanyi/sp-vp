@@ -1,29 +1,28 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-07-24       荣杰         1.0            Initial Version
+ * 2015-08-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.impl.BaseService
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.mds.tcmp.api.ITboxApi;
-import com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi;
-import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
-import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.VehicleDto;
-import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 
 /**
- * 安防 基础服务类
- *
- * @author 叶荣杰
- * create date 2015-7-24 9:57
- * modify date 2015-8-18 14:57
- * @version 0.2, 2015-8-18
+ * 安防服务 基础服务类
  */
 public class BaseService {
-
-    @Autowired
-    private ITboxApi tboxApi;
-    @Autowired
-    private IVehicleApi vehicleApi;
 
     /**
      * 验证必填的输入参数
@@ -49,59 +48,4 @@ public class BaseService {
         }
     }
 
-    /**
-     * 根据ID得到TBOX传输对象
-     * @param tboxId                TBOX ID
-     * @return                      TBOX传输对象
-     */
-    protected TboxDto findTboxById(Long tboxId) {
-        TboxDto tboxDto = new TboxDto();
-        tboxDto.setId(tboxId);
-        List<TboxDto> list = tboxApi.findTbox(tboxDto);
-        return list.size()>0?list.get(0):null;
-    }
-
-    /**
-     * 根据ID得到车辆唯一码
-     * @param tboxId                TBOX ID
-     * @return                      车辆唯一码
-     */
-    protected String findVinById(Long tboxId) {
-        TboxDto tboxDto = findTboxById(tboxId);
-        return null!=tboxDto?tboxDto.getVin():null;
-    }
-
-    /**
-     * 根据ID得到用户ID
-     * @param tboxId                TBOX ID
-     * @return                      用户ID
-     */
-    protected Long findUserIdById(Long tboxId) {
-        String vin = findVinById(tboxId);
-        VehicleDto vehicleDto = null;
-        if(null != vin) {
-            vehicleDto = vehicleApi.findVehicleByVin(vin);
-        }
-        return null!=vehicleDto?vehicleDto.getUserId():null;
-    }
-
-    /**
-     * 根据车辆唯一码得到TBOX ID
-     * @param vin                   车辆唯一码
-     * @return                      TBOX ID
-     */
-    protected Long findTboxIdByVin(String vin) {
-        TboxDto tboxDto = new TboxDto();
-        tboxDto.setVin(vin);
-        List<TboxDto> list = tboxApi.findTbox(tboxDto);
-        return list.size()>0?list.get(0).getId():null;
-    }
-
-    /**
-     * 更新TBOX
-     * @param tboxDto
-     */
-    protected void updateTbox(TboxDto tboxDto) {
-        tboxApi.updateTboxInfo(tboxDto);
-    }
 }

@@ -1,3 +1,18 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-19       荣杰         1.0            Initial Version
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.config.impl.TboxPersonalConfigDaoImpl
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.config.impl;
 
 import com.saicmotor.telematics.framework.core.log.LoggerFactory;
@@ -14,26 +29,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 安防 TBOX个性化配置持久化服务接口实现类
- *
- * @author 叶荣杰
- * create date 2015-6-19 13:18
- * modify date
- * @version 0.1, 2015-6-19
+ * 安防服务 TBOX个性化配置数据访问接口实现类
  */
 @Service
-public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConfigRepository, TboxPersonalConfig, Long> implements ITboxPersonalConfigDao {
+public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConfigRepository, TboxPersonalConfig, Long>
+		implements ITboxPersonalConfigDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TboxPersonalConfigDaoImpl.class);
 
-    @Autowired
-	public TboxPersonalConfigDaoImpl(ITboxPersonalConfigRepository repo){
+	@Autowired
+	public TboxPersonalConfigDaoImpl(ITboxPersonalConfigRepository repo) {
 		super(repo);
 	}
 
 	@Override
 	public TboxPersonalConfig createTboxPersonalConfig(TboxPersonalConfig tboxPersonalConfig) {
-		if (tboxPersonalConfig == null){
+		if (tboxPersonalConfig == null) {
 			LOGGER.error("tboxPersonalConfig cannot be null");
 		}
 		tboxPersonalConfig.setId(null);
@@ -43,7 +54,7 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 
 	@Override
 	public TboxPersonalConfig updateTboxPersonalConfig(TboxPersonalConfig tboxPersonalConfig) {
-		if (tboxPersonalConfig == null){
+		if (tboxPersonalConfig == null) {
 			LOGGER.error("tboxPersonalConfig cannot be null");
 		}
 		super.update(tboxPersonalConfig);
@@ -52,7 +63,7 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 
 	@Override
 	public void removeTboxPersonalConfig(Long tboxPersonalConfigId) {
-		if (tboxPersonalConfigId == null){
+		if (tboxPersonalConfigId == null) {
 			LOGGER.error("tboxPersonalConfigId cannot be null");
 		}
 		super.delete(tboxPersonalConfigId);
@@ -60,7 +71,7 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 
 	@Override
 	public TboxPersonalConfig findTboxPersonalConfigById(Long tboxPersonalConfigId) {
-		if (tboxPersonalConfigId == null){
+		if (tboxPersonalConfigId == null) {
 			LOGGER.error("tboxPersonalConfigId cannot be null");
 		}
 		return super.findOne(tboxPersonalConfigId);
@@ -71,7 +82,7 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tboxId", tboxId);
 		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
-		return list.size()>0?list.get(0):null;
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	@Override
@@ -79,6 +90,6 @@ public class TboxPersonalConfigDaoImpl extends BaseServiceImpl<ITboxPersonalConf
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("vin", vin);
 		List<TboxPersonalConfig> list = super.findListViaBatis(paramMap);
-		return list.size()>0?list.get(0):null;
+		return list.size() > 0 ? list.get(0) : null;
 	}
 }

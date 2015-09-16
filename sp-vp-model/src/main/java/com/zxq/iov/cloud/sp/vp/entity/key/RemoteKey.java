@@ -1,5 +1,20 @@
-package com.zxq.iov.cloud.sp.vp.entity.key;
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-23       荣杰         1.0            Initial Version
+ * 2015-08-12       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey
+ *
+ * sp - sp-vp-model
+ */
 
+package com.zxq.iov.cloud.sp.vp.entity.key;
 
 import com.saicmotor.telematics.framework.core.dal.entity.MyBaseEntity;
 
@@ -9,108 +24,105 @@ import java.util.Date;
 
 /**
  * 安防服务 电子钥匙类
- * @author 叶荣杰
- * create date 2015-6-23 11:37
- * modify date 2015-8-12 14:31
- * @version 0.3, 2015-8-12
  */
 @Entity()
 @Table(name = "TB_REMOTE_KEY")
 public class RemoteKey extends MyBaseEntity<Long> implements Serializable {
 
-    private static final String SEQ_NAME = "seq_tb_remote_key";
+	private static final String SEQ_NAME = "seq_tb_remote_key";
 
-    @Id
-    @Column(name = "ID", nullable = false, updatable = false, length=20)
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = SEQ_NAME)
-    @TableGenerator(name = SEQ_NAME, table = MY_SEQ_TABLE, allocationSize = 1,
-            pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
-    private Long id;
+	@Id
+	@Column(name = "ID", nullable = false, updatable = false, length = 20)
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = SEQ_NAME)
+	@TableGenerator(name = SEQ_NAME, table = MY_SEQ_TABLE, allocationSize = 1,
+			pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
+	private Long id;
 
-    @Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
-    private Long tboxId;
+	@Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
+	private Long tboxId;
 
-    @Column(name = "TYPE", nullable = false, precision = 4, scale = 0)
-    private Integer type;
+	@Column(name = "TYPE", nullable = false, precision = 4, scale = 0)
+	private Integer type;
 
-    @Column(name = "VALUE", nullable = false, length = 32)
-    private String value;
+	@Column(name = "VALUE", nullable = false, length = 32)
+	private String value;
 
-    @Column(name = "REFERENCE", precision = 20, scale = 0)
-    private Long reference;
+	@Column(name = "REFERENCE", precision = 20, scale = 0)
+	private Long reference;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "VALID_START_TIME", length = 7)
-    private Date validStartTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "VALID_START_TIME", length = 7)
+	private Date validStartTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "VALID_END_TIME", length = 7)
-    private Date validEndTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "VALID_END_TIME", length = 7)
+	private Date validEndTime;
 
-    public RemoteKey(){}
+	public RemoteKey() {
+	}
 
-    public RemoteKey(Long tboxId, Integer type, String value, Long reference, Date validStartTime, Date validEndTime) {
-        this.tboxId = tboxId;
-        this.type = type;
-        this.value = value;
-        this.reference = reference;
-        this.validStartTime = validStartTime;
-        this.validEndTime = validEndTime;
-    }
+	public RemoteKey(Long tboxId, Integer type, String value, Long reference, Date validStartTime, Date validEndTime) {
+		this.tboxId = tboxId;
+		this.type = type;
+		this.value = value;
+		this.reference = reference;
+		this.validStartTime = validStartTime;
+		this.validEndTime = validEndTime;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getTboxId() {
-        return tboxId;
-    }
+	public Long getTboxId() {
+		return tboxId;
+	}
 
-    public void setTboxId(Long tboxId) {
-        this.tboxId = tboxId;
-    }
+	public void setTboxId(Long tboxId) {
+		this.tboxId = tboxId;
+	}
 
-    public Integer getType() {
-        return type;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    public Long getReference() {
-        return reference;
-    }
+	public Long getReference() {
+		return reference;
+	}
 
-    public void setReference(Long reference) {
-        this.reference = reference;
-    }
+	public void setReference(Long reference) {
+		this.reference = reference;
+	}
 
-    public Date getValidStartTime() {
-        return validStartTime;
-    }
+	public Date getValidStartTime() {
+		return validStartTime;
+	}
 
-    public void setValidStartTime(Date validStartTime) {
-        this.validStartTime = validStartTime;
-    }
+	public void setValidStartTime(Date validStartTime) {
+		this.validStartTime = validStartTime;
+	}
 
-    public Date getValidEndTime() {
-        return validEndTime;
-    }
+	public Date getValidEndTime() {
+		return validEndTime;
+	}
 
-    public void setValidEndTime(Date validEndTime) {
-        this.validEndTime = validEndTime;
-    }
+	public void setValidEndTime(Date validEndTime) {
+		this.validEndTime = validEndTime;
+	}
 }

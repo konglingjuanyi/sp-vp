@@ -1,42 +1,54 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-07-29       荣杰         1.0            Initial Version
+ * 2015-07-30       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcStatusDto
+ *
+ * sp - sp-vp-api
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.dto.rvc;
 
-
-import java.io.Serializable;
+import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 
 /**
- * 安防 远程控制命令状态传输对象
- *
- * @author 叶荣杰
- * create date 2015-7-29 18:14
- * modify date 2015-7-30 9:59
- * @version 0.2, 2015-7-30
+ * 安防服务 远程控制命令状态传输对象
  */
-public class RvcStatusDto implements Serializable {
+public class RvcStatusDto extends OtaDto {
 
-    private String commandStatus;
-    private Integer failureType;
+	// 命令状态
+	private String commandStatus;
+	// 失败类型
+	private Integer failureType;
 
-    public RvcStatusDto() {
-    }
+	public RvcStatusDto() {
+	}
 
-    public RvcStatusDto(String commandStatus, Integer failureType) {
-        this.commandStatus = commandStatus;
-        this.failureType = failureType;
-    }
+	public RvcStatusDto(String commandStatus, Integer failureType) {
+		this.commandStatus = commandStatus;
+		this.failureType = failureType;
+	}
 
-    public String getCommandStatus() {
-        return commandStatus;
-    }
+	public String getCommandStatus() {
+		return commandStatus;
+	}
 
-    public void setCommandStatus(String commandStatus) {
-        this.commandStatus = commandStatus;
-    }
+	public void setCommandStatus(String commandStatus) {
+		this.commandStatus = commandStatus;
+	}
 
-    public Integer getFailureType() {
-        return failureType;
-    }
+	public Integer getFailureType() {
+		return failureType;
+	}
 
-    public void setFailureType(Integer failureType) {
-        this.failureType = failureType;
-    }
+	public void setFailureType(Integer failureType) {
+		this.failureType = failureType;
+	}
 }

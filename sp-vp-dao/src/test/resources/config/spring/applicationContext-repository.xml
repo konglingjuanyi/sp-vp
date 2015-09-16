@@ -18,6 +18,7 @@
         <property name="initialSize" value="${jdbc.pool.initialSize}" />
         <property name="minIdle" value="${jdbc.pool.minIdle}" />
         <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="maxWait" value="${jdbc.pool.maxWait}" />
         <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
         <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}" />
         <property name="testOnReturn" value="${jdbc.pool.testOnReturn}" />

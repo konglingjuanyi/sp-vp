@@ -1,22 +1,38 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-05-04       荣杰         1.0            Initial Version
+ * 2015-07-13       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.dto.OtaDto
+ *
+ * sp - sp-vp-api
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 安防 OTA基础DTO，包含非业务属性
- *
- * @author 叶荣杰
- * create date 2015-5-4 10:46
- * modify date 2015-7-13 13:14
- * @version 0.11, 2015-7-13
+ * 安防服务 OTA基础传输对象，包含非业务属性
  */
 public class OtaDto implements Serializable {
 
+    // 车辆唯一码
     private String vin;
+    // TBOX序号
     private Integer tboxSn;
+    // TBOX ID
     private Long tboxId;
+    // 应用ID
     private String aid;
+    // 方法ID
     private Integer mid;
     private Date eventCreateTime;
     private Long eventId;

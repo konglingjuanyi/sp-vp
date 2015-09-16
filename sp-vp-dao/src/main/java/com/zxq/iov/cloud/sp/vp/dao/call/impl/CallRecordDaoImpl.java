@@ -1,3 +1,18 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-11       荣杰         1.0            Initial Version
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.call.impl.CallRecordDaoImpl
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.call.impl;
 
 import com.saicmotor.telematics.framework.core.log.LoggerFactory;
@@ -13,28 +28,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * 安防 呼叫记录持久化服务接口实现类
- *
- * @author 叶荣杰
- * create date 2015-6-11 10:17
- * modify date
- * @version 0.1, 2015-6-11
+ * 安防 呼叫记录数据访问接口实现类
  */
 @Service
-public class CallRecordDaoImpl extends BaseServiceImpl<ICallRecordRepository, CallRecord, Long> implements ICallRecordDao {
+public class CallRecordDaoImpl extends BaseServiceImpl<ICallRecordRepository, CallRecord, Long>
+		implements ICallRecordDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CallRecordDaoImpl.class);
 
-    @Autowired
-	public CallRecordDaoImpl(ICallRecordRepository repo){
+	@Autowired
+	public CallRecordDaoImpl(ICallRecordRepository repo) {
 		super(repo);
 	}
 
 	@Override
 	public CallRecord createCallRecord(CallRecord callRecord) {
-		if (callRecord == null){
+		if (callRecord == null) {
 			LOGGER.error("callRecord cannot be null");
 		}
 		callRecord.setId(null);
@@ -44,7 +54,7 @@ public class CallRecordDaoImpl extends BaseServiceImpl<ICallRecordRepository, Ca
 
 	@Override
 	public CallRecord updateCallRecord(CallRecord callRecord) {
-		if (callRecord == null){
+		if (callRecord == null) {
 			LOGGER.error("callRecord cannot be null");
 		}
 		super.update(callRecord);
@@ -53,7 +63,7 @@ public class CallRecordDaoImpl extends BaseServiceImpl<ICallRecordRepository, Ca
 
 	@Override
 	public void removeCallRecord(Long callRecordId) {
-		if (callRecordId == null){
+		if (callRecordId == null) {
 			LOGGER.error("callRecordId cannot be null");
 		}
 		super.delete(callRecordId);
@@ -61,7 +71,7 @@ public class CallRecordDaoImpl extends BaseServiceImpl<ICallRecordRepository, Ca
 
 	@Override
 	public CallRecord findCallRecordById(Long callRecordId) {
-		if (callRecordId == null){
+		if (callRecordId == null) {
 			LOGGER.error("callRecordId cannot be null");
 		}
 		return super.findOne(callRecordId);

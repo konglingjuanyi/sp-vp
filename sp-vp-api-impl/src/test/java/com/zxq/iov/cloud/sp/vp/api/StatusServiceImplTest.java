@@ -1,12 +1,30 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-05-15       荣杰         1.0            Initial Version
+ * 2015-08-06       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.StatusServiceImplTest
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleAlertDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +36,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 安防 车辆状态服务测试类
- *
- * @author 叶荣杰
- * create date 2015-5-15 11:08
- * modify date 2015-8-6 9:50
- * @version 0.6, 2015-8-6
+ * 安防服务 车辆状态API测试类
  */
 @Transactional
 public class StatusServiceImplTest extends BaseServiceTestCase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusServiceImplTest.class);
 
     @Autowired
     private IStatusApi statusApi;
@@ -39,7 +54,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     public void testRequestVehicleStatus() throws Exception {
         Integer statusType = 1;
         Long eventId = statusApi.requestVehicleStatus(vin, statusType);
-        System.out.print(eventId);
+        LOGGER.info("eventId = " + eventId);
     }
 
     @Test

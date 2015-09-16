@@ -1,19 +1,30 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-24       荣杰         1.0            Initial Version
+ * 2015-08-05       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.impl.assembler.diagnostic.DiagnosticDtoAssembler
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.impl.assembler.diagnostic;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.diagnostic.DiagnosticDto;
-import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
+import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.entity.diagnostic.Diagnostic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 安防 远程诊断传输对象装配类
- *
- * @author 叶荣杰
- * create date 2015-6-24 10:11
- * modify date 2015-8-5 16:58
- * @version 0.4, 2015-8-5
+ * 安防服务 远程诊断传输对象装配类
  */
 public class DiagnosticDtoAssembler {
 

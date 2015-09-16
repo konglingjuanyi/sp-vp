@@ -1,40 +1,53 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-15       荣杰         1.0            Initial Version
+ * 2015-08-06       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.ISvtService
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
 import com.zxq.iov.cloud.sp.vp.entity.status.VehicleStatus;
 import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
+import com.zxq.iov.cloud.sp.vp.service.domain.Tbox;
 
 import java.util.List;
 
-
 /**
  * 安防服务 被盗追踪接口
- * @author 叶荣杰
- * create date 2015-6-15 11:47
- * modify date 2015-8-6 9:52
- * @version 0.6, 2015-8-6
  */
 public interface ISvtService {
 
-    /**
-     * 车辆报警
-     * @param tboxId                        TBOX ID
-     * @param stolenAlarm                   被盗警报对象
-     * @param vehiclePos                    车辆位置对象
-     * @param eventId                       事件ID
-     */
-    void alarm(Long tboxId, StolenAlarm stolenAlarm, VehiclePos vehiclePos,
-               Long eventId) throws ServLayerException;
+	/**
+	 * 车辆报警
+	 *
+	 * @param tbox        TBOX对象
+	 * @param stolenAlarm 被盗警报对象
+	 * @param vehiclePos  车辆位置对象
+	 * @param eventId     事件ID
+	 */
+	void alarm(Tbox tbox, StolenAlarm stolenAlarm, VehiclePos vehiclePos, Long eventId) throws ServLayerException;
 
-    /**
-     * 更新追踪点
-     * @param tboxId                        TBOX ID
-     * @param vehicleStatuses               车辆状态对象列表
-     * @param vehiclePos                    车辆位置对象
-     * @param eventId                       事件ID
-     */
-    void updateTrack(Long tboxId, List<VehicleStatus> vehicleStatuses,
-                     VehiclePos vehiclePos, Long eventId) throws ServLayerException;
+	/**
+	 * 更新追踪点
+	 *
+	 * @param tbox            TBOX对象
+	 * @param vehicleStatuses 车辆状态对象列表
+	 * @param vehiclePos      车辆位置对象
+	 * @param eventId         事件ID
+	 */
+	void updateTrack(Tbox tbox, List<VehicleStatus> vehicleStatuses, VehiclePos vehiclePos, Long eventId)
+			throws ServLayerException;
 
 }

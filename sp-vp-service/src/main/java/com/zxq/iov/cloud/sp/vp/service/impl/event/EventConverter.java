@@ -2,7 +2,7 @@ package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.*;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import org.springframework.beans.factory.annotation.Autowired;

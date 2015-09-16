@@ -1,33 +1,51 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-19       荣杰         1.0            Initial Version
+ * 2015-08-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.impl.TboxConfigApiImpl
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.ParseException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
 import com.zxq.iov.cloud.sp.vp.api.ITboxConfigApi;
-import com.zxq.iov.cloud.sp.vp.api.dto.config.*;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.config.*;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
-import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
+import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
+import com.zxq.iov.cloud.sp.vp.common.util.RSAUtils;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.ITboxConfigService;
 import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.interfaces.RSAPrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 安防 远程配置服务实现类
- *
- * @author 叶荣杰
- * create date 2015-6-19 11:44
- * modify date 2015-8-18 17:17
- * @version 0.10, 2015-8-18
+ * 安防服务 远程配置API实现类
  */
 @Service
 public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TboxConfigApiImpl.class);
 
     @Autowired
     private ITboxConfigService tboxConfigService;
@@ -37,7 +55,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     @Override
     public void requestConfigUpdate(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 3);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_CONFIGURATION, 3);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {
@@ -140,7 +158,7 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
     @Override
     public void requestReadConfig(String vin, Long[] tboxConfigsettingIds) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_CONFIGURATION, 8);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_CONFIGURATION, 8);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {
@@ -198,8 +216,21 @@ public class TboxConfigApiImpl extends BaseApi implements ITboxConfigApi {
         eventService.start(event);
         KeyDto keyDto = new KeyDto();
         if(!event.isRetry()) {
-            tboxConfigService.bindTboxWithSecretKey(otaDto.getTboxId(), new String(secretKeyWithEnc),
-                    new String(tboxSnWithEnc));
+            RSAPrivateKey privateKey = tboxConfigService.getPrivateKey(otaDto.getTboxId());
+            TboxDto tboxDto = getTboxDto(otaDto.getTboxId());
+            String secretKey = null;
+            String tboxSn = null;
+            try {
+                secretKey = RSAUtils.decryptByPrivateKey(new String(secretKeyWithEnc), privateKey);
+                tboxSn = RSAUtils.decryptByPrivateKey(new String(tboxSnWithEnc), privateKey);
+                if(tboxSn.equals(tboxDto.getTboxSn())) {
+                    tboxDto.setSecurityKey(secretKey);
+                    updateTbox(tboxDto);
+                    tboxConfigService.updateSecretKey(otaDto.getTboxId(), secretKey);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             keyDto.setEventId(event.getId());
             keyDto.setTboxId(otaDto.getTboxId());
             keyDto.setSecretKeyAccepted(true);

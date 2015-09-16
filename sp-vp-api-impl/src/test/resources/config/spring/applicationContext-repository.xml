@@ -61,7 +61,7 @@
 
     <aop:config>
         <aop:pointcut id="serviceMethods"
-                      expression="execution(* com.zxq.iov.cloud.sp.vp..*Service*.*(..))"/>
+                      expression="execution(* com.zxq.iov.cloud.sp.vp..*Api*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
     </aop:config>
 

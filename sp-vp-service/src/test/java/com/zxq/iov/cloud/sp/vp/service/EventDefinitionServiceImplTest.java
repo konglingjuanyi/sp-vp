@@ -1,5 +1,23 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-04       荣杰         1.0            Initial Version
+ * 2015-08-06       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.EventDefinitionServiceImplTest
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service;
 
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventDefinition;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepDefinition;
@@ -13,15 +31,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 安防 事件定义服务测试类
- *
- * @author 叶荣杰
- * create date 2015-6-4 13:55
- * modify date 2015-8-6 11:41
- * @version 0.9, 2015-8-6
+ * 安防服务 事件定义服务测试类
  */
 @Transactional
 public class EventDefinitionServiceImplTest extends BaseServiceTestCase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventDefinitionServiceImplTest.class);
 
     @Autowired
     private IEventDefinitionService eventDefinitionService;

@@ -1,3 +1,18 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-24       荣杰         1.0            Initial Version
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.diagnostic.impl.DiagnosticDaoImpl
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.diagnostic.impl;
 
 import com.saicmotor.telematics.framework.core.log.LoggerFactory;
@@ -14,26 +29,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 安防 远程诊断持久化服务接口实现类
- *
- * @author 叶荣杰
- * create date 2015-6-24 9:16
- * modify date
- * @version 0.1, 2015-6-24
+ * 安防服务 远程诊断数据访问接口实现类
  */
 @Service
-public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Diagnostic, Long> implements IDiagnosticDao {
+public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Diagnostic, Long>
+		implements IDiagnosticDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DiagnosticDaoImpl.class);
 
-    @Autowired
-	public DiagnosticDaoImpl(IDiagnosticRepository repo){
+	@Autowired
+	public DiagnosticDaoImpl(IDiagnosticRepository repo) {
 		super(repo);
 	}
 
 	@Override
 	public Diagnostic createDiagnostic(Diagnostic diagnostic) {
-		if (diagnostic == null){
+		if (diagnostic == null) {
 			LOGGER.error("diagnostic cannot be null");
 		}
 		diagnostic.setId(null);
@@ -43,7 +54,7 @@ public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Di
 
 	@Override
 	public Diagnostic updateDiagnostic(Diagnostic diagnostic) {
-		if (diagnostic == null){
+		if (diagnostic == null) {
 			LOGGER.error("diagnostic cannot be null");
 		}
 		super.update(diagnostic);
@@ -52,7 +63,7 @@ public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Di
 
 	@Override
 	public void removeDiagnostic(Long diagnosticId) {
-		if (diagnosticId == null){
+		if (diagnosticId == null) {
 			LOGGER.error("diagnosticId cannot be null");
 		}
 		super.delete(diagnosticId);
@@ -60,7 +71,7 @@ public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Di
 
 	@Override
 	public Diagnostic findDiagnosticById(Long diagnosticId) {
-		if (diagnosticId == null){
+		if (diagnosticId == null) {
 			LOGGER.error("diagnosticId cannot be null");
 		}
 		return super.findOne(diagnosticId);
@@ -71,6 +82,6 @@ public class DiagnosticDaoImpl extends BaseServiceImpl<IDiagnosticRepository, Di
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("eventId", eventId);
 		List<Diagnostic> list = super.findListViaBatis(paramMap);
-		return list.size()>0?list.get(0):null;
+		return list.size() > 0 ? list.get(0) : null;
 	}
 }

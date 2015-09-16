@@ -1,12 +1,29 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-19       荣杰         1.0            Initial Version
+ * 2015-08-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.impl.TboxConfigServiceImpl
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.JSONArray;
 import com.alibaba.dubbo.common.json.JSONObject;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
-import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
-import com.zxq.iov.cloud.sp.vp.common.RSAUtils;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
+import com.zxq.iov.cloud.sp.vp.common.util.RSAUtils;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxConfigSettingDao;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxDao;
 import com.zxq.iov.cloud.sp.vp.dao.config.ITboxPersonalConfigDao;
@@ -25,15 +42,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 安防 远程配置服务实现类
- *
- * @author 叶荣杰
- * create date 2015-6-19 11:44
- * modify date 2015-8-18 14:00
- * @version 0.8, 2015-8-18
+ * 安防服务 远程配置服务接口实现类
  */
 @Service
 public class TboxConfigServiceImpl extends BaseService implements ITboxConfigService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TboxConfigServiceImpl.class);
 
     @Autowired
     private ITboxPersonalConfigDao tboxPersonalConfigDao;
@@ -111,10 +125,6 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
             String publicExponent = publicKey.getPublicExponent().toString();
             //私钥指数
             String privateExponent = privateKey.getPrivateExponent().toString();
-            TboxDto tboxDto = findTboxById(tboxId);
-            tboxDto.setPublicKey(publicExponent);
-            tboxDto.setPrivateKey(privateExponent);
-            //updateTbox(tboxDto); 数据库字段长度不够
             tboxDao.updateAsymmetricKey(tboxId, modulus.toString(), publicExponent, privateExponent);
             byte[] tmp = modulus.toByteArray();
             byte[] modulusByte = new byte[128];
@@ -129,23 +139,14 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
     }
 
     @Override
-    public void bindTboxWithSecretKey(Long tboxId, String secretKeyWithEnc, String tboxSnWithEnc) {
+    public RSAPrivateKey getPrivateKey(Long tboxId) throws ServLayerException {
         String modulus = tboxDao.findModulusById(tboxId);
         String privateExponent = tboxDao.findPrivateExponentyById(tboxId);
-        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(modulus, privateExponent);
-        String secretKey = null;
-        String tboxSn = null;
-        TboxDto tboxDto = findTboxById(tboxId);
-        try {
-            secretKey = RSAUtils.decryptByPrivateKey(secretKeyWithEnc, privateKey);
-            tboxSn = RSAUtils.decryptByPrivateKey(tboxSnWithEnc, privateKey);
-            if(tboxSn.equals(tboxDto.getTboxSn())) {
-                tboxDto.setSecurityKey(secretKey);
-                updateTbox(tboxDto);
-                tboxDao.updateSecretKey(tboxId, secretKey);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return RSAUtils.getPrivateKey(modulus, privateExponent);
+    }
+
+    @Override
+    public void updateSecretKey(Long tboxId, String secretKey) {
+        tboxDao.updateSecretKey(tboxId, secretKey);
     }
 }

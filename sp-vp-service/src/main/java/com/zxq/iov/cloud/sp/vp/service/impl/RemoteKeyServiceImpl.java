@@ -1,35 +1,51 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-23       荣杰         1.0            Initial Version
+ * 2015-08-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.impl.RemoteKeyServiceImpl
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
-import com.zxq.iov.cloud.sp.vp.common.MsgUtil;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
+import com.zxq.iov.cloud.sp.vp.common.util.MsgUtil;
 import com.zxq.iov.cloud.sp.vp.dao.key.IRemoteKeyDao;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 import com.zxq.iov.cloud.sp.vp.service.IRemoteKeyService;
+import com.zxq.iov.cloud.sp.vp.service.domain.Tbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 /**
- * 安防 电子钥匙服务实现类
- *
- * @author 叶荣杰
- * create date 2015-6-23 13:47
- * modify date 2015-8-18 14:42
- * @version 0.7, 2015-8-18
+ * 安防服务 电子钥匙服务接口实现类
  */
 @Service
 public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemoteKeyServiceImpl.class);
 
     @Autowired
     private IRemoteKeyDao remoteKeyDao;
 
     @Override
-    public void requestWriteKey(String vin, Integer keyType, String keyValue, Long keyReference,
+    public void requestWriteKey(Tbox tbox, Integer keyType, String keyValue, Long keyReference,
                                 Date keyValidityStartTime, Date keyValidityEndTime) throws ServLayerException {
-        AssertRequired("vin,keyType,keyValue", vin, keyType, keyValue);
-        RemoteKey remoteKey = new RemoteKey(findTboxIdByVin(vin), keyType, keyValue, keyReference,
+        AssertRequired("vin,keyType,keyValue", tbox.getVin(), keyType, keyValue);
+        RemoteKey remoteKey = new RemoteKey(tbox.getTboxId(), keyType, keyValue, keyReference,
                 keyValidityStartTime, keyValidityEndTime);
         remoteKeyDao.createRemoteKey(remoteKey);
     }

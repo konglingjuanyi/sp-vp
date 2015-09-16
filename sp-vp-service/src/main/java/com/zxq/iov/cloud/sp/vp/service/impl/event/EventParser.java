@@ -1,7 +1,7 @@
 package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDao;
 import com.zxq.iov.cloud.sp.vp.entity.event.EventRule;

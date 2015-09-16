@@ -1,11 +1,27 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-11       荣杰         1.0            Initial Version
+ * 2015-08-04       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.call.impl.CallDaoImpl
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.call.impl;
 
-import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.call.ICallDao;
 import com.zxq.iov.cloud.sp.vp.dao.call.repo.ICallRepository;
 import com.zxq.iov.cloud.sp.vp.entity.call.Call;
-import org.slf4j.Logger;
+import com.saicmotor.telematics.framework.core.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,28 +29,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * 安防 呼叫持久化服务接口实现类
- *
- * @author 叶荣杰
- * create date 2015-6-11 9:41
- * modify date 2015-8-4 15:24
- * @version 0.3, 2015-8-4
+ * 安防 呼叫数据访问接口实现类
  */
 @Service
 public class CallDaoImpl extends BaseServiceImpl<ICallRepository, Call, Long> implements ICallDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CallDaoImpl.class);
 
-    @Autowired
-	public CallDaoImpl(ICallRepository repo){
+	@Autowired
+	public CallDaoImpl(ICallRepository repo) {
 		super(repo);
 	}
 
 	@Override
 	public Call createCall(Call call) {
-		if (call == null){
+		if (call == null) {
 			LOGGER.error("call cannot be null");
 		}
 		call.setId(null);
@@ -44,7 +54,7 @@ public class CallDaoImpl extends BaseServiceImpl<ICallRepository, Call, Long> im
 
 	@Override
 	public Call updateCall(Call call) {
-		if (call == null){
+		if (call == null) {
 			LOGGER.error("call cannot be null");
 		}
 		super.update(call);
@@ -53,7 +63,7 @@ public class CallDaoImpl extends BaseServiceImpl<ICallRepository, Call, Long> im
 
 	@Override
 	public void removeCall(Long callId) {
-		if (callId == null){
+		if (callId == null) {
 			LOGGER.error("callId cannot be null");
 		}
 		super.delete(callId);
@@ -61,7 +71,7 @@ public class CallDaoImpl extends BaseServiceImpl<ICallRepository, Call, Long> im
 
 	@Override
 	public Call findCallById(Long callId) {
-		if (callId == null){
+		if (callId == null) {
 			LOGGER.error("callId cannot be null");
 		}
 		return super.findOne(callId);

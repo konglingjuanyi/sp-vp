@@ -1,23 +1,40 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-04-23       荣杰         1.0            Initial Version
+ * 2015-08-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.dto.config.KeyDto
+ *
+ * sp - sp-vp-api
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.dto.config;
 
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 
 /**
- * 安防 密钥DTO
- *
- * @author 叶荣杰
- * create date 2015-4-23 10:30
- * modify date 2015-8-18 17:36
- * @version 0.4, 2015-8-18
+ * 安防服务 密钥传输对象
  */
 public class KeyDto extends OtaDto {
 
+    // 公钥
     private byte[] publicKey;
+    // 是否授权公钥
     private Boolean publicKeyGranted;
+    // 私钥
     private String privateKey;
+    // 密钥
     private String secretKey;
+    // 密钥是否通过
     private Boolean secretKeyAccepted;
+    // TBOX KEY
     private byte[] TboxKey;
 
     public byte[] getPublicKey() {

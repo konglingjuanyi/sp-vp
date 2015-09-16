@@ -1,12 +1,30 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-15       荣杰         1.0            Initial Version
+ * 2015-08-06       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.SvtServiceImplTest
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.ProtectStrategySettingDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenAlarmDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.TrackDto;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -17,15 +35,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 安防 被盗追踪服务测试类
- *
- * @author 叶荣杰
- * create date 2015-6-15 16:49
- * modify date 2015-8-6 10:47
- * @version 0.4, 2015-8-6
+ * 安防服务 被盗追踪API测试类
  */
 @Transactional
 public class SvtServiceImplTest extends BaseServiceTestCase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SvtServiceImplTest.class);
 
     @Autowired
     private ISvtApi svtApi;

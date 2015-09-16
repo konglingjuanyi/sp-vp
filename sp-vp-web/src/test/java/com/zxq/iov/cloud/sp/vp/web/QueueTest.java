@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.json.JSON;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.ServiceMessage;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import org.junit.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.test.annotation.Rollback;

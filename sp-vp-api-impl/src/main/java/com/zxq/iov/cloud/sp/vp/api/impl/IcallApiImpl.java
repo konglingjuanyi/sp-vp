@@ -1,8 +1,26 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-12       荣杰         1.0            Initial Version
+ * 2015-08-11       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.impl.IcallApiImpl
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.ParseException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.vp.api.IIcallApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -11,7 +29,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.icall.IcallRecordDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IIcallService;
 import com.zxq.iov.cloud.sp.vp.service.domain.Event;
@@ -21,15 +39,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 安防 iCall API实现类
- *
- * @author 叶荣杰
- * create date 2015-6-12 15:30
- * modify date 2015-8-11 10:11
- * @version 0.10, 2015-8-11
+ * 安防服务 iCall API实现类
  */
 @Service
 public class IcallApiImpl extends BaseApi implements IIcallApi {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IcallApiImpl.class);
 
     @Autowired
     private IIcallService icallService;
@@ -46,7 +61,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
         eventService.start(event);
         IcallRecordDto icallRecordDto = null;
         if(!event.isRetry()) {
-            icallRecordDto = new IcallRecordDtoAssembler().toDto(icallService.start(otaDto.getTboxId(),
+            icallRecordDto = new IcallRecordDtoAssembler().toDto(icallService.start(getTboxById(otaDto.getTboxId()),
                     new VehiclePosDtoAssembler().fromDtoList(vehiclePosDtos), icallType,
                     tboxBatteryStatus, vehicleBatteryStatus, otaDto.getEventCreateTime()));
             event.setResult(icallRecordDto);
@@ -72,7 +87,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     @Override
     public void requestIcallStatus(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 3);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_ICALL, 3);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {
@@ -91,7 +106,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
         eventService.start(event);
         Long callId;
         if(!event.isRetry()) {
-            callId = icallService.update(otaDto.getTboxId(), new VehiclePosDtoAssembler().fromDtoList(vehiclePosDtos),
+            callId = icallService.update(getTboxById(otaDto.getTboxId()), new VehiclePosDtoAssembler().fromDtoList(vehiclePosDtos),
                      icallType, tboxBatteryStatus, vehicleBatteryStatus, otaDto.getEventCreateTime()).getId();
             event.setResult(callId);
             eventService.end(event);
@@ -105,7 +120,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     @Override
     public void requestHangUp(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 5);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_ICALL, 5);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {
@@ -119,7 +134,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     @Override
     public void requestCallBack(String vin, String callNumber) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 7);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_ICALL, 7);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {
@@ -145,7 +160,7 @@ public class IcallApiImpl extends BaseApi implements IIcallApi {
     @Override
     public void requestCloseIcall(String vin) throws ServLayerException {
         AssertRequired("vin", vin);
-        OtaDto otaDto = new OtaDto(getTboxId(vin), vin, Constants.AID_ICALL, 6);
+        OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_ICALL, 6);
         Event event = new EventAssembler().fromOtaDto(otaDto);
         eventService.start(event);
         if(!event.isRetry()) {

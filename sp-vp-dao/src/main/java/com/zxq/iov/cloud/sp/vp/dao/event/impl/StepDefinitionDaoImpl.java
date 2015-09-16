@@ -1,12 +1,28 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-03       荣杰         1.0            Initial Version
+ * 2015-06-18       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.dao.event.impl.StepDefinitionDaoImpl
+ *
+ * sp - sp-vp-dao
+ */
+
 package com.zxq.iov.cloud.sp.vp.dao.event.impl;
 
 import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
-import com.saicmotor.telematics.framework.core.log.LoggerFactory;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.service.BaseServiceImpl;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.repo.IStepDefinitionRepository;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepDefinition;
-import org.slf4j.Logger;
+import com.saicmotor.telematics.framework.core.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,27 +30,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * 安防 步骤定义持久化服务接口实现类
- *
- * @author 叶荣杰
- * create date 2015-6-3 17:18
- * modify date 2015-6-18 12:39
- * @version 0.3, 2015-6-18
+ * 安防服务 步骤定义数据访问接口实现类
  */
 @Service
-public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionRepository, StepDefinition, Long> implements IStepDefinitionDao {
+public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionRepository, StepDefinition, Long>
+		implements IStepDefinitionDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StepDefinitionDaoImpl.class);
 
-    @Autowired
-	public StepDefinitionDaoImpl(IStepDefinitionRepository repo){
+	@Autowired
+	public StepDefinitionDaoImpl(IStepDefinitionRepository repo) {
 		super(repo);
 	}
 
 	public StepDefinition createStepDefinition(StepDefinition stepDefinition) {
-		if (stepDefinition == null){
+		if (stepDefinition == null) {
 			LOGGER.error("stepDefinition cannot be null");
 		}
 		stepDefinition.setId(null);
@@ -44,7 +55,7 @@ public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionReposi
 
 	@Override
 	public StepDefinition updateStepDefinition(StepDefinition stepDefinition) {
-		if (stepDefinition == null){
+		if (stepDefinition == null) {
 			LOGGER.error("stepDefinition cannot be null");
 		}
 		super.update(stepDefinition);
@@ -53,7 +64,7 @@ public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionReposi
 
 	@Override
 	public void removeStepDefinition(Long stepDefinitionId) {
-		if (stepDefinitionId == null){
+		if (stepDefinitionId == null) {
 			LOGGER.error("stepDefinitionId cannot be null");
 		}
 		super.delete(stepDefinitionId);
@@ -61,7 +72,7 @@ public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionReposi
 
 	@Override
 	public StepDefinition findStepDefinitionById(Long stepDefinitionId) {
-		if (stepDefinitionId == null){
+		if (stepDefinitionId == null) {
 			LOGGER.error("stepDefinitionId cannot be null");
 		}
 		return super.findOne(stepDefinitionId);
@@ -69,7 +80,7 @@ public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionReposi
 
 	@Override
 	public List<StepDefinition> listStepDefinitionByStartCodeAndEventDefinitionId(String startCode,
-																				  Long eventDefinitionId) {
+			Long eventDefinitionId) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("startCode", startCode);
 		paramMap.put("eventDefinitionId", eventDefinitionId);
@@ -85,7 +96,7 @@ public class StepDefinitionDaoImpl extends BaseServiceImpl<IStepDefinitionReposi
 
 	@Override
 	public PageResult<StepDefinition> pagingStepDefinition(PageResult<StepDefinition> pageResult,
-													Map<String, Object> paramMap) {
+			Map<String, Object> paramMap) {
 		return super.getPagedListViaBatis(pageResult, paramMap);
 	}
 }

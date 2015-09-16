@@ -1,3 +1,18 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-25       荣杰         1.0            Initial Version
+ *
+ * com.zxq.iov.cloud.sp.vp.api.dto.svt.TrackDto
+ *
+ * sp - sp-vp-api
+ */
+
 package com.zxq.iov.cloud.sp.vp.api.dto.svt;
 
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
@@ -6,24 +21,25 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import java.util.Date;
 
 /**
- * 安防 追踪点传输对象
- *
- * @author 叶荣杰
- * create date 2015-6-25 16:51
- * modify date
- * @version 0.1, 2015-6-25
+ * 安防服务 追踪点传输对象
  */
 public class TrackDto extends OtaDto {
 
+    // 追踪时间
     private Date trackTime;
+    // 车辆位置
     private VehiclePosDto vehiclePosDto;
     private Integer gnssSpeed;
     private Boolean gsmAntConnected;
     private Boolean gnssAntConnected;
     private Boolean vehicleBatteryConnected;
+    // 电量
     private Integer intBattV;
+    // 车辆报警状态
     private Integer vehicleAlarmStatus;
+    // 引擎状态
     private Integer engineStatus;
+    // 电源状态
     private Integer powerMode;
     private Integer lastKeySeen;
     private Integer fuelLevelPrc;

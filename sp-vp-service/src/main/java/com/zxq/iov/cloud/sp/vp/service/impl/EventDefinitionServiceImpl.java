@@ -1,8 +1,26 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-03       荣杰         1.0            Initial Version
+ * 2015-08-06       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.service.impl.EventDefinitionServiceImpl
+ *
+ * sp - sp-vp-service
+ */
+
 package com.zxq.iov.cloud.sp.vp.service.impl;
 
 import com.saicmotor.telematics.framework.core.dal.repo.mybatis.PageResult;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.common.ExceptionConstants;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventDefinitionDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.IEventRuleDao;
 import com.zxq.iov.cloud.sp.vp.dao.event.IStepDefinitionDao;
@@ -19,15 +37,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 安防 事件定义服务实现类
- *
- * @author 叶荣杰
- * create date 2015-6-3 14:24
- * modify date 2015-8-6 11:35
- * @version 0.4, 2015-8-6
+ * 安防服务 事件定义服务接口实现类
  */
 @Service
 public class EventDefinitionServiceImpl extends BaseService implements IEventDefinitionService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventDefinitionServiceImpl.class);
 
     @Autowired
     private IEventDefinitionDao eventDefinitionDao;

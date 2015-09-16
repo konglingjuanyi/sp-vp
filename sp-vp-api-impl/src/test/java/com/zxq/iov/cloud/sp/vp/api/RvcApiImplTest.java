@@ -1,11 +1,29 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-17       荣杰         1.0            Initial Version
+ * 2015-08-07       荣杰         1.1
+ *
+ * com.zxq.iov.cloud.sp.vp.api.RvcApiImplTest
+ *
+ * sp - sp-vp-api-impl
+ */
+
 package com.zxq.iov.cloud.sp.vp.api;
 
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
-import com.zxq.iov.cloud.sp.vp.common.BinaryAndHexUtil;
-import com.zxq.iov.cloud.sp.vp.common.Constants;
+import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
+import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 /**
- * 安防 远程控制服务测试类
- *
- * @author 叶荣杰
- * create date 2015-6-17 14:25
- * modify date 2015-8-7 14:05
- * @version 0.6, 2015-8-7
+ * 安防服务 远程控制API测试类
  */
 @Transactional
 public class RvcApiImplTest extends BaseServiceTestCase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RvcApiImplTest.class);
 
     @Autowired
     private IRvcApi rvcApi;
