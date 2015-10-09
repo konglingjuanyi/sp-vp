@@ -19,6 +19,7 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.saicmotor.telematics.framework.core.logger.support.InfoData;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.ITboxApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
@@ -70,6 +71,12 @@ public class BaseApi {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected InfoData getInfoData() {
+		InfoData infoData = new InfoData();
+
+		return infoData;
 	}
 
 	/**

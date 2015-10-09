@@ -86,8 +86,7 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 			controlCommandId = Long.parseLong(event.getResult().toString());
 		}
 		otaDto.setEventId(event.getId());
-		sendQueue(otaDto,
-				new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)), tboxConfig));
+		sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)), tboxConfig));
 		return controlCommandId;
 	}
 

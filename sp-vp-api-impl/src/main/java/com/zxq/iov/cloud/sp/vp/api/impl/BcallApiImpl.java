@@ -19,8 +19,8 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.json.ParseException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.saicmotor.telematics.framework.core.logger.SaicLogger;
 import com.zxq.iov.cloud.sp.vp.api.IBcallApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.bcall.BcallRecordDto;
@@ -47,7 +47,7 @@ import java.util.List;
 @Transactional
 public class BcallApiImpl extends BaseApi implements IBcallApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BcallApiImpl.class);
+    private static final SaicLogger LOGGER = LoggerFactory.getLogger(BcallApiImpl.class);
 
     @Autowired
     private IBcallService bcallService;
@@ -65,6 +65,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
         eventService.start(event);
         BcallRecordDto bcallRecordDto = null;
         if(!event.isRetry()) {
+            LOGGER.info(getInfoData());
             bcallRecordDto = new BcallRecordDtoAssembler().toDto(bcallService.start(getTboxById(otaDto.getTboxId()),
                     new VehiclePosDtoAssembler().fromDtoList(vehiclePosDtos), bcallType, tboxBatteryStatus,
                     vehicleBatteryStatus, new VehicleAlertDtoAssembler().fromDtoList(vehicleAlertDtos),
@@ -75,6 +76,7 @@ public class BcallApiImpl extends BaseApi implements IBcallApi {
             event = assembler.fromOtaDto(otaDto);
             eventService.start(event);
             eventService.end(event);
+
         }
         else {
             try {

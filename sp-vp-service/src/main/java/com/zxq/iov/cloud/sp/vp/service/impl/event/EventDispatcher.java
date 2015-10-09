@@ -1,6 +1,8 @@
 package com.zxq.iov.cloud.sp.vp.service.impl.event;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.vp.entity.event.*;
 import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import java.util.Map;
  */
 @Service
 public class EventDispatcher {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventDispatcher.class);
 
     @Autowired
     private EventParser eventParse;
