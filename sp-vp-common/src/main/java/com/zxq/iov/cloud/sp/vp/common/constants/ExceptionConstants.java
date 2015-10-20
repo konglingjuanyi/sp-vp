@@ -1,16 +1,30 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-07-24       荣杰         1.0            Initial Version
+ * 2015-10-19       荣杰         1.2
+ *
+ * com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants
+ *
+ * sp - sp-vp-common
+ */
+
 package com.zxq.iov.cloud.sp.vp.common.constants;
 
 /**
  * 安防 异常常量类
- *
- * @author 叶荣杰
- * create date 2015-7-24 12:48
- * modify date 2015-8-12 10:21
- * @version 0.7, 2015-8-12
  */
 public class ExceptionConstants {
 
+	// 基础异常
 	public static final String PARAMS_IS_NULL = "1"; // 参数为空
+
+	// 事件相关异常
 	public static final String HAS_CHILD = ""; // 存在子元素
 	public static final String AID_NOT_MATCH = ""; // AID不匹配
 	public static final String MID_NOT_MATCH = ""; // MID不匹配
@@ -19,6 +33,10 @@ public class ExceptionConstants {
 	public static final String CYCLE_LIMIT = "15002"; // 达到循环上限
 	public static final String MORE_THAN_RETRY_COUNT = "15003"; // 超过重试上限
 	public static final String EVENT_NOT_EXIST = "15004"; // 事件不存在
+
+	public static final String USER_NOT_OWNER = ""; // 当前用户不是车主
+
+
 	public static final String WRONG_CONTROL_CMD = "15100"; // 错误的控制命令
 	public static final String WRONG_CONTROL_CMD_PARAM = "15109"; // 错误的控制命令参数
 	public static final String WRONG_VEHICLE_STATUS = "15101"; // 错误的车辆状态类型

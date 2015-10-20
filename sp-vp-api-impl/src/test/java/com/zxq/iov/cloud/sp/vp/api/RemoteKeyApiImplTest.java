@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  * Date             Author      Version        Comments
  * 2015-06-23       荣杰         1.0            Initial Version
- * 2015-08-12       荣杰         1.1
+ * 2015-10-20       荣杰         1.2
  *
  * com.zxq.iov.cloud.sp.vp.api.RemoteKeyApiImplTest
  *
@@ -20,13 +20,16 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.key.RemoteKeyDto;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防服务 电子钥匙API测试类
@@ -41,14 +44,50 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
 
     private String vin = "11111111111111111";
     private Long tboxId = 1L;
+    private Long userId = 1L;
 
     @Test
     @Rollback(false)
-    public void testRequestWriteKey() throws Exception {
-        Integer keyType = 1;
-        String keyValue = "01";
-        Long keyReference = 1L;
-        remoteKeyApi.requestWriteKey(vin, keyType, keyValue, keyReference, new Date(), new Date());
+    public void testCreateKey() throws Exception {
+        remoteKeyApi.createKey(userId, vin);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testGrantKey() throws Exception {
+        String mobile = "13917288107";
+        Integer privilege = 1;
+        String pin = "0000";
+        remoteKeyApi.grantKey(userId, vin, mobile, new Date(), new Date(), privilege, pin);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testUpdateKey() throws Exception {
+        Long reference = 31L;
+        Integer privilege = 2;
+        remoteKeyApi.updateKey(userId, reference, new Date(), new Date(), privilege);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testDisableKey() throws Exception {
+        Long reference = 31L;
+        remoteKeyApi.disableKey(userId, reference);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testEnableKey() throws Exception {
+        Long reference = 31L;
+        remoteKeyApi.enableKey(userId, reference);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testRemoveKey() throws Exception {
+        Long reference = 31L;
+        remoteKeyApi.removeKey(userId, reference);
     }
 
     @Test
@@ -56,12 +95,6 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
     public void testResponseWriteKey() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 2);
         remoteKeyApi.responseWriteKey(otaDto, true, null);
-    }
-
-    @Test
-    @Rollback(false)
-    public void testRequestDeleteKey() throws Exception {
-        remoteKeyApi.requestDeleteKey(vin, 1L);
     }
 
     @Test
@@ -76,5 +109,21 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
     public void testKeyAlarm() throws Exception {
         OtaDto otaDto = new OtaDto(tboxId, Constants.AID_REMOTE_KEY, 5);
         remoteKeyApi.keyAlarm(otaDto);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testListUserKey() throws Exception {
+        List<RemoteKeyDto> remoteKeyDtos = remoteKeyApi.listUserKey(userId);
+        LOGGER.info("list size:" + remoteKeyDtos.size());
+        Assert.assertTrue(remoteKeyDtos.size() > 0);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testListVehicleKey() throws Exception {
+        List<RemoteKeyDto> remoteKeyDtos = remoteKeyApi.listVehicleKey(userId, vin);
+        LOGGER.info("list size:" + remoteKeyDtos.size());
+        Assert.assertTrue(remoteKeyDtos.size() > 0);
     }
 }

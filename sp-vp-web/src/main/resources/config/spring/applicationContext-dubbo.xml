@@ -68,4 +68,6 @@
 
     <dubbo:reference  id="vehicleApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi" version="1.1" />
 
+    <dubbo:reference  id="userApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.IUserApi" version="1.1" />
+
 </beans>

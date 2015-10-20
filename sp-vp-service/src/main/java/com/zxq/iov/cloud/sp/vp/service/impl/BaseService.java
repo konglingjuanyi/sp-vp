@@ -37,7 +37,7 @@ public class BaseService {
         int index = 0;
         for(Object arg : args) {
             if(null == arg) {
-                argName.append(_argNames[index]);
+                argName.append(_argNames[index] + " ");
                 isNull = true;
             }
             index++;

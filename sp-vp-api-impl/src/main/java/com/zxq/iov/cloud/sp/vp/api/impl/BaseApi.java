@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  * Date             Author      Version        Comments
  * 2015-07-24       荣杰         1.0            Initial Version
- * 2015-08-06       荣杰         1.1
+ * 2015-10-19       荣杰         1.2           增加检查车主的成员函数
  *
  * com.zxq.iov.cloud.sp.vp.api.impl.BaseApi
  *
@@ -179,6 +179,19 @@ public class BaseApi {
 
 	protected String getCode(OtaDto otaDto) {
 		return otaDto.getAid() + otaDto.getMid().toString();
+	}
+
+	/**
+	 * 检查userId是否是VIN的车主
+	 *
+	 * @param vin    车辆唯一码
+	 * @param userId 用户ID
+	 * @throws ServLayerException
+	 */
+	protected void checkVinOwner(String vin, Long userId) throws ServLayerException {
+		if (userId.longValue() != getOwnerIdByVin(vin).longValue()) {
+			throw new ServLayerException(ExceptionConstants.USER_NOT_OWNER);
+		}
 	}
 
 }

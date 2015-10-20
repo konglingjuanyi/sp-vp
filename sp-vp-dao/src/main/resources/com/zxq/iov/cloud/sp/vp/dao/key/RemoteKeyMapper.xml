@@ -6,11 +6,16 @@
 	<resultMap id="remoteKeyResultMap" type="RemoteKey">
 		<id column="ID" javaType="Long"  property="id" jdbcType="BIGINT" />
 		<result column="TBOX_ID" jdbcType="BIGINT" property="tboxId"/>
+		<result column="VIN" jdbcType="VARCHAR" property="vin"/>
 		<result column="TYPE" jdbcType="INTEGER" property="type"/>
-		<result column="VALUE" jdbcType="BIGINT" property="value"/>
+		<result column="SECRET_KEY" jdbcType="VARCHAR" property="secretKey"/>
 		<result column="REFERENCE" jdbcType="BIGINT" property="reference"/>
 		<result column="VALID_START_TIME" jdbcType="TIMESTAMP" property="validStartTime"/>
 		<result column="VALID_END_TIME" jdbcType="TIMESTAMP" property="validEndTime"/>
+		<result column="PRIVILEGE" jdbcType="INTEGER" property="privilege"/>
+		<result column="USER_ID" jdbcType="BIGINT" property="userId"/>
+		<result column="MOBILE" jdbcType="VARCHAR" property="mobile"/>
+		<result column="IS_ENABLE" jdbcType="INTEGER" property="isEnable"/>
 		<result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
 		<result column="STATUS" jdbcType="INTEGER" property="status"/>
 		<result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
@@ -49,6 +54,12 @@
 		<include refid="selectPageTemplate"/>
 		<if test="tboxId != null">
 			AND TBOX_ID = #{tboxId,jdbcType=BIGINT}
+		</if>
+		<if test="userId != null">
+			AND USER_ID = #{userId,jdbcType=BIGINT}
+		</if>
+		<if test="vin != null and vin != ''">
+			AND VIN = #{vin,jdbcType=VARCHAR}
 		</if>
 	</select>
 

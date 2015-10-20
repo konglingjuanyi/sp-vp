@@ -15,6 +15,8 @@
 
 package com.zxq.iov.cloud.sp.vp.service.domain;
 
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.ParseException;
 import com.zxq.iov.cloud.sp.vp.entity.event.StepInstance;
 import com.zxq.iov.cloud.sp.vp.entity.event.TaskInstance;
 
@@ -108,6 +110,17 @@ public class Event {
 
 	public Object getResult() {
 		return result;
+	}
+
+	public <T> T getResult(Class<T> clz) {
+		if(null != result) {
+			try {
+				return JSON.parse(result.toString(), clz);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	public void setResult(Object result) {

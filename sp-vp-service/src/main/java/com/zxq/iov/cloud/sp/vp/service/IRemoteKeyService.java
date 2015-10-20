@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  * Date             Author      Version        Comments
  * 2015-06-23       荣杰         1.0            Initial Version
- * 2015-08-12       荣杰         1.1
+ * 2015-10-19       荣杰         1.2            增加手机端相关接口
  *
  * com.zxq.iov.cloud.sp.vp.service.IRemoteKeyService
  *
@@ -17,9 +17,10 @@
 package com.zxq.iov.cloud.sp.vp.service;
 
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
-import com.zxq.iov.cloud.sp.vp.service.domain.Tbox;
+import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防服务 电子钥匙接口
@@ -27,17 +28,61 @@ import java.util.Date;
 public interface IRemoteKeyService {
 
 	/**
-	 * 请求写入钥匙
+	 * 创建钥匙
 	 *
-	 * @param tbox                 TBOX对象
-	 * @param keyType              钥匙类型
-	 * @param keyValue             钥匙
-	 * @param keyReference         钥匙引用
-	 * @param keyValidityStartTime 有效开始时间
-	 * @param keyValidityEndTime   有效结束时间
+	 * @param userId 用户ID
+	 * @param tboxId TBOX ID
+	 * @param vin    车辆唯一码
+	 * @return 钥匙对象
+	 * @throws ServLayerException
 	 */
-	void requestWriteKey(Tbox tbox, Integer keyType, String keyValue, Long keyReference, Date keyValidityStartTime,
-			Date keyValidityEndTime) throws ServLayerException;
+	RemoteKey createKey(Long userId, Long tboxId, String vin) throws ServLayerException;
+
+	/**
+	 * 授权钥匙
+	 *
+	 * @param remoteKey 智能钥匙对象
+	 * @return 钥匙对象
+	 * @throws ServLayerException
+	 */
+	RemoteKey grantKey(RemoteKey remoteKey) throws ServLayerException;
+
+	/**
+	 * 修改钥匙
+	 *
+	 * @param keyReference 钥匙ID
+	 * @param startTime    有效开始时间
+	 * @param endTime      有效结束时间
+	 * @param privilege    权限
+	 * @throws ServLayerException
+	 */
+	RemoteKey updateKey(Long keyReference, Date startTime, Date endTime, Integer privilege) throws ServLayerException;
+
+	/**
+	 * 禁用钥匙
+	 *
+	 * @param keyReference 钥匙ID
+	 * @return 钥匙对象
+	 * @throws ServLayerException
+	 */
+	RemoteKey disableKey(Long keyReference) throws ServLayerException;
+
+	/**
+	 * 启用钥匙
+	 *
+	 * @param keyReference 钥匙ID
+	 * @return 钥匙对象
+	 * @throws ServLayerException
+	 */
+	RemoteKey enableKey(Long keyReference) throws ServLayerException;
+
+	/**
+	 * 删除钥匙
+	 *
+	 * @param keyReference 钥匙ID
+	 * @throws ServLayerException
+	 */
+	void removeKey(Long keyReference) throws ServLayerException;
 
 	/**
 	 * 响应写入钥匙请求
@@ -47,14 +92,6 @@ public interface IRemoteKeyService {
 	 * @param writeFailureReason 写入失败原因
 	 */
 	void responseWriteKey(Long tboxId, Boolean writeSuccess, Integer writeFailureReason) throws ServLayerException;
-
-	/**
-	 * 请求删除钥匙
-	 *
-	 * @param vin          OTA传输对象
-	 * @param keyReference 钥匙引用
-	 */
-	void requestDeleteKey(String vin, Long keyReference) throws ServLayerException;
 
 	/**
 	 * 响应删除钥匙请求
@@ -71,5 +108,29 @@ public interface IRemoteKeyService {
 	 * @param tboxId OTA传输对象
 	 */
 	void keyAlarm(Long tboxId) throws ServLayerException;
+
+	/**
+	 * 根据ID得到钥匙对象
+	 *
+	 * @param reference 钥匙ID
+	 * @return 钥匙对象
+	 */
+	RemoteKey findKeyByReference(Long reference);
+
+	/**
+	 * 获得用户钥匙列表
+	 *
+	 * @param userId 用户ID
+	 * @return 钥匙对象列表
+	 */
+	List<RemoteKey> listUserKey(Long userId);
+
+	/**
+	 * 根据车辆钥匙列表
+	 *
+	 * @param vin 车辆唯一码
+	 * @return 钥匙对象列表
+	 */
+	List<RemoteKey> listVehicleKey(String vin);
 
 }

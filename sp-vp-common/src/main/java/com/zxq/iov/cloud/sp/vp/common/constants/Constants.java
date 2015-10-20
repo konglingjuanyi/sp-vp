@@ -1,3 +1,19 @@
+/*
+ * Licensed to SAICMotor,Inc. under the terms of the SAICMotor
+ * Software License version 1.0.
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * ----------------------------------------------------------------------------
+ * Date             Author      Version        Comments
+ * 2015-06-12       荣杰         1.0            Initial Version
+ * 2015-10-19       荣杰         1.2
+ *
+ * com.zxq.iov.cloud.sp.vp.common.constants.Constants
+ *
+ * sp - sp-vp-common
+ */
+
 package com.zxq.iov.cloud.sp.vp.common.constants;
 
 import java.util.Map;
@@ -5,15 +21,13 @@ import java.util.TreeMap;
 
 /**
  * 安防 常量类
- *
- * @author 叶荣杰
- * create date 2015-6-12 11:31
- * modify date 2015-8-7 14:20
- * @version 0.13, 2015-8-7
  */
 public class Constants {
 
 	public static final String QUEUE_ROUTING_KEY = "AppTBOXServiceQueue.AV.1.0";
+
+	public static final Integer REMOTE_KEY_TYPE_RESCUE = 0;
+	public static final Integer REMOTE_KEY_TYPE_TEMPORARY = 1;
 
 	public static final Integer CALL_TYPE_BCALL = 1;
 	public static final Integer CALL_TYPE_ECALL = 2;

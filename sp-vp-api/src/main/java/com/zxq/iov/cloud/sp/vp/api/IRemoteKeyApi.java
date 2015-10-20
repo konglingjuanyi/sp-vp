@@ -18,26 +18,75 @@ package com.zxq.iov.cloud.sp.vp.api;
 
 import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.key.RemoteKeyDto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * 安防服务 电子钥匙API
+ * 安防服务 智能钥匙API
  */
 public interface IRemoteKeyApi {
 
 	/**
-	 * 请求写入钥匙
+	 * 创建钥匙
+	 * 一般在车主绑定车辆时同时创建该车辆的智能钥匙
 	 *
-	 * @param vin                  OTA传输对象
-	 * @param keyType              钥匙类型
-	 * @param keyValue             钥匙
-	 * @param keyReference         钥匙引用
-	 * @param keyValidityStartTime 有效开始时间
-	 * @param keyValidityEndTime   有效结束时间
+	 * @param ownerId 车主ID
+	 * @param vin     车辆唯一码
 	 */
-	void requestWriteKey(String vin, Integer keyType, String keyValue, Long keyReference, Date keyValidityStartTime,
-			Date keyValidityEndTime) throws ApiException;
+	void createKey(Long ownerId, String vin) throws ApiException;
+
+	/**
+	 * 授权钥匙
+	 *
+	 * @param ownerId   车主ID
+	 * @param vin       车辆唯一码
+	 * @param mobile    被授权用户手机
+	 * @param startTime 钥匙有效开始时间
+	 * @param endTime   钥匙有效结束时间
+	 * @param privilege 钥匙权限
+	 * @param pin       安防PIN码
+	 * @throws ApiException
+	 */
+	void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege, String pin)
+			throws ApiException;
+
+	/**
+	 * 修改钥匙
+	 *
+	 * @param ownerId      车主ID
+	 * @param keyReference 钥匙ID
+	 * @param startTime    钥匙有效开始时间
+	 * @param endTime      钥匙有效结束时间
+	 * @param privilege    钥匙权限
+	 */
+	void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
+			throws ApiException;
+
+	/**
+	 * 禁用钥匙
+	 *
+	 * @param ownerId      车主ID
+	 * @param keyReference 钥匙ID
+	 */
+	void disableKey(Long ownerId, Long keyReference) throws ApiException;
+
+	/**
+	 * 启用钥匙
+	 *
+	 * @param ownerId      车主ID
+	 * @param keyReference 钥匙ID
+	 */
+	void enableKey(Long ownerId, Long keyReference) throws ApiException;
+
+	/**
+	 * 删除钥匙
+	 *
+	 * @param ownerId      车主ID
+	 * @param keyReference 钥匙ID
+	 */
+	void removeKey(Long ownerId, Long keyReference) throws ApiException;
 
 	/**
 	 * 响应写入钥匙请求
@@ -47,14 +96,6 @@ public interface IRemoteKeyApi {
 	 * @param writeFailureReason 写入失败原因
 	 */
 	void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason) throws ApiException;
-
-	/**
-	 * 请求删除钥匙
-	 *
-	 * @param vin          OTA传输对象
-	 * @param keyReference 钥匙引用
-	 */
-	void requestDeleteKey(String vin, Long keyReference) throws ApiException;
 
 	/**
 	 * 响应删除钥匙请求
@@ -71,5 +112,22 @@ public interface IRemoteKeyApi {
 	 * @param otaDto OTA传输对象
 	 */
 	void keyAlarm(OtaDto otaDto) throws ApiException;
+
+	/**
+	 * 获得用户钥匙列表
+	 *
+	 * @param userId 用户ID
+	 * @return 蓝牙钥匙列表
+	 */
+	List<RemoteKeyDto> listUserKey(Long userId) throws ApiException;
+
+	/**
+	 * 获得指定车辆上的钥匙列表
+	 *
+	 * @param ownerId 车主ID
+	 * @param vin     车辆唯一码
+	 * @return 蓝牙钥匙列表
+	 */
+	List<RemoteKeyDto> listVehicleKey(Long ownerId, String vin) throws ApiException;
 
 }

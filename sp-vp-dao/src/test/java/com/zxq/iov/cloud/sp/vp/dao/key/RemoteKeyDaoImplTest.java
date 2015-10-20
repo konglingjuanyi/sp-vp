@@ -7,6 +7,7 @@
  * ----------------------------------------------------------------------------
  * Date             Author      Version        Comments
  * 2015-06-23       荣杰         1.0            Initial Version
+ * 2015-10-19       荣杰         1.1
  *
  * com.zxq.iov.cloud.sp.vp.dao.key.RemoteKeyDaoImplTest
  *
@@ -25,13 +26,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
- * 安防服务 电子钥匙数据访问测试类
+ * 安防服务 智能钥匙数据访问测试类
  */
 @Transactional
 public class RemoteKeyDaoImplTest extends BaseServiceTestCase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteKeyDaoImplTest.class);
+
+	private String vin = "12345678901234567";
+	private Long userId = 1L;
 
 	@Autowired
 	private IRemoteKeyDao remoteKeyDao;
@@ -43,7 +49,9 @@ public class RemoteKeyDaoImplTest extends BaseServiceTestCase {
 		RemoteKey remoteKey = new RemoteKey();
 		remoteKey.setTboxId(tboxId);
 		remoteKey.setType(1);
-		remoteKey.setValue("1");
+		remoteKey.setSecretKey("1");
+		remoteKey.setVin("12345678901234567");
+		remoteKey.setUserId(userId);
 		remoteKey = remoteKeyDao.createRemoteKey(remoteKey);
 		Assert.assertNotNull(remoteKey);
 	}
@@ -64,6 +72,29 @@ public class RemoteKeyDaoImplTest extends BaseServiceTestCase {
 	public void testRemoveReomteKey() {
 		Long remoteKeyId = 4L;
 		remoteKeyDao.removeRemoteKey(remoteKeyId);
+	}
+
+	@Test
+	@Rollback(false)
+	public void testFindRemoteKeyByUserIdAndVin() {
+		RemoteKey remoteKey = remoteKeyDao.findRemoteKeyByUserIdAndVin(userId, vin);
+		Assert.assertNotNull(remoteKey);
+	}
+
+	@Test
+	@Rollback(false)
+	public void testFindRemoteKeyByUserId() {
+		List<RemoteKey> list = remoteKeyDao.findRemoteKeyByUserId(userId);
+		LOGGER.info("list size:" + list.size());
+		Assert.assertTrue(list.size() > 0);
+	}
+
+	@Test
+	@Rollback(false)
+	public void testFindRemoteKeyByVin() {
+		List<RemoteKey> list = remoteKeyDao.findRemoteKeyByVin(vin);
+		LOGGER.info("list size:" + list.size());
+		Assert.assertTrue(list.size() > 0);
 	}
 
 }
