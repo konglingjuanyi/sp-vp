@@ -79,9 +79,9 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 	}
 
 	@Override
-	public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege,
-			String pin) throws ApiException {
-		AssertRequired("ownerId,vin,mobile,pin", ownerId, vin, mobile, pin);
+	public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege)
+			throws ApiException {
+		AssertRequired("ownerId,vin,mobile", ownerId, vin, mobile);
 		checkVinOwner(vin, ownerId);
 		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_REMOTE_KEY, 1);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
@@ -89,12 +89,9 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		eventService.start(event);
 		if (!event.isRetry()) {
 			Long userId = null; //TODO 调用根据手机号得到用户的接口（唐善华）
-			boolean isPinOk = true;
-			if (isPinOk) { //TODO 调用主数据检查用户PIN码的接口（唐善华）
-				remoteKey = remoteKeyService.grantKey(
-						new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
-				//TODO 调用消息接口通知被授权用户（吕春田）
-			}
+			remoteKey = remoteKeyService.grantKey(
+					new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
+			//TODO 调用消息接口通知被授权用户（吕春田）
 		} else {
 			LOGGER.info("重试授权钥匙操作");
 			remoteKey = event.getResult(RemoteKey.class);
@@ -195,8 +192,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		List<RemoteKey> remoteKeys = remoteKeyService.listUserKey(userId);
 		RemoteKeyDtoAssembler assembler = new RemoteKeyDtoAssembler();
 		UserDto userDto = null;
-		for(RemoteKey remoteKey : remoteKeys) {
-			if(null != remoteKey.getUserId()) {
+		for (RemoteKey remoteKey : remoteKeys) {
+			if (null != remoteKey.getUserId()) {
 				userDto = userApi.findUserById(remoteKey.getUserId());
 			}
 			remoteKeyDtos.add(assembler.toDto(remoteKey, userDto));
@@ -213,8 +210,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		List<RemoteKey> remoteKeys = remoteKeyService.listVehicleKey(vin);
 		RemoteKeyDtoAssembler assembler = new RemoteKeyDtoAssembler();
 		UserDto userDto = null;
-		for(RemoteKey remoteKey : remoteKeys) {
-			if(null != remoteKey.getUserId()) {
+		for (RemoteKey remoteKey : remoteKeys) {
+			if (null != remoteKey.getUserId()) {
 				userDto = userApi.findUserById(remoteKey.getUserId());
 			}
 			remoteKeyDtos.add(assembler.toDto(remoteKey, userDto));

@@ -46,10 +46,9 @@ public interface IRemoteKeyApi {
 	 * @param startTime 钥匙有效开始时间
 	 * @param endTime   钥匙有效结束时间
 	 * @param privilege 钥匙权限
-	 * @param pin       安防PIN码
 	 * @throws ApiException
 	 */
-	void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege, String pin)
+	void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege)
 			throws ApiException;
 
 	/**
