@@ -100,7 +100,11 @@ public class BaseApi {
 	protected Tbox getTboxByVin(String vin) throws ServLayerException {
 		TboxDto tboxDto = new TboxDto();
 		tboxDto.setVin(vin);
-		return getTboxByTboxDto(tboxDto);
+		Tbox tbox = getTboxByTboxDto(tboxDto);
+		if(null == tbox) {
+			throw new ServLayerException(ExceptionConstants.VIN_NOT_EXIST);
+		}
+		return tbox;
 	}
 
 	/**
