@@ -148,7 +148,7 @@ public class BaseApi {
 	private Tbox getTboxByTboxDto(TboxDto tboxDto) throws ServLayerException {
 		List<TboxDto> tboxDtos = tboxApi.findTbox(tboxDto);
 		Tbox tbox = null;
-		if (tboxDtos.size() > 0) {
+		if (null != tboxDtos && tboxDtos.size() > 0) {
 			tboxDto = tboxDtos.get(0);
 			tbox = new Tbox(tboxDto.getId(), tboxDto.getVin(), getOwnerIdByVin(tboxDto.getVin()));
 		}
