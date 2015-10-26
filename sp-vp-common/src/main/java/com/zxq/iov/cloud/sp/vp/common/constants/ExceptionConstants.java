@@ -34,8 +34,8 @@ public class ExceptionConstants {
 	public static final String MORE_THAN_RETRY_COUNT = "15003"; // 超过重试上限
 	public static final String EVENT_NOT_EXIST = "15004"; // 事件不存在
 
-	public static final String USER_NOT_OWNER = ""; // 当前用户不是车主
-
+	public static final String USER_NOT_OWNER = "15201"; // 当前用户不是车主
+	public static final String VIN_NOT_EXIST = "15202"; // VIN码不存在
 
 	public static final String WRONG_CONTROL_CMD = "15100"; // 错误的控制命令
 	public static final String WRONG_CONTROL_CMD_PARAM = "15109"; // 错误的控制命令参数

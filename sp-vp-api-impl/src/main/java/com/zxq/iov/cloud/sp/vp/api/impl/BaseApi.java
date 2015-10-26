@@ -85,7 +85,7 @@ public class BaseApi {
 	 * @param tboxId TBOX ID
 	 * @return TBOX对象
 	 */
-	protected Tbox getTboxById(Long tboxId) {
+	protected Tbox getTboxById(Long tboxId) throws ServLayerException {
 		TboxDto tboxDto = new TboxDto();
 		tboxDto.setId(tboxId);
 		return getTboxByTboxDto(tboxDto);
@@ -97,7 +97,7 @@ public class BaseApi {
 	 * @param vin 车辆唯一码
 	 * @return TBOX对象
 	 */
-	protected Tbox getTboxByVin(String vin) {
+	protected Tbox getTboxByVin(String vin) throws ServLayerException {
 		TboxDto tboxDto = new TboxDto();
 		tboxDto.setVin(vin);
 		return getTboxByTboxDto(tboxDto);
@@ -122,8 +122,11 @@ public class BaseApi {
 	 * @param vin 车辆唯一码
 	 * @return 车主用户ID
 	 */
-	protected Long getOwnerIdByVin(String vin) {
+	protected Long getOwnerIdByVin(String vin) throws ServLayerException {
 		VehicleDto vehicleDto = vehicleApi.findVehicleByVin(vin);
+		if(null == vehicleDto) {
+			throw new ServLayerException(ExceptionConstants.VIN_NOT_EXIST);
+		}
 		return vehicleDto.getUserId();
 	}
 
@@ -142,10 +145,10 @@ public class BaseApi {
 	 * @param tboxDto TBOX DTO
 	 * @return TBOX对象
 	 */
-	private Tbox getTboxByTboxDto(TboxDto tboxDto) {
+	private Tbox getTboxByTboxDto(TboxDto tboxDto) throws ServLayerException {
 		List<TboxDto> tboxDtos = tboxApi.findTbox(tboxDto);
 		Tbox tbox = null;
-		if (tboxDtos.size() > 0) {
+		if (null != tboxDtos && tboxDtos.size() > 0) {
 			tboxDto = tboxDtos.get(0);
 			tbox = new Tbox(tboxDto.getId(), tboxDto.getVin(), getOwnerIdByVin(tboxDto.getVin()));
 		}
