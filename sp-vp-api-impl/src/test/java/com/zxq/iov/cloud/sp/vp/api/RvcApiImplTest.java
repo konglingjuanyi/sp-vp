@@ -50,12 +50,11 @@ public class RvcApiImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testRequestControl() throws Exception {
-        String command = "find_my_car";
+        String command = "climate_control";
         String requestClient = "mobile";
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("light", true);
-        parameters.put("horn", "low");
-        parameters.put("horn_length", 30);
+        parameters.put("type", "ac");
+        parameters.put("target_temp", 18);
         Long controlCommandId =  rvcApi.requestControl(requestClient, userId, vin, command, parameters);
         Assert.assertNotNull(controlCommandId);
     }
