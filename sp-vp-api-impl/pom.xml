@@ -28,6 +28,10 @@
             <groupId>com.zxq.iov.cloud.sp</groupId>
             <artifactId>sp-mds-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zxq.iov.cloud.sp</groupId>
+            <artifactId>sp-msg-api</artifactId>
+        </dependency>
 
         <!-- AOP -->
         <dependency>

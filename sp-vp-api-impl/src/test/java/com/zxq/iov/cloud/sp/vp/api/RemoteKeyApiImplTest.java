@@ -58,7 +58,7 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
         String mobile = "13917288107";
         Integer privilege = 1;
         String pin = "0000";
-        remoteKeyApi.grantKey(userId, vin, mobile, new Date(), new Date(), privilege, pin);
+        remoteKeyApi.grantKey(userId, vin, mobile, new Date(), new Date(), privilege);
     }
 
     @Test

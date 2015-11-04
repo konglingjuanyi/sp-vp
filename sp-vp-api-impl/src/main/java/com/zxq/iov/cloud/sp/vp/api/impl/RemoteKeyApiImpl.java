@@ -22,6 +22,7 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.IUserApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.UserDto;
+import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.DeleteKeyDto;
@@ -55,6 +56,9 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 	private IEventService eventService;
 	@Autowired
 	private IUserApi userApi;
+	//TODO 吕春田尚未部署
+//	@Autowired
+//	private IMessageApi messageApi;
 
 	@Override
 	public void createKey(Long ownerId, String vin) throws ApiException {
@@ -88,10 +92,14 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = null;
 		eventService.start(event);
 		if (!event.isRetry()) {
-			Long userId = null; //TODO 调用根据手机号得到用户的接口（唐善华）
-			remoteKey = remoteKeyService.grantKey(
-					new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
-			//TODO 调用消息接口通知被授权用户（吕春田）
+			Long userId = null;
+			UserDto userDto = userApi.findUserByMobile(mobile);
+			if (null != userDto) {
+				userId = userDto.getId();
+			}
+			remoteKey = remoteKeyService
+					.grantKey(new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
+			pushMobile(userId, "title", "content"); //TODO 确定通知内容（李亮）
 		} else {
 			LOGGER.info("重试授权钥匙操作");
 			remoteKey = event.getResult(RemoteKey.class);
@@ -106,9 +114,12 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 	public void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
 			throws ApiException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
-		remoteKeyService.updateKey(keyReference, startTime, endTime, privilege);
-		//TODO 调用消息接口通知被授权用户（吕春田）
-		//TODO 修改协议待定（刘凯），确定后发队列
+		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
+		if (null != remoteKey) {
+			remoteKeyService.updateKey(keyReference, startTime, endTime, privilege);
+			pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
+			//TODO 修改协议待定（刘凯），确定后发队列
+		}
 	}
 
 	@Override
@@ -117,7 +128,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = remoteKeyService.disableKey(keyReference);
 		if (null != remoteKey) {
 			if (ownerId.equals(remoteKey.getUserId())) {
-				//TODO 调用消息接口通知被授权用户（吕春田）
+				pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
 			}
 			//TODO 修改协议待定（刘凯），确定后发队列
 		}
@@ -129,7 +140,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = remoteKeyService.enableKey(keyReference);
 		if (null != remoteKey) {
 			if (ownerId.equals(remoteKey.getUserId())) {
-				//TODO 调用消息接口通知被授权用户（吕春田）
+				pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
 			}
 			//TODO 修改协议待定（刘凯），确定后发队列
 		}
@@ -218,5 +229,27 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 			userDto = null;
 		}
 		return remoteKeyDtos;
+	}
+
+	/**
+	 * 推送消息到用户手机
+	 *
+	 * @param userId  用户ID
+	 * @param title   标题
+	 * @param content 内容
+	 * @throws ApiException
+	 */
+	private void pushMobile(Long userId, String title, String content) throws ApiException {
+		if (null != userId) {
+			BaiduMessageDto messageDto = new BaiduMessageDto();
+			messageDto.setUserId(userId);
+			messageDto.setMsgType(0); // 0透传消息 1通知中心
+			messageDto.setSendWay(2); // 1群发 2单发
+			messageDto.setMsgTitle(title);
+			messageDto.setMsgContent(content);
+			messageDto.setSendBy("安防-智能钥匙");
+			//TODO 吕春田尚未部署
+//			messageApi.createBaiduMessage(messageDto);
+		}
 	}
 }

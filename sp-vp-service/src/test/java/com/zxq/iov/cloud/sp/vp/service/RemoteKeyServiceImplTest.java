@@ -27,6 +27,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 安防服务 智能钥匙服务测试类
@@ -104,5 +105,13 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
     @Rollback(false)
     public void testKeyAlarm() throws Exception {
         remoteKeyService.keyAlarm(tboxId);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testListVehicleKey() throws Exception {
+        List<RemoteKey> remoteKeys = remoteKeyService.listVehicleKey(vin);
+        LOGGER.info("remoteKeys size:" + remoteKeys.size());
+        Assert.assertTrue(remoteKeys.size() > 0);
     }
 }

@@ -27,5 +27,8 @@
     <dubbo:reference  id="tboxApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.ITboxApi" version="1.1" />
     <dubbo:reference  id="vehicleApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi" version="1.1" />
     <dubbo:reference  id="userApi" check="false"  interface="com.zxq.iov.cloud.sp.mds.tcmp.api.IUserApi" version="1.1" />
+    <!-- 春田还未部署
+    <dubbo:reference  id="messageApi" check="false"  interface="com.zxq.iov.cloud.sp.msg.api.IMessageApi" version="1.1" />
+    -->
 
 </beans>
