@@ -62,6 +62,7 @@
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
         </dependency>
+        <!-- 与fasterxml.jackson冲突
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
@@ -70,7 +71,7 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
-
+        -->
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
