@@ -20,6 +20,7 @@ import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.common.util.MsgUtil;
 import com.zxq.iov.cloud.sp.vp.dao.key.IRemoteKeyDao;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
@@ -37,6 +38,7 @@ import java.util.List;
 public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteKeyServiceImpl.class);
+	private static int GRANT_KEY_UPPER_LIMIT = 10;
 
 	@Autowired
 	private IRemoteKeyDao remoteKeyDao;
@@ -57,15 +59,20 @@ public class RemoteKeyServiceImpl extends BaseService implements IRemoteKeyServi
 	@Override
 	public RemoteKey grantKey(RemoteKey remoteKey) throws ServLayerException {
 		AssertRequired("tboxId,vin", remoteKey.getTboxId(), remoteKey.getVin());
-		RemoteKey _remoteKey = remoteKeyDao.findRemoteKeyByUserIdAndVin(remoteKey.getUserId(), remoteKey.getVin());
-		if (null == _remoteKey) {
-			remoteKey.setType(Constants.REMOTE_KEY_TYPE_TEMPORARY);
-			remoteKey.setReference(generateKeyReference(remoteKey.getUserId(), remoteKey.getVin()));
-			remoteKey.setSecretKey(generateSecretKey());
-			remoteKeyDao.createRemoteKey(remoteKey);
-			return remoteKey;
+		if (listVehicleKey(remoteKey.getVin()).size() < GRANT_KEY_UPPER_LIMIT) {
+			RemoteKey _remoteKey = remoteKeyDao.findRemoteKeyByUserIdAndVin(remoteKey.getUserId(), remoteKey.getVin());
+			if (null == _remoteKey) {
+				remoteKey.setType(Constants.REMOTE_KEY_TYPE_TEMPORARY);
+				remoteKey.setReference(generateKeyReference(remoteKey.getUserId(), remoteKey.getVin()));
+				remoteKey.setSecretKey(generateSecretKey());
+				remoteKeyDao.createRemoteKey(remoteKey);
+				return remoteKey;
+			}
+			return _remoteKey;
 		}
-		return _remoteKey;
+
+		throw new ServLayerException(ExceptionConstants.EXCEED_REMOTE_KEY_UPPER_LIMIT,
+				"grant remote key exceed the upper limit:" + GRANT_KEY_UPPER_LIMIT);
 	}
 
 	@Override

@@ -38,7 +38,6 @@ public class ExceptionConstants {
 	public static final String VIN_NOT_EXIST = "15202"; // VIN码不存在
 
 	public static final String WRONG_CONTROL_CMD = "15100"; // 错误的控制命令
-	public static final String WRONG_CONTROL_CMD_PARAM = "15109"; // 错误的控制命令参数
 	public static final String WRONG_VEHICLE_STATUS = "15101"; // 错误的车辆状态类型
 	public static final String TBOX_NOT_MATCH_VIN = "15102"; // TBOX无法匹配车辆
 	public static final String PERSONAL_CONFIG_NOT_FIND = "15103"; // 没有找到指定车辆的个性化配置
@@ -47,4 +46,6 @@ public class ExceptionConstants {
 	public static final String NO_OPEN_BCALL = "15106"; // 没有有效的bCall
 	public static final String NO_OPEN_ECALL = "15107"; // 没有有效的eCall
 	public static final String NO_OPEN_ICALL = "15108"; // 没有有效的iCall
+	public static final String WRONG_CONTROL_CMD_PARAM = "15109"; // 错误的控制命令参数
+	public static final String EXCEED_REMOTE_KEY_UPPER_LIMIT = "15110"; // 超过智能钥匙授权上限
 }
