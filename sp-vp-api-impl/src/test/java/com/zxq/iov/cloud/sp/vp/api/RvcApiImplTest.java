@@ -53,8 +53,8 @@ public class RvcApiImplTest extends BaseServiceTestCase {
         String command = "climate_control";
         String requestClient = "mobile";
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("type", "ac");
-        parameters.put("target_temp", 18);
+        parameters.put("climate_req_type", "ac");
+        parameters.put("climate_target_temp", 18);
         Long controlCommandId =  rvcApi.requestControl(requestClient, userId, vin, command, parameters);
         Assert.assertNotNull(controlCommandId);
     }

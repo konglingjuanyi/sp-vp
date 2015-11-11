@@ -9,7 +9,7 @@
     <rabbit:admin connection-factory="rabbitConnectionFactory" />
 
     <!-- OTAMessage的转换器 -->
-    <bean id="otaMessageConvertor"  class="org.springframework.amqp.support.converter.JsonMessageConverter">
+    <bean id="otaMessageConvertor"  class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter">
         <property name="classMapper">
             <bean class="org.springframework.amqp.support.converter.DefaultClassMapper">
                 <property name="defaultType" value="com.zxq.iov.cloud.sp.vp.api.ServiceMessage"/>
