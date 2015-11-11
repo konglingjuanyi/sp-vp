@@ -22,7 +22,7 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.IUserApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.UserDto;
-import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
+//import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.DeleteKeyDto;
@@ -241,13 +241,13 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 	 */
 	private void pushMobile(Long userId, String title, String content) throws ApiException {
 		if (null != userId) {
-			BaiduMessageDto messageDto = new BaiduMessageDto();
-			messageDto.setUserId(userId);
-			messageDto.setMsgType(0); // 0透传消息 1通知中心
-			messageDto.setSendWay(2); // 1群发 2单发
-			messageDto.setMsgTitle(title);
-			messageDto.setMsgContent(content);
-			messageDto.setSendBy("安防-智能钥匙");
+//			BaiduMessageDto messageDto = new BaiduMessageDto();
+//			messageDto.setUserId(userId);
+//			messageDto.setMsgType(0); // 0透传消息 1通知中心
+//			messageDto.setSendWay(2); // 1群发 2单发
+//			messageDto.setMsgTitle(title);
+//			messageDto.setMsgContent(content);
+//			messageDto.setSendBy("安防-智能钥匙");
 			//TODO 吕春田尚未部署
 //			messageApi.createBaiduMessage(messageDto);
 		}
