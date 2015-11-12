@@ -49,7 +49,7 @@ public class Constants {
 	public static final String RVC_CMD_VEHICLE_UNLOCK = "vehicle_unlock";
 	public static final String RVC_CMD_WINDOW_CONTROL = "window_control";
 	public static final String RVC_CMD_KEY_MANAGEMENT = "key_management";
-	public static final String RVC_CMD_HEATED_SEAT_CONTROL = "headed_seat_control";
+	public static final String RVC_CMD_HEATED_SEAT_CONTROL = "heated_seat_control";
 	public static final String RVC_CMD_CLIMATE_CONTROL = "climate_control";
 	public static final String RVC_CMD_ENGINE_CONTROL = "engine_control";
 	public static final Map<String, String> RVC_CMD = new TreeMap<>();
@@ -173,10 +173,12 @@ public class Constants {
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_KEY_REQ_TYPE+"_enable", "01");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_KEY_REQ_TYPE+"_disable", "00");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_DRIVER+"_off", "00");
+		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_DRIVER+"_on", "01");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_DRIVER+"_low", "01");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_DRIVER+"_mid", "02");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_DRIVER+"_high", "03");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_PASSENGER+"_off", "00");
+		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_PASSENGER+"_on", "01");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_PASSENGER+"_low", "01");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_PASSENGER+"_mid", "02");
 		RVC_CMD_PARAM_VALUE.put(RVC_CMD_PARAM_HEATED_SEAT_PASSENGER+"_high", "03");
