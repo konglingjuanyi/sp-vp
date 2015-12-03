@@ -22,7 +22,6 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.IUserApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.UserDto;
-//import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
 import com.zxq.iov.cloud.sp.vp.api.IRemoteKeyApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.key.DeleteKeyDto;
@@ -38,9 +37,9 @@ import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+//import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
 
 /**
  * 安防服务 智能钥匙API实现类
@@ -56,9 +55,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 	private IEventService eventService;
 	@Autowired
 	private IUserApi userApi;
-	//TODO 吕春田尚未部署
-//	@Autowired
-//	private IMessageApi messageApi;
+
 
 	@Override
 	public void createKey(Long ownerId, String vin) throws ApiException {
@@ -97,9 +94,12 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 			if (null != userDto) {
 				userId = userDto.getId();
 			}
+			userId = 10000012130071L;
 			remoteKey = remoteKeyService
 					.grantKey(new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
-			pushMobile(userId, "title", "content"); //TODO 确定通知内容（李亮）
+			Map<String, Object> params = new HashMap<>();
+			params.put("params", "test");
+			pushMobile(userId, "title", "content", params); //TODO 确定通知内容（李亮）
 		} else {
 			LOGGER.info("重试授权钥匙操作");
 			remoteKey = event.getResult(RemoteKey.class);
@@ -117,7 +117,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
 		if (null != remoteKey) {
 			remoteKeyService.updateKey(keyReference, startTime, endTime, privilege);
-			pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
+			Map<String, Object> params = new HashMap<>();
+			pushMobile(remoteKey.getUserId(), "title", "content", params); //TODO 确定通知内容（李亮）
 			//TODO 修改协议待定（刘凯），确定后发队列
 		}
 	}
@@ -128,7 +129,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = remoteKeyService.disableKey(keyReference);
 		if (null != remoteKey) {
 			if (ownerId.equals(remoteKey.getUserId())) {
-				pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
+				Map<String, Object> params = new HashMap<>();
+				pushMobile(remoteKey.getUserId(), "title", "content", params); //TODO 确定通知内容（李亮）
 			}
 			//TODO 修改协议待定（刘凯），确定后发队列
 		}
@@ -140,7 +142,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		RemoteKey remoteKey = remoteKeyService.enableKey(keyReference);
 		if (null != remoteKey) {
 			if (ownerId.equals(remoteKey.getUserId())) {
-				pushMobile(remoteKey.getUserId(), "title", "content"); //TODO 确定通知内容（李亮）
+				Map<String, Object> params = new HashMap<>();
+				pushMobile(remoteKey.getUserId(), "title", "content", params); //TODO 确定通知内容（李亮）
 			}
 			//TODO 修改协议待定（刘凯），确定后发队列
 		}
@@ -231,25 +234,5 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		return remoteKeyDtos;
 	}
 
-	/**
-	 * 推送消息到用户手机
-	 *
-	 * @param userId  用户ID
-	 * @param title   标题
-	 * @param content 内容
-	 * @throws ApiException
-	 */
-	private void pushMobile(Long userId, String title, String content) throws ApiException {
-		if (null != userId) {
-//			BaiduMessageDto messageDto = new BaiduMessageDto();
-//			messageDto.setUserId(userId);
-//			messageDto.setMsgType(0); // 0透传消息 1通知中心
-//			messageDto.setSendWay(2); // 1群发 2单发
-//			messageDto.setMsgTitle(title);
-//			messageDto.setMsgContent(content);
-//			messageDto.setSendBy("安防-智能钥匙");
-			//TODO 吕春田尚未部署
-//			messageApi.createBaiduMessage(messageDto);
-		}
-	}
+
 }

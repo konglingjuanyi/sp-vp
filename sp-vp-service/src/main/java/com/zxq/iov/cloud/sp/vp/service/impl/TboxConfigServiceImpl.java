@@ -67,7 +67,7 @@ public class TboxConfigServiceImpl extends BaseService implements ITboxConfigSer
         if(null == tboxPersonalConfig) {
             throw new ServLayerException(ExceptionConstants.PERSONAL_CONFIG_NOT_FIND);
         }
-        if(tboxPersonalConfig.getTboxId().intValue() != tboxId) {
+        if(tboxPersonalConfig.getTboxId().intValue() != tboxId.intValue()) {
             throw new ServLayerException(ExceptionConstants.TBOX_NOT_MATCH_VIN);
         }
         if(tboxPersonalConfig.getConfigDelta().intValue() > configDelta.intValue()) {

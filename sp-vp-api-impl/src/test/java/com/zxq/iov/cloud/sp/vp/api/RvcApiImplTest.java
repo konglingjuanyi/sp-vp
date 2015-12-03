@@ -22,7 +22,6 @@ import com.saicmotor.telematics.framework.core.test.BaseServiceTestCase;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
-import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -38,48 +37,64 @@ import java.util.*;
 @Transactional
 public class RvcApiImplTest extends BaseServiceTestCase {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RvcApiImplTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RvcApiImplTest.class);
 
-    @Autowired
-    private IRvcApi rvcApi;
+	@Autowired
+	private IRvcApi rvcApi;
 
-    private String vin = "11111111111111111";
-    private Long tboxId = 1L;
-    private Long userId = 1L;
+	private String vin = "11111111111111111";
+	private Long tboxId = 1L;
+	private Long userId = 1L;
 
-    @Test
-    @Rollback(false)
-    public void testRequestControl() throws Exception {
-        String command = "heated_seat_control";
-        String requestClient = "mobile";
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("heated_seat_driver", "high");
-        parameters.put("heated_seat_passenger", "high");
-        Long controlCommandId =  rvcApi.requestControl(requestClient, userId, vin, command, parameters);
-        Assert.assertNotNull(controlCommandId);
-        LOGGER.info("command id:" + controlCommandId);
-    }
+	/**
+	 * 请求控制空调
+	 * @throws Exception
+	 */
+	@Test
+	@Rollback(false)
+	public void testRequestClimateControl() throws Exception {
+		String command = "climate_control";
+		String requestClient = "mobile";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("climate_req_type", "ac");
+		parameters.put("climate_target_temp", 25);
+		Long controlCommandId = rvcApi.requestControl(requestClient, userId, vin, command, parameters);
+		Assert.assertNotNull(controlCommandId);
+		LOGGER.info("command id:" + controlCommandId);
+	}
 
-    @Test
-    @Rollback(false)
-    public void testCancelControl() throws Exception {
-        String command = "find_my_car";
-        String requestClient = "mobile";
-        rvcApi.cancelControl(requestClient, userId, vin, command);
-    }
+	@Test
+	@Rollback(false)
+	public void testRequestControl() throws Exception {
+		String command = "climate_control";
+		String requestClient = "mobile";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("climate_req_type", "ac");
+		parameters.put("climate_target_temp", 25);
+		Long controlCommandId = rvcApi.requestControl(requestClient, userId, vin, command, parameters);
+		Assert.assertNotNull(controlCommandId);
+		LOGGER.info("command id:" + controlCommandId);
+	}
 
-    @Test
-    @Rollback(false)
-    public void testUpdateControlStatus() throws Exception {
-        Integer mid = 2;
-        OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_RVC, mid);
-        otaDto.setEventId(241L);
-        String rvcStatus = "00";
-        VehiclePosDto vehiclePosDto =  new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
-        List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
-        vehicleStatusDtos.add(new VehicleStatusDto("status", 1));
-        rvcApi.updateControlStatus(otaDto, BinaryAndHexUtil.hexStringToByte(rvcStatus),
-                null, vehiclePosDto, vehicleStatusDtos);
-    }
+	@Test
+	@Rollback(false)
+	public void testCancelControl() throws Exception {
+		String command = "find_my_car";
+		String requestClient = "mobile";
+		rvcApi.cancelControl(requestClient, userId, vin, command);
+	}
+
+	@Test
+	@Rollback(false)
+	public void testUpdateControlStatus() throws Exception {
+		Integer mid = 2;
+		OtaDto otaDto = new OtaDto(tboxId, new Date(), Constants.AID_RVC, mid);
+		otaDto.setEventId(69029L);
+		String rvcStatus = "00";
+		VehiclePosDto vehiclePosDto = new VehiclePosDto(1, 1, 1, 1, 1, 1, 1, new Date(), 1);
+		List<VehicleStatusDto> vehicleStatusDtos = new ArrayList<>();
+		vehicleStatusDtos.add(new VehicleStatusDto("status", 1));
+		rvcApi.updateControlStatus(otaDto, rvcStatus.getBytes(), null, vehiclePosDto, vehicleStatusDtos);
+	}
 
 }

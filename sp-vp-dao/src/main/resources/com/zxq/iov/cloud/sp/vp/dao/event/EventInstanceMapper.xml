@@ -49,6 +49,9 @@
 		<if test="eventDefinitionId != null">
 			AND EVENT_DEFINITION_ID = #{eventDefinitionId,jdbcType=BIGINT}
 		</if>
+		<if test="owner != null and owner != ''">
+			AND OWNER = #{owner,jdbcType=VARCHAR}
+		</if>
 		<if test="status != null">
 			AND STATUS = #{status,jdbcType=INTEGER}
 		</if>

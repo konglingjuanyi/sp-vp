@@ -20,7 +20,6 @@ import com.alibaba.dubbo.common.json.JSON;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
-import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.dao.rvc.IControlCommandDao;
@@ -95,12 +94,12 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
 	}
 
 	@Override
-	public void updateControlStatus(Tbox tbox, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
+	public ControlCommand updateControlStatus(Tbox tbox, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
 			List<VehicleStatus> vehicleStatuses, Long eventId) throws ServLayerException {
 		AssertRequired("eventId,tboxId,userId,rvcStatus", eventId, tbox.getTboxId(), tbox.getUserId(), rvcStatus);
 		ControlCommand controlCommand = controlCommandDao.findControlCommandByEventId(eventId);
 		if (null != controlCommand) {
-			controlCommand.setCommandStatus(BinaryAndHexUtil.bytesToHexString(rvcStatus, false));
+			controlCommand.setCommandStatus(new String(rvcStatus));
 			if (null != failureType) {
 				controlCommand.setFailureType(failureType);
 			}
@@ -112,6 +111,7 @@ public class RvcServiceImpl extends BaseService implements IRvcService {
 					vehicleStatuses, null, null, null);
 			pushRequestClient(controlCommand);
 		}
+		return controlCommand;
 	}
 
 	@Override

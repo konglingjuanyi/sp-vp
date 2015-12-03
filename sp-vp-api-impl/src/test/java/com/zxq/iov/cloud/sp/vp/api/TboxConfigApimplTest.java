@@ -68,8 +68,9 @@ public class TboxConfigApimplTest extends BaseServiceTestCase {
 		String mpuVersion = "01";
 		String configVersion = "01";
 		Integer configDelta = 1;
-		String iccid = "1";
-		Long tboxId = 1L;
+		String iccid = "1234";
+		Long tboxId = 10000000017882L;
+		String vin = "zxkjmunuzkjowddht";
 		OtaDto otaDto = new OtaDto(tboxId, Constants.AID_CONFIGURATION, 1);
 		//otaDto.setEventId(1L);
 		TboxConfigDto tboxConfigDto = tboxConfigApi

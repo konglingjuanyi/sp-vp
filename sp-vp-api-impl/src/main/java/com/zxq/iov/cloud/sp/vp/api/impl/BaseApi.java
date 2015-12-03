@@ -18,12 +18,17 @@ package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
+import com.saicmotor.telematics.framework.core.logger.Logger;
+import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.saicmotor.telematics.framework.core.logger.support.InfoData;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.ITboxApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.IVehicleApi;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.TboxDto;
 import com.zxq.iov.cloud.sp.mds.tcmp.api.dto.VehicleDto;
+import com.zxq.iov.cloud.sp.msg.api.IMessageApi;
+import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
 import com.zxq.iov.cloud.sp.vp.api.ServiceMessage;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
@@ -35,17 +40,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防服务 基础接口类
  */
 public class BaseApi {
 
-	@Autowired
-	private ITboxApi tboxApi;
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseApi.class);
 
 	@Autowired
-	private IVehicleApi vehicleApi;
+	private ITboxApi tboxApi;
+	@Autowired
+	private IVehicleApi tcmpVehicleApi;
+	@Autowired
+	private IMessageApi messageApi;
 
 	@Resource(name = "tboxAppServiceTemplate")
 	private RabbitTemplate tboxAppServiceTemplate;
@@ -127,7 +136,7 @@ public class BaseApi {
 	 * @return 车主用户ID
 	 */
 	protected Long getOwnerIdByVin(String vin) throws ServLayerException {
-		VehicleDto vehicleDto = vehicleApi.findVehicleByVin(vin);
+		VehicleDto vehicleDto = tcmpVehicleApi.findVehicleByVin(vin);
 		if(null == vehicleDto) {
 			throw new ServLayerException(ExceptionConstants.VIN_NOT_EXIST);
 		}
@@ -198,6 +207,34 @@ public class BaseApi {
 	protected void checkVinOwner(String vin, Long userId) throws ServLayerException {
 		if (userId.longValue() != getOwnerIdByVin(vin).longValue()) {
 			throw new ServLayerException(ExceptionConstants.USER_NOT_OWNER);
+		}
+	}
+
+	/**
+	 * 推送消息到用户手机
+	 *
+	 * @param userId  用户ID
+	 * @param title   标题
+	 * @param content 内容
+	 * @param params  参数
+	 * @throws ApiException
+	 */
+	protected void pushMobile(Long userId, String title, String content, Map<String, Object> params) throws ApiException {
+		if (null != userId) {
+			BaiduMessageDto messageDto = new BaiduMessageDto();
+			messageDto.setUserId(userId);
+			messageDto.setMsgType(0); // 0透传消息 1通知中心
+			messageDto.setSendWay(2); // 1群发 2单发
+			messageDto.setMsgTitle(title);
+			messageDto.setMsgContent(content);
+			messageDto.setCustomCnt(params);
+			messageDto.setSendBy("安防");
+			messageDto.setTopicCode("cgj04");
+			messageDto.setVin("");
+			messageApi.createBaiduMessage(messageDto);
+		}
+		else {
+			LOGGER.warn("推送消息到用户手机失败，没有定位到用户信息");
 		}
 	}
 

@@ -16,6 +16,7 @@
 
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
@@ -34,9 +35,7 @@ import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 安防服务 被盗追踪API实现类
@@ -52,7 +51,7 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 	private IEventService eventService;
 
 	@Override
-	public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ServLayerException {
+	public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ApiException {
 		Event event = new EventAssembler().fromOtaDto(otaDto);
 		eventService.start(event);
 		if (!event.isRetry()) {
@@ -62,6 +61,10 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 				svtService.alarm(getTboxById(otaDto.getTboxId()), stolenAlarmDtoAssembler.fromDto(stolenAlarmDto),
 						posDtoAssembler.fromDto(stolenAlarmDto.getVehiclePosDto()), event.getId());
 			}
+			Map<String, Object> params = new HashMap<>();
+			params.put("svt_alert", 1);
+			params.put("svt_alert_msg", "");
+			pushMobile(getOwnerIdByVin(otaDto.getVin()), "车辆出现报警状态", "车辆出现报警状态", params);
 			eventService.end(event);
 		}
 	}

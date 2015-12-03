@@ -75,6 +75,8 @@ public class Constants {
 		RVC_CMD_CODE.put(RVC_CMD_ENGINE_CONTROL, "11");
 	}
 
+	public static final String MSG_TYPE_RVC = "control";
+
 	public static final String RVC_CMD_PARAM_FMC_LIGHTS = "light";
 	public static final String RVC_CMD_PARAM_FMC_HORN = "horn";
 	public static final String RVC_CMD_PARAM_FMC_LENGTH = "horn_length";

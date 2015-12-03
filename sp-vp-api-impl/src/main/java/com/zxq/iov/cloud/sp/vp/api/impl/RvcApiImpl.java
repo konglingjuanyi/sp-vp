@@ -17,9 +17,11 @@
 package com.zxq.iov.cloud.sp.vp.api.impl;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.saicmotor.telematics.framework.core.exception.ServLayerException;
 import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
+import com.zxq.iov.cloud.sp.msg.api.IMessageApi;
 import com.zxq.iov.cloud.sp.vp.api.IRvcApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.rvc.RvcDto;
@@ -30,9 +32,10 @@ import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.rvc.RvcStatusDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
-import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
 import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
+import com.zxq.iov.cloud.sp.vp.common.util.BinaryAndHexUtil;
+import com.zxq.iov.cloud.sp.vp.entity.rvc.ControlCommand;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IRvcService;
 import com.zxq.iov.cloud.sp.vp.service.domain.Event;
@@ -56,6 +59,8 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 	private IRvcService rvcService;
 	@Autowired
 	private IEventService eventService;
+	@Autowired
+	private IMessageApi messageApi;
 
 	@Override
 	public Long requestControl(String requestClient, Long userId, String vin, String command,
@@ -86,7 +91,8 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 			controlCommandId = Long.parseLong(event.getResult().toString());
 		}
 		otaDto.setEventId(event.getId());
-		sendQueue(otaDto, new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)), tboxConfig));
+		sendQueue(otaDto,
+				new RvcDto(BinaryAndHexUtil.hexStringToByte(Constants.RVC_CMD_CODE.get(command)), tboxConfig));
 		return controlCommandId;
 	}
 
@@ -113,16 +119,25 @@ public class RvcApiImpl extends BaseApi implements IRvcApi {
 
 	@Override
 	public void updateControlStatus(OtaDto otaDto, byte[] rvcStatus, Integer failureType, VehiclePosDto vehiclePosDto,
-			List<VehicleStatusDto> vehicleStatusDtos) throws ServLayerException {
+			List<VehicleStatusDto> vehicleStatusDtos) throws ApiException {
 		AssertRequired("otaDto,rvcStatus", otaDto, rvcStatus);
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("status", rvcStatus);
+		paramMap.put("status", new String(rvcStatus));
 		Event event = new EventAssembler().fromOtaDto(otaDto);
+		event.setParamMap(paramMap);
 		eventService.start(event);
 		if (!event.isRetry()) {
-			rvcService.updateControlStatus(getTboxById(otaDto.getTboxId()), rvcStatus, failureType,
-					new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
-					new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos), event.getId());
+			ControlCommand controlCommand = rvcService
+					.updateControlStatus(getTboxById(otaDto.getTboxId()), rvcStatus, failureType,
+							new VehiclePosDtoAssembler().fromDto(vehiclePosDto),
+							new VehicleStatusDtoAssembler().fromDtoList(vehicleStatusDtos), event.getId());
+			Map<String, Object> params = new HashMap<>();
+			params.put("type", Constants.MSG_TYPE_RVC);
+			params.put("command_type", "climate_control");
+			params.put("command_id", controlCommand.getId());
+			params.put("command_status", controlCommand.getCommandStatus());
+			controlCommand.setUserId(10000012130071L); // 临时测试用的USERID
+			pushMobile(controlCommand.getUserId(), "远程车控命令状态变更", "当前命令状态：" + controlCommand.getCommandStatus(), params);
 			eventService.end(event);
 		}
 

@@ -64,7 +64,7 @@ public interface IRvcService {
 	 * @param vehicleStatuses 车辆状态对象列表
 	 * @param eventId         事件ID
 	 */
-	void updateControlStatus(Tbox tbox, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
+	ControlCommand updateControlStatus(Tbox tbox, byte[] rvcStatus, Integer failureType, VehiclePos vehiclePos,
 			List<VehicleStatus> vehicleStatuses, Long eventId) throws ServLayerException;
 
 	/**
