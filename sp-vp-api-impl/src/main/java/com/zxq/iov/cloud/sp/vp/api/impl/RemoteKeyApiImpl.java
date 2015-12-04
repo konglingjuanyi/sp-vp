@@ -97,6 +97,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 			userId = 10000012130071L;
 			remoteKey = remoteKeyService
 					.grantKey(new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
+			event.setResult(remoteKey);
+			eventService.end(event);
 			Map<String, Object> params = new HashMap<>();
 			params.put("params", "test");
 			pushMobile(userId, "title", "content", params); //TODO 确定通知内容（李亮）

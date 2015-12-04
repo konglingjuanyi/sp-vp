@@ -42,9 +42,9 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
     @Autowired
     private IRemoteKeyApi remoteKeyApi;
 
-    private String vin = "11111111111111111";
+    private String vin = "123456";
     private Long tboxId = 1L;
-    private Long userId = 1L;
+    private Long userId = 10000000002985L;
 
     @Test
     @Rollback(false)
@@ -52,13 +52,16 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
         remoteKeyApi.createKey(userId, vin);
     }
 
+	/**
+     * 测试授权钥匙
+     * @throws Exception
+     */
     @Test
     @Rollback(false)
     public void testGrantKey() throws Exception {
-        String mobile = "13917288107";
-        Integer privilege = 1;
-        String pin = "0000";
-        remoteKeyApi.grantKey(userId, vin, mobile, new Date(), new Date(), privilege);
+        String mobile = "13148476145";
+        Integer privilege = 0;
+        remoteKeyApi.grantKey(userId, vin, mobile, new Date(1446310861), new Date(1480057932), privilege);
     }
 
     @Test
