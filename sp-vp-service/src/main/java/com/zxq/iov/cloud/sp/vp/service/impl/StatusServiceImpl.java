@@ -58,12 +58,12 @@ public class StatusServiceImpl extends BaseService implements IStatusService {
 			List<VehicleInfo> vehicleInfos = vehicleInfoDao.listVehicleInfoByEventId(eventId);
 			if (vehicleInfos.size() > 0) {
 				vehicleInfo = vehicleInfos.get(0);
+				vehicleInfo.setVehiclePos(vehiclePosDao.findVehiclePosByVehicleInfoId(vehicleInfo.getId()));
+				vehicleInfo.setVehicleStatuses(vehicleStatusDao
+						.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_BASIC));
+				vehicleInfo.setVehicleAlerts(vehicleStatusDao
+						.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_ALERT));
 			}
-			vehicleInfo.setVehiclePos(vehiclePosDao.findVehiclePosByVehicleInfoId(vehicleInfo.getId()));
-			vehicleInfo.setVehicleStatuses(vehicleStatusDao
-					.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_BASIC));
-			vehicleInfo.setVehicleAlerts(vehicleStatusDao
-					.findVehicleStatusByVehicleInfoId(vehicleInfo.getId(), Constants.VEHICLE_STATUS_ALERT));
 		} else {
 			vehicleInfo = vehicleInfoDao.readVehicleInfo(vin);
 		}

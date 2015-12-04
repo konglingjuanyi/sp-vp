@@ -25,6 +25,9 @@ import com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfo;
 public class VehicleInfoDtoAssembler {
 
 	public VehicleInfoDto toDto(final VehicleInfo vehicleInfo) {
+		if(null == vehicleInfo) {
+			return null;
+		}
 		VehicleInfoDto vehicleInfoDto = new VehicleInfoDto();
 		vehicleInfoDto.setVehiclePosDto(new VehiclePosDtoAssembler().toDto(vehicleInfo.getVehiclePos()));
 		vehicleInfoDto

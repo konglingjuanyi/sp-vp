@@ -25,7 +25,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleInfoDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -46,7 +46,7 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
     @Autowired
     private IStatusApi statusApi;
 
-    private String vin = "11111111111111111";
+    private String vin = "123456";
     private Long tboxId = 1L;
 
     @Test
@@ -72,12 +72,16 @@ public class StatusServiceImplTest extends BaseServiceTestCase {
                 vehicleAlertDtos);
     }
 
+	/**
+     * 测试获得TBOX尚未响应的车辆状态
+     * @throws Exception
+     */
     @Test
     @Rollback(false)
-    public void testGetVehicleStatus() throws Exception {
-        Long eventId = 230L;
+    public void testGetVehicleStatusNoTboxResponse() throws Exception {
+        Long eventId = 69117L;
         VehicleInfoDto vehicleInfoDto = statusApi.getVehicleStatus(vin, eventId);
-        Assert.assertNotNull(vehicleInfoDto);
+        Assert.assertNull(vehicleInfoDto);
     }
 
     @Test
