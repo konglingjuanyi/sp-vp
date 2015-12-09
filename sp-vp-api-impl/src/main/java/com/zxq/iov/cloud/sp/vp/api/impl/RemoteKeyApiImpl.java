@@ -30,6 +30,7 @@ import com.zxq.iov.cloud.sp.vp.api.dto.key.WriteKeyDto;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.key.RemoteKeyDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
+import com.zxq.iov.cloud.sp.vp.common.constants.ExceptionConstants;
 import com.zxq.iov.cloud.sp.vp.entity.key.RemoteKey;
 import com.zxq.iov.cloud.sp.vp.service.IEventService;
 import com.zxq.iov.cloud.sp.vp.service.IRemoteKeyService;
@@ -44,21 +45,15 @@ import java.util.*;
 /**
  * 安防服务 智能钥匙API实现类
  */
-@Service
-public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
+@Service public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteKeyApiImpl.class);
 
-	@Autowired
-	private IRemoteKeyService remoteKeyService;
-	@Autowired
-	private IEventService eventService;
-	@Autowired
-	private IUserApi userApi;
+	@Autowired private IRemoteKeyService remoteKeyService;
+	@Autowired private IEventService eventService;
+	@Autowired private IUserApi userApi;
 
-
-	@Override
-	public void createKey(Long ownerId, String vin) throws ApiException {
+	@Override public void createKey(Long ownerId, String vin) throws ApiException {
 		AssertRequired("ownerId,vin", ownerId, vin);
 		checkVinOwner(vin, ownerId);
 		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_REMOTE_KEY, 1);
@@ -79,9 +74,8 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 						remoteKey.getValidStartTime(), remoteKey.getValidEndTime()));
 	}
 
-	@Override
-	public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege)
-			throws ApiException {
+	@Override public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime,
+			Integer privilege) throws ApiException {
 		AssertRequired("ownerId,vin,mobile", ownerId, vin, mobile);
 		checkVinOwner(vin, ownerId);
 		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_REMOTE_KEY, 1);
@@ -93,8 +87,11 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 			UserDto userDto = userApi.findUserByMobile(mobile);
 			if (null != userDto) {
 				userId = userDto.getId();
+				if (userId.longValue() == ownerId.longValue()) {
+					throw new ServLayerException(ExceptionConstants.CANNOT_GRANT_OWNER_HIMSELF,
+							ExceptionConstants.EXCEPTION_MSG.get(ExceptionConstants.CANNOT_GRANT_OWNER_HIMSELF));
+				}
 			}
-			userId = 10000012130071L;
 			remoteKey = remoteKeyService
 					.grantKey(new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
 			event.setResult(remoteKey);
@@ -112,8 +109,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 						remoteKey.getValidStartTime(), remoteKey.getValidEndTime()));
 	}
 
-	@Override
-	public void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
+	@Override public void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
 			throws ApiException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
@@ -125,8 +121,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public void disableKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override public void disableKey(Long ownerId, Long keyReference) throws ApiException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.disableKey(keyReference);
 		if (null != remoteKey) {
@@ -138,8 +133,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public void enableKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override public void enableKey(Long ownerId, Long keyReference) throws ApiException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.enableKey(keyReference);
 		if (null != remoteKey) {
@@ -151,8 +145,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public void removeKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override public void removeKey(Long ownerId, Long keyReference) throws ApiException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
 		OtaDto otaDto = new OtaDto(remoteKey.getTboxId(), remoteKey.getVin(), Constants.AID_REMOTE_KEY, 3);
@@ -166,8 +159,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		sendQueue(otaDto, new DeleteKeyDto(keyReference));
 	}
 
-	@Override
-	public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason)
+	@Override public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason)
 			throws ServLayerException {
 		AssertRequired("otaDto,writeSuccess", otaDto, writeSuccess);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
@@ -178,8 +170,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess, Integer deleteFailureReason)
+	@Override public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess, Integer deleteFailureReason)
 			throws ServLayerException {
 		AssertRequired("otaDto,deleteSuccess", otaDto, deleteSuccess);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
@@ -190,8 +181,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public void keyAlarm(OtaDto otaDto) throws ServLayerException {
+	@Override public void keyAlarm(OtaDto otaDto) throws ServLayerException {
 		AssertRequired("otaDto", otaDto);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
 		eventService.start(event);
@@ -201,8 +191,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 	}
 
-	@Override
-	public List listUserKey(Long userId) throws ApiException {
+	@Override public List listUserKey(Long userId) throws ApiException {
 		AssertRequired("userId", userId);
 		List<RemoteKeyDto> remoteKeyDtos = new ArrayList<>();
 		List<RemoteKey> remoteKeys = remoteKeyService.listUserKey(userId);
@@ -218,8 +207,7 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		return remoteKeyDtos;
 	}
 
-	@Override
-	public List listVehicleKey(Long ownerId, String vin) throws ApiException {
+	@Override public List listVehicleKey(Long ownerId, String vin) throws ApiException {
 		AssertRequired("ownerId,vin", ownerId, vin);
 		checkVinOwner(vin, ownerId);
 		List<RemoteKeyDto> remoteKeyDtos = new ArrayList<>();
@@ -235,6 +223,5 @@ public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 		}
 		return remoteKeyDtos;
 	}
-
 
 }

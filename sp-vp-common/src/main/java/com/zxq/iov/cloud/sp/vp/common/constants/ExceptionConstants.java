@@ -16,6 +16,9 @@
 
 package com.zxq.iov.cloud.sp.vp.common.constants;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * 安防 异常常量类
  */
@@ -48,4 +51,10 @@ public class ExceptionConstants {
 	public static final String NO_OPEN_ICALL = "15108"; // 没有有效的iCall
 	public static final String WRONG_CONTROL_CMD_PARAM = "15109"; // 错误的控制命令参数
 	public static final String EXCEED_REMOTE_KEY_UPPER_LIMIT = "15110"; // 超过智能钥匙授权上限
+	public static final String CANNOT_GRANT_OWNER_HIMSELF = "15111"; // 不能授权车主自己
+
+	public static final Map<String, String> EXCEPTION_MSG = new TreeMap<>();
+	static {
+		EXCEPTION_MSG.put(CANNOT_GRANT_OWNER_HIMSELF, "Can't grant the owner himself");
+	}
 }
