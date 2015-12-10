@@ -6,8 +6,8 @@
  * information regarding copyright ownership.
  * ----------------------------------------------------------------------------
  * Date             Author      Version        Comments
- * 2015-06-15       荣杰         1.0            Initial Version
- * 2015-07-24       荣杰         1.1
+ * 2015-06-15       叶荣杰       1.0            Initial Version
+ * 2015-12-10       叶荣杰       1.1
  *
  * com.zxq.iov.cloud.sp.vp.api.ISvtApi
  *
@@ -20,6 +20,7 @@ import com.saicmotor.telematics.framework.core.exception.ApiException;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.ProtectStrategySettingDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenAlarmDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.svt.StolenStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.TrackDto;
 
 import java.util.Date;
@@ -31,7 +32,17 @@ import java.util.List;
 public interface ISvtApi {
 
 	/**
-	 * 报警
+	 * 请求触发报警
+	 * 通常由客户联系呼叫中心请求触发车辆被盗报警，这种情况下用户身份已由CC核实，无需在程序内部验证
+	 *
+	 * @param vin 车辆唯一码
+	 * @throws ApiException
+	 */
+	void requestAlarm(String vin) throws ApiException;
+
+	/**
+	 * 车辆产生报警
+	 * 所有出现报警的类型会通过各自的stolenAlarm传上来
 	 *
 	 * @param otaDto          OTA传输对象
 	 * @param stolenAlarmDtos 被盗警报传输对象列表
@@ -130,9 +141,21 @@ public interface ISvtApi {
 	void responseUpdateProtectStrategy() throws ApiException;
 
 	/**
-	 * 请求触发报警
+	 * 得到车辆被盗状态
 	 *
 	 * @param vin 车辆唯一码
+	 * @return 被盗状态传输对象
+	 * @throws ApiException
 	 */
-	void requestAlarm(String vin) throws ApiException;
+	StolenStatusDto getStolenStatus(String vin) throws ApiException;
+
+	/**
+	 * 列出车辆最近轨迹
+	 *
+	 * @param vin        车辆唯一码
+	 * @param trackCount 轨迹数量
+	 * @return 车辆轨迹传输对象
+	 * @throws ApiException
+	 */
+	List<TrackDto> listVehicleLastTrack(String vin, int trackCount) throws ApiException;
 }

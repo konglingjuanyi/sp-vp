@@ -51,6 +51,19 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 	private IEventService eventService;
 
 	@Override
+	public void requestAlarm(String vin) throws ServLayerException {
+		AssertRequired("vin", vin);
+		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_SVT, 13);
+		Event event = new EventAssembler().fromOtaDto(otaDto);
+		eventService.start(event);
+		if (!event.isRetry()) {
+			eventService.end(event);
+		}
+		otaDto.setEventId(event.getId());
+		sendQueue(otaDto);
+	}
+
+	@Override
 	public void alarm(OtaDto otaDto, List<StolenAlarmDto> stolenAlarmDtos) throws ApiException {
 		Event event = new EventAssembler().fromOtaDto(otaDto);
 		eventService.start(event);
@@ -220,15 +233,12 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 	}
 
 	@Override
-	public void requestAlarm(String vin) throws ServLayerException {
-		AssertRequired("vin", vin);
-		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_SVT, 13);
-		Event event = new EventAssembler().fromOtaDto(otaDto);
-		eventService.start(event);
-		if (!event.isRetry()) {
-			eventService.end(event);
-		}
-		otaDto.setEventId(event.getId());
-		sendQueue(otaDto);
+	public StolenStatusDto getStolenStatus(String vin) throws ApiException {
+		return null;
+	}
+
+	@Override
+	public List<TrackDto> listVehicleLastTrack(String vin, int trackCount) throws ApiException {
+		return null;
 	}
 }
