@@ -32,52 +32,84 @@ public class RemoteKey extends MyBaseEntity<Long> implements Serializable {
 	private static final Integer WAIT_TBOX = 0; // 等待TBOX写入
 
 	@Id
-	@Column(name = "ID", nullable = false, updatable = false, length = 20)
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = SEQ_NAME)
-	@TableGenerator(name = SEQ_NAME, table = MY_SEQ_TABLE, allocationSize = 1,
-			pkColumnName = "pk_name", valueColumnName = "current_value", pkColumnValue = SEQ_NAME)
+	@Column(name = "ID",
+			nullable = false,
+			updatable = false,
+			length = 20)
+	@GeneratedValue(strategy = GenerationType.TABLE,
+			generator = SEQ_NAME)
+	@TableGenerator(name = SEQ_NAME,
+			table = MY_SEQ_TABLE,
+			allocationSize = 1,
+			pkColumnName = "pk_name",
+			valueColumnName = "current_value",
+			pkColumnValue = SEQ_NAME)
 	private Long id;
 
-	@Column(name = "TBOX_ID", nullable = false, precision = 20, scale = 0)
+	@Column(name = "TBOX_ID",
+			nullable = false,
+			precision = 20,
+			scale = 0)
 	private Long tboxId;
 
-	@Column(name = "VIN", nullable = false, length = 17)
+	@Column(name = "VIN",
+			nullable = false,
+			length = 17)
 	private String vin;
 
-	@Column(name = "TYPE", nullable = false, precision = 4, scale = 0)
+	@Column(name = "TYPE",
+			nullable = false,
+			precision = 4,
+			scale = 0)
 	private Integer type;
 
-	@Column(name = "SECRET_KEY", nullable = false, length = 32)
+	@Column(name = "SECRET_KEY",
+			nullable = false,
+			length = 32)
 	private String secretKey;
 
-	@Column(name = "REFERENCE", precision = 20, scale = 0)
+	@Column(name = "REFERENCE",
+			precision = 20,
+			scale = 0)
 	private Long reference;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "VALID_START_TIME", length = 7)
+	@Column(name = "VALID_START_TIME",
+			length = 7)
 	private Date validStartTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "VALID_END_TIME", length = 7)
+	@Column(name = "VALID_END_TIME",
+			length = 7)
 	private Date validEndTime;
 
-	@Column(name = "PRIVILEGE", precision = 4, scale = 0)
+	@Column(name = "PRIVILEGE",
+			precision = 4,
+			scale = 0)
 	private Integer privilege;
 
-	@Column(name = "USER_ID", precision = 20, scale = 0)
+	@Column(name = "USER_ID",
+			precision = 20,
+			scale = 0)
 	private Long userId;
 
-	@Column(name = "MOBILE", length = 50)
+	@Column(name = "MOBILE",
+			length = 50)
 	private String mobile;
 
-	@Column(name = "IS_ENABLE", nullable = false, precision = 1, scale = 0)
+	@Column(name = "IS_ENABLE",
+			nullable = false,
+			precision = 1,
+			scale = 0)
 	private Boolean isEnable;
 
 	public RemoteKey() {
 	}
 
-	public RemoteKey(Long tboxId, String vin, Date validStartTime, Date validEndTime, Integer privilege, Long userId) {
+	public RemoteKey(Long tboxId, String mobile, String vin, Date validStartTime, Date validEndTime, Integer privilege,
+			Long userId) {
 		this.tboxId = tboxId;
+		this.mobile = mobile;
 		this.vin = vin;
 		this.validStartTime = validStartTime;
 		this.validEndTime = validEndTime;

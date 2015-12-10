@@ -47,6 +47,7 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
 	private String vin = "11111111111111111";
 	private Long tboxId = 1L;
 	private Long userId = 1L;
+	String mobile = "13148476145";
 
 	@Test
 	@Rollback(false)
@@ -62,10 +63,11 @@ public class RemoteKeyApiImplTest extends BaseServiceTestCase {
 	@Test
 	@Rollback(false)
 	public void testGrantKey() throws Exception {
-		String mobile = "13148476145";
-		Integer privilege = 0;
-		remoteKeyApi.grantKey(userId, vin, mobile, new Date(1446310861), new Date(1480057932), privilege);
-		Assert.assertTrue(true);
+		String mobile = "15987459878";
+		String vin = "123456";
+		Long userId = 10000000002985L;
+		Integer privilege = 1;
+		remoteKeyApi.grantKey(userId, vin, mobile, new Date(1449680461000L), new Date(1481302861000L), privilege);
 	}
 
 	/**

@@ -40,20 +40,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-//import com.zxq.iov.cloud.sp.msg.api.dto.BaiduMessageDto;
-
 /**
  * 安防服务 智能钥匙API实现类
  */
-@Service public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
+@Service
+public class RemoteKeyApiImpl extends BaseApi implements IRemoteKeyApi {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteKeyApiImpl.class);
 
-	@Autowired private IRemoteKeyService remoteKeyService;
-	@Autowired private IEventService eventService;
-	@Autowired private IUserApi userApi;
+	@Autowired
+	private IRemoteKeyService remoteKeyService;
+	@Autowired
+	private IEventService eventService;
+	@Autowired
+	private IUserApi userApi;
 
-	@Override public void createKey(Long ownerId, String vin) throws ApiException {
+	@Override
+	public void createKey(Long ownerId, String vin) throws ApiException {
 		AssertRequired("ownerId,vin", ownerId, vin);
 		checkVinOwner(vin, ownerId);
 		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_REMOTE_KEY, 1);
@@ -74,8 +77,9 @@ import java.util.*;
 						remoteKey.getValidStartTime(), remoteKey.getValidEndTime()));
 	}
 
-	@Override public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime,
-			Integer privilege) throws ApiException {
+	@Override
+	public void grantKey(Long ownerId, String vin, String mobile, Date startTime, Date endTime, Integer privilege)
+			throws ServLayerException {
 		AssertRequired("ownerId,vin,mobile", ownerId, vin, mobile);
 		checkVinOwner(vin, ownerId);
 		OtaDto otaDto = new OtaDto(getTboxByVin(vin).getTboxId(), vin, Constants.AID_REMOTE_KEY, 1);
@@ -92,8 +96,8 @@ import java.util.*;
 							ExceptionConstants.EXCEPTION_MSG.get(ExceptionConstants.CANNOT_GRANT_OWNER_HIMSELF));
 				}
 			}
-			remoteKey = remoteKeyService
-					.grantKey(new RemoteKey(getTboxByVin(vin).getTboxId(), vin, startTime, endTime, privilege, userId));
+			remoteKey = remoteKeyService.grantKey(
+					new RemoteKey(getTboxByVin(vin).getTboxId(), mobile, vin, startTime, endTime, privilege, userId));
 			event.setResult(remoteKey);
 			eventService.end(event);
 			Map<String, Object> params = new HashMap<>();
@@ -109,8 +113,9 @@ import java.util.*;
 						remoteKey.getValidStartTime(), remoteKey.getValidEndTime()));
 	}
 
-	@Override public void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
-			throws ApiException {
+	@Override
+	public void updateKey(Long ownerId, Long keyReference, Date startTime, Date endTime, Integer privilege)
+			throws ServLayerException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
 		if (null != remoteKey) {
@@ -121,7 +126,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public void disableKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override
+	public void disableKey(Long ownerId, Long keyReference) throws ServLayerException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.disableKey(keyReference);
 		if (null != remoteKey) {
@@ -133,7 +139,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public void enableKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override
+	public void enableKey(Long ownerId, Long keyReference) throws ServLayerException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.enableKey(keyReference);
 		if (null != remoteKey) {
@@ -145,7 +152,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public void removeKey(Long ownerId, Long keyReference) throws ApiException {
+	@Override
+	public void removeKey(Long ownerId, Long keyReference) throws ServLayerException {
 		AssertRequired("ownerId,keyReference", ownerId, keyReference);
 		RemoteKey remoteKey = remoteKeyService.findKeyByReference(keyReference);
 		OtaDto otaDto = new OtaDto(remoteKey.getTboxId(), remoteKey.getVin(), Constants.AID_REMOTE_KEY, 3);
@@ -159,7 +167,8 @@ import java.util.*;
 		sendQueue(otaDto, new DeleteKeyDto(keyReference));
 	}
 
-	@Override public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason)
+	@Override
+	public void responseWriteKey(OtaDto otaDto, Boolean writeSuccess, Integer writeFailureReason)
 			throws ServLayerException {
 		AssertRequired("otaDto,writeSuccess", otaDto, writeSuccess);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
@@ -170,7 +179,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess, Integer deleteFailureReason)
+	@Override
+	public void responseDeleteKey(OtaDto otaDto, Boolean deleteSuccess, Integer deleteFailureReason)
 			throws ServLayerException {
 		AssertRequired("otaDto,deleteSuccess", otaDto, deleteSuccess);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
@@ -181,7 +191,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public void keyAlarm(OtaDto otaDto) throws ServLayerException {
+	@Override
+	public void keyAlarm(OtaDto otaDto) throws ServLayerException {
 		AssertRequired("otaDto", otaDto);
 		Event event = new EventAssembler().fromOtaDto(otaDto);
 		eventService.start(event);
@@ -191,7 +202,8 @@ import java.util.*;
 		}
 	}
 
-	@Override public List listUserKey(Long userId) throws ApiException {
+	@Override
+	public List listUserKey(Long userId) throws ServLayerException {
 		AssertRequired("userId", userId);
 		List<RemoteKeyDto> remoteKeyDtos = new ArrayList<>();
 		List<RemoteKey> remoteKeys = remoteKeyService.listUserKey(userId);
@@ -207,7 +219,8 @@ import java.util.*;
 		return remoteKeyDtos;
 	}
 
-	@Override public List listVehicleKey(Long ownerId, String vin) throws ApiException {
+	@Override
+	public List listVehicleKey(Long ownerId, String vin) throws ServLayerException {
 		AssertRequired("ownerId,vin", ownerId, vin);
 		checkVinOwner(vin, ownerId);
 		List<RemoteKeyDto> remoteKeyDtos = new ArrayList<>();

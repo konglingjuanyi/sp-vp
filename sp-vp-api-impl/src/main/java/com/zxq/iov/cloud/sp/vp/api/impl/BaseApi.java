@@ -217,21 +217,25 @@ public class BaseApi {
 	 * @param title   标题
 	 * @param content 内容
 	 * @param params  参数
-	 * @throws ApiException
 	 */
-	protected void pushMobile(Long userId, String title, String content, Map<String, Object> params) throws ApiException {
+	protected void pushMobile(Long userId, String title, String content, Map<String, Object> params) {
 		if (null != userId) {
-			BaiduMessageDto messageDto = new BaiduMessageDto();
-			messageDto.setUserId(userId);
-			messageDto.setMsgType(0); // 0透传消息 1通知中心
-			messageDto.setSendWay(2); // 1群发 2单发
-			messageDto.setMsgTitle(title);
-			messageDto.setMsgContent(content);
-			messageDto.setCustomCnt(params);
-			messageDto.setSendBy("安防");
-			messageDto.setTopicCode("cgj04");
-			messageDto.setVin("");
-			messageApi.createBaiduMessage(messageDto);
+			try {
+				BaiduMessageDto messageDto = new BaiduMessageDto();
+				messageDto.setUserId(userId);
+				messageDto.setMsgType(0); // 0透传消息 1通知中心
+				messageDto.setSendWay(2); // 1群发 2单发
+				messageDto.setMsgTitle(title);
+				messageDto.setMsgContent(content);
+				messageDto.setCustomCnt(params);
+				messageDto.setSendBy("安防");
+				messageDto.setTopicCode("cgj04");
+				messageDto.setVin("");
+				messageApi.createBaiduMessage(messageDto);
+			}
+			catch (ApiException e) {
+				LOGGER.warn(e.getMessage());
+			}
 		}
 		else {
 			LOGGER.warn("推送消息到用户手机失败，没有定位到用户信息");

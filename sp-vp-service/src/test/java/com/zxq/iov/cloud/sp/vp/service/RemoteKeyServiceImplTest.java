@@ -54,7 +54,8 @@ public class RemoteKeyServiceImplTest extends BaseServiceTestCase {
     @Test
     @Rollback(false)
     public void testGrantKey() throws Exception {
-        RemoteKey remoteKey = new RemoteKey(tboxId, vin, new Date(), new Date(), 1, userId);
+	    String mobile = "13917288107";
+        RemoteKey remoteKey = new RemoteKey(tboxId, mobile, vin, new Date(), new Date(), 1, userId);
         remoteKey = remoteKeyService.grantKey(remoteKey);
         Assert.assertNotNull(remoteKey);
     }
