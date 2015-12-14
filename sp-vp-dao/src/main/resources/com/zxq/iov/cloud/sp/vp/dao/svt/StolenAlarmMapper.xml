@@ -46,6 +46,9 @@
 
 	<select id="selectList" parameterType="hashmap" resultMap="stolenAlarmResultMap">
 		<include refid="selectPageTemplate"/>
+		<if test="tboxId != null and tboxId!=''">
+			AND TBOX_ID = #{tboxId,jdbcType=BIGINT}
+		</if>
 	</select>
 
 	<select id="selectOne" resultMap="stolenAlarmResultMap" parameterType="java.lang.Long">

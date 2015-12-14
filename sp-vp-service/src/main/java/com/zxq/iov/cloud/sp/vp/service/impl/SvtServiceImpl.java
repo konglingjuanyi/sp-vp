@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防服务 被盗追踪服务接口实现类
@@ -60,6 +61,11 @@ public class SvtServiceImpl extends BaseService implements ISvtService {
                             VehiclePos vehiclePos, Long eventId) throws ServLayerException {
         statusService.logVehicleInfo(tbox, Constants.VEHICLE_INFO_SOURCE_SVT,
                 eventId, vehiclePos, vehicleStatuses, null, null, eventId);
+    }
+
+    @Override
+    public List<StolenAlarm> findStolenAlarmByMap(Map<String, Object> map) {
+        return stolenAlarmDao.findStolenAlarmByMap(map);
     }
 
 }

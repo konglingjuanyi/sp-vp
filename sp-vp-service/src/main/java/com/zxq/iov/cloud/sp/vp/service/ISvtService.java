@@ -23,6 +23,7 @@ import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
 import com.zxq.iov.cloud.sp.vp.service.domain.Tbox;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 安防服务 被盗追踪接口
@@ -50,4 +51,9 @@ public interface ISvtService {
 	void updateTrack(Tbox tbox, List<VehicleStatus> vehicleStatuses, VehiclePos vehiclePos, Long eventId)
 			throws ServLayerException;
 
+	/**
+	 * 根据特殊设置的条件组成map，查找符合条件的被盗报警对象
+	 * @return
+	 */
+	List<StolenAlarm> findStolenAlarmByMap(Map<String,Object> map);
 }

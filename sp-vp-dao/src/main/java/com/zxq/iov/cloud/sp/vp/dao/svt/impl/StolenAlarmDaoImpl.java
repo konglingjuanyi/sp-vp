@@ -24,6 +24,9 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 安防服务 被盗警报数据访问接口实现类
  */
@@ -71,6 +74,11 @@ public class StolenAlarmDaoImpl extends BaseServiceImpl<IStolenAlarmRepository, 
 			LOGGER.error("stolenAlarmId cannot be null");
 		}
 		return super.findOne(stolenAlarmId);
+	}
+
+	@Override
+	public List<StolenAlarm> findStolenAlarmByMap(Map<String, Object> map) {
+		return super.findListViaBatis(map);
 	}
 
 }

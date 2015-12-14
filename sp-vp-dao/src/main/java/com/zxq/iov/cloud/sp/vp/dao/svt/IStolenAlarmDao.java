@@ -18,6 +18,9 @@ package com.zxq.iov.cloud.sp.vp.dao.svt;
 import com.saicmotor.telematics.framework.core.service.BaseService;
 import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 安防服务 被盗警报数据访问接口
  */
@@ -53,5 +56,12 @@ public interface IStolenAlarmDao extends BaseService<StolenAlarm, Long> {
 	 * @return 被盗警报对象
 	 */
 	StolenAlarm findStolenAlarmById(Long stolenAlarmId);
+
+	/**
+	 * 根据特殊设置的条件组成map，查找符合条件的被盗报警对象
+	 * @param map
+	 * @return
+	 */
+	List<StolenAlarm> findStolenAlarmByMap(Map<String,Object> map);
 
 }

@@ -28,5 +28,4 @@ public class StolenAlarmDtoAssembler {
 		return new StolenAlarm(stolenAlarmDto.getAlarmTypeId(), stolenAlarmDto.getAlarmData(),
 				stolenAlarmDto.getAlarmTime());
 	}
-
 }

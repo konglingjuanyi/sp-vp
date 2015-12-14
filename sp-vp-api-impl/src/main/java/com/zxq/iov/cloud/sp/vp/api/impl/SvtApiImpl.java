@@ -22,6 +22,7 @@ import com.saicmotor.telematics.framework.core.logger.Logger;
 import com.saicmotor.telematics.framework.core.logger.LoggerFactory;
 import com.zxq.iov.cloud.sp.vp.api.ISvtApi;
 import com.zxq.iov.cloud.sp.vp.api.dto.OtaDto;
+import com.zxq.iov.cloud.sp.vp.api.dto.status.VehiclePosDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.status.VehicleStatusDto;
 import com.zxq.iov.cloud.sp.vp.api.dto.svt.*;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.EventAssembler;
@@ -29,8 +30,12 @@ import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehiclePosDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.status.VehicleStatusDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.api.impl.assembler.svt.StolenAlarmDtoAssembler;
 import com.zxq.iov.cloud.sp.vp.common.constants.Constants;
-import com.zxq.iov.cloud.sp.vp.service.IEventService;
-import com.zxq.iov.cloud.sp.vp.service.ISvtService;
+import com.zxq.iov.cloud.sp.vp.entity.event.EventDefinition;
+import com.zxq.iov.cloud.sp.vp.entity.event.EventInstance;
+import com.zxq.iov.cloud.sp.vp.entity.status.VehicleInfo;
+import com.zxq.iov.cloud.sp.vp.entity.status.VehiclePos;
+import com.zxq.iov.cloud.sp.vp.entity.svt.StolenAlarm;
+import com.zxq.iov.cloud.sp.vp.service.*;
 import com.zxq.iov.cloud.sp.vp.service.domain.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +54,12 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 	private ISvtService svtService;
 	@Autowired
 	private IEventService eventService;
-
+	@Autowired
+	private IEventDefinitionService eventDefinitionService;
+	@Autowired
+	private IEventInstanceService eventInstanceService;
+	@Autowired
+	private IVehicleInfoService vehicleInfoService;
 	@Override
 	public void requestAlarm(String vin) throws ServLayerException {
 		AssertRequired("vin", vin);
@@ -234,11 +244,54 @@ public class SvtApiImpl extends BaseApi implements ISvtApi {
 
 	@Override
 	public StolenStatusDto getStolenStatus(String vin) throws ApiException {
-		return null;
+		AssertRequired("vin", vin);
+		boolean isStolen=false;
+		Map<String,Object> parmMap=new HashMap();
+		parmMap.put("tboxId",getTboxByVin(vin).getTboxId());
+		List<StolenAlarm> stolenAlarmList=svtService.findStolenAlarmByMap(parmMap);
+		List<StolenAlarmDto> stolenAlarmDtos=new ArrayList<>();
+		if(stolenAlarmList!=null && stolenAlarmList.size()>0){
+			isStolen=true;
+			for(StolenAlarm stolenAlarm:stolenAlarmList){
+				StolenAlarmDto stolenAlarmDto=new StolenAlarmDto();
+				stolenAlarmDto.setAlarmData(stolenAlarm.getAlarmData());
+				stolenAlarmDto.setAlarmTime(stolenAlarm.getAlarmTime());
+				stolenAlarmDto.setAlarmTypeId(stolenAlarm.getAlarmType());
+				//stolenAlarmDto其它字段赋值待确认
+				stolenAlarmDtos.add(stolenAlarmDto);
+			}
+		}
+		StolenStatusDto stolenStatusDto=new StolenStatusDto();
+		stolenStatusDto.setStolenAlarmDtos(stolenAlarmDtos);
+		stolenStatusDto.setStolen(isStolen);
+		return stolenStatusDto;
 	}
 
 	@Override
 	public List<TrackDto> listVehicleLastTrack(String vin, int trackCount) throws ApiException {
-		return null;
+		AssertRequired("vin", vin);
+		long ownerId=getOwnerIdByVin(vin);
+		EventDefinition eventDefinition=eventDefinitionService.findEventDefinitionById(8L);
+		long eventDefinitionId=eventDefinition.getId();
+		List<EventInstance> eventInstances=eventInstanceService
+				.listEventInstanceByEventDefinitionId(eventDefinitionId, ownerId,Integer.valueOf(1));
+		EventInstance eventInstance=new EventInstance();
+		if(eventInstances!=null && eventInstances.size()>0){
+			eventInstance=eventInstances.get(0);
+		}
+		long eventId=eventInstance.getId();
+		List<VehicleInfo> vehicleInfos=vehicleInfoService.listVehicleInfoByEventId(eventId);
+		List<TrackDto> trackDtos=new ArrayList();
+		if(vehicleInfos!=null && vehicleInfos.size()>0){
+			for(VehicleInfo vehicleInfo:vehicleInfos){
+				TrackDto trackDto=new TrackDto();
+				VehiclePos vehiclePos=vehicleInfo.getVehiclePos();
+				VehiclePosDto vehiclePosDto= new VehiclePosDtoAssembler().toDto(vehiclePos);
+				trackDto.setVehiclePosDto(vehiclePosDto);
+				//trackDto其它字段的赋值待确认
+				trackDtos.add(trackDto);
+			}
+		}
+		return trackDtos;
 	}
 }
